@@ -1,0 +1,88 @@
+.wrapper-main {
+  position: relative;
+}
+.header-video {
+  background-color: $black-color;
+  line-height: 0px;
+  font-size: 0px;
+  video {
+    width: 100%;
+    height: 100%;
+    z-index: -100;
+    object-fit: cover;
+    object-position: 50% 50%;
+
+  }
+}
+.hero {
+  position: absolute;
+  width: 450px;
+  height: 150px;
+  top: 25%;
+  left: 10%;
+  h2 {
+    font-family: $second-font;
+    color: $white-color;
+    font-weight: 700;
+    font-size: 70px;
+    margin-bottom: 50px;
+    span {
+      font-weight: 400;
+      font-family: $second-font;
+      font-size: 60px;
+    }
+  }
+}
+.category-ban {
+  background-color: $black-color;
+  padding: 30px 0px;
+  max-height: 600px;
+  .container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center
+  }
+  .for-him, .for-her {
+   max-width: 45%;  
+   position: relative;
+   img {
+     width: 100%;
+     max-height: 550px;
+     object-fit: contain;
+     object-position: 50% 50%;
+   }
+   div {
+      z-index: 3;
+      position: absolute;
+      bottom: 5%;
+      left: 5%;
+      display: flex;
+      justify-content: space-between;
+      width: 90%;
+      text-align: center;
+      align-items: center;
+      span {
+        display: block;
+        color: $white-color;
+        font-size: 24px;
+      i {
+        padding: 15px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.4);
+      }
+     }
+   }
+   .glasses {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 2;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    cursor: pointer;
+  }
+  }
+}
+
+// latest product
