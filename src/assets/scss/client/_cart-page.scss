@@ -1,0 +1,209 @@
+.cart-page {
+  font-family: $primary-font;
+  margin-top: 60px;
+  margin-bottom: 50px;
+  h1 {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+}
+.cart-content {
+  display: flex;
+  justify-content: space-between;
+  .left-cart {
+    width: 70%;
+    h3 {
+      padding: 20px;
+      font-size: 24px;
+      font-weight: normal;
+      margin-bottom: 20px;
+    }
+  }
+  .items-in-cart {
+    li {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-top: 2px solid $grey-color;
+      a {
+        display: block;
+        width: 150px;
+        margin-right: 50px;
+        img {
+          width: 150px;
+          height: 150px;
+        }
+      }
+      .fa-x {
+        cursor: pointer;
+        position: absolute;
+        top: 5%;
+        padding: 10px;
+        right: 0px;
+        font-size: 20px;
+        color: $grey-color;
+      }
+    }
+    li:last-child {
+      border-bottom: 2px solid $grey-color;
+    }
+    .info-item {
+      margin-right: 20px;
+      a {
+        font-size: 24px;
+        padding-bottom: 20px;
+        color: $black-color;
+        position: relative;
+      }
+      span {
+        font-size: 20px;
+        display: block;
+        margin-bottom: 10px;
+      }
+      .discount-item {
+        margin-top: 10px;
+        font-size: 20px;
+        color: $red-color;
+        position: absolute;
+        top: -7px;
+        right: -45px;
+      }
+      .new-price {
+        color: $red-color;
+      }
+    }
+    .total {
+      margin-left: 50px;
+      span {
+        display: block;
+        font-size: 20px;
+      }
+      .title-price {
+        padding-bottom: 20px;
+      }
+    }
+  }
+  .right-cart {
+    width: 27%;
+  }
+
+}
+.discount-box {
+  margin-bottom: 30px;
+  h3 {
+    margin-bottom: 20px !important;
+    padding-top: 20px;
+  }
+  .box-content {
+    padding-left: 20px; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    div {
+      width: 70%;
+      input {
+        width: 40%;
+        display: inline-block;
+        height: 55px;
+        border: none;
+        outline: none;
+        border-bottom: 2px solid $blue-sky;
+        padding: 10px;
+        font-size: 18px;
+        font-family: $primary-font;
+      }
+      button {
+        width: 25%;
+        color: $black-color;
+        background-color: $blue-sky;
+        border-color:  $blue-sky;
+      }
+    }
+    button {
+      width: 25%;
+      color: $black-color;
+      background-color: $blue-sky;
+      border-color:  $blue-sky;
+    }
+  }
+}
+.right-cart {
+  h3 {
+    font-size: 30px;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 20px;
+  }
+  .checkout-box {
+    padding: 20px;
+    background-color: #FAFAFA;
+    .total-price, .discount, .final-price {
+      display: flex;
+      padding: 20px 0px;
+      justify-content: space-between;
+      span {
+        display: block;
+        font-size: 18px;
+      }
+    }
+    .total-price, .discount {
+      border-bottom: 2px solid $grey-color;
+    }
+    .price {
+      color: $red-color;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      color: $grey-color;
+      border-color: transparent;
+      background-color: $black-color;
+      margin-bottom: 20px;
+    }
+  }
+  .help-box {
+    .help {
+      border-bottom: 2px solid $grey-color;
+      span {
+        position: relative;
+        align-items: center;
+        display: block;
+        padding: 20px 0px;
+        font-size: 18px;
+        font-weight: 300;
+        .fa-plus {
+          cursor: pointer;
+          position: absolute;
+          right: 0px;
+          top: 30%;
+          font-size: 22px;
+        }
+        .fa-minus {
+          cursor: pointer;
+          position: absolute;
+          right: 0px;
+          top: 30%;
+          font-size: 22px;
+        }
+      }
+    }
+    .content {
+      font-size: 16px;
+      font-weight: 300;
+      p,li {
+        padding-bottom: 20px;
+        line-height: 20px;
+      }
+      li:before {
+        content: '+ ';
+      }
+    }
+    .refund {
+      li {
+        margin-left: 20px;
+      }
+    }
+  }
+  
+}

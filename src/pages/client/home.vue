@@ -54,15 +54,25 @@
     </section>
     
     <!-- latest-products -->
-    <productSlider></productSlider>
+    <latestProducts></latestProducts>
+    <bestSeller></bestSeller>
+    <brand></brand>
+    <whyLP></whyLP>
   </main>
 </template>
 
 <script>
-import productSlider from "../../components/client/productSlider.vue";
+import latestProducts from "../../components/client/latestProducts.vue";
+import bestSeller from "../../components/client/bestSeller.vue";
+import brand from "../../components/client/brand.vue";
+import whyLP from "../../components/client/whyLP.vue";
+
 export default {
   components: {
-    productSlider
+    latestProducts,
+    bestSeller,
+    brand,
+    whyLP,
   },
   setup() {},
   data() {

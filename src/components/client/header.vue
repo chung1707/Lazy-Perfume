@@ -4,14 +4,14 @@
       <div class="container">
         <div class="header-container">
           <h1 class="header-logo">
-            <a href="#">Lazy Perfume</a>
+            <router-link to="/">Lazy Perfume</router-link>
           </h1>
-          <ul class="header-menu">
+          <ul class="header-menu" :class="{is_active: menuActive}">
             <li>
-              <a class="hover-border-bottom" href="#">TRANG CHỦ</a>
+              <router-link to="/" class="hover-border-bottom">TRANG CHỦ</router-link>
             </li>
             <li>
-              <a class="hover-border-bottom" href="#">SẢN PHẨM</a>
+              <router-link to="/products" class="hover-border-bottom">SẢN PHẨM</router-link>
             </li>
             <li>
               <a class="hover-border-bottom" href="#">THƯƠNG HIỆU</a>
@@ -35,7 +35,10 @@
                   @click="closeSearchBox"
                 ></i>
               </div>
-              <button @click.prevent="closeSearchBox" class="hover-border-bottom">
+              <button
+                @click.prevent="closeSearchBox"
+                class="hover-border-bottom"
+              >
                 <i class="fa-solid fa-magnifying-glass find-icon"></i>
               </button>
               <div
@@ -95,20 +98,21 @@
               </div>
             </div>
             <div class="header-auth">
-              <a href="#"><i class="fa-solid fa-user hover-border-bottom"></i></a>
+              <a href="#"
+                ><i class="fa-solid fa-user hover-border-bottom"></i
+              ></a>
               <a href="#"
                 ><i class="fa-solid fa-right-to-bracket hidden"></i
               ></a>
             </div>
             <div class="cart-box">
-              <a href="#"
-                class="hover-border-bottom"
+              <router-link to="/cart" class="hover-border-bottom"
                 ><i
                   class="fa-solid fa-cart-shopping cart-icon"
                   @mouseover="cartActive = !cartActive"
                 ></i>
                 <span class="quantity-in-cart">(1)</span>
-              </a>
+              </router-link>
 
               <div
                 class="cart-box-inside"
@@ -178,6 +182,12 @@
               </div>
             </div>
           </ul>
+          <button class="menu-toggle"
+          @click="menuActive =!menuActive">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
         </div>
       </div>
     </header>
@@ -185,13 +195,16 @@
 </template>
 
 <script>
+
 export default {
+
   setup() {},
   data() {
     return {
       searchActive: false,
       searchKey: "",
       cartActive: false,
+      menuActive: false,
     };
   },
   methods: {
@@ -200,6 +213,8 @@ export default {
       this.searchActive = !this.searchActive;
     },
   },
+  mounted(){
+  }
 };
 </script>
 

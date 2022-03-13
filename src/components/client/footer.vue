@@ -11,9 +11,11 @@
               />
             </a>
           </h1>
+          <label class="subLabel" for="subImput">Đăng ký nhận ưu đãi</label>
           <div class="footer-sub">
-            <input type="text" placeholder="Nhập email của bạn..." />
-            <button>Nhận ưu đãi <i class="fa-solid fa-arrow-right"></i></button>
+            
+            <input id="subImput" type="text" placeholder="Nhập email của bạn..." />
+            <button><span>Nhận ưu đãi </span><i class="fa-solid fa-arrow-right"></i></button>
           </div>
           <div class="socials">
             <a class="hover-border-bottom" href=""><i class="fa-brands fa-facebook"></i></a>
@@ -38,7 +40,7 @@
               <a class="hover-border-bottom" href="#">Thương hiệu</a>
             </li>
             <li>
-              <a class="hover-border-bottom" href="#">Chính xách bán hàng</a>
+              <a class="hover-border-bottom" href="#">Chính sách bán hàng</a>
             </li>
             <li>
               <a class="hover-border-bottom" href="#">Về chúng tôi</a>
