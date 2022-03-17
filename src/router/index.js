@@ -31,6 +31,12 @@ const routes = [
     meta: { layout: 'client' }
   },
   {
+    path: '/checkout',
+    name: 'Checkout',
+    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/checkout.vue'),
+    meta: { layout: 'client' }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/login.vue'),
@@ -42,6 +48,13 @@ const routes = [
     component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/register.vue'),
     meta: { layout: 'client' }
   },
+  {
+    path: '/account',
+    name: 'Account',
+    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/personal.vue'),
+    meta: { layout: 'client' }
+  },
+
   //admin layouts
   {
     path: '/admin/dashbroad',

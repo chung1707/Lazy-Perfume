@@ -29,21 +29,24 @@ body {
   
 }
 .hidden {
+  overflow: hidden;
+  transform: translateY(-1%);
   visibility: collapse;
   overflow: hidden;
   opacity: 0;
   width: 0px;
   height: 0px;
   z-index: -10;
-  transition: visibility 0.5s, opacity 0.5s linear;
+  transition: visibility 0.5s, opacity 0.5s, transform 0.3s linear;
 }
 .visible {
+  transform: translateX(0);
   visibility: visible;
   opacity: 1;
   width: unset;
   z-index: 2;
   height: unset;
-  transition: visibility 0.5s, opacity 0.5s linear;
+  transition: visibility 0.5s, opacity 0.5s,transform 0.3s linear;
 }
 
 .product-name {
@@ -327,5 +330,47 @@ body {
   .minus {
     top: 15px;
     left: 10px;
+  }
+}
+
+// drop down menu
+.arrange {
+  span {
+    cursor: pointer;
+    display: inline-block;
+    padding: 10px;
+    padding-right: 30px;
+    width: 300px;
+    border: 2px solid $grey-color;
+    position: relative;
+    font-size: 14px;
+    text-align: center;
+    i {
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      font-size: 20px;
+    }
+  }
+  ul {
+    background-color: $grey-color;
+    i {
+      position: absolute;
+      top: -9%;
+      transform: rotate(180deg);
+      color: $grey-color;
+      font-size: 20px;
+    }
+    z-index: 2;
+    position: absolute;
+    margin-top: 10px;
+    width: 300px;
+    padding: 10px;
+    border: 2px solid $grey-color;
+    li {
+      font-size: 16px;
+      margin: 15px 0px;
+      cursor: pointer;
+    }
   }
 }

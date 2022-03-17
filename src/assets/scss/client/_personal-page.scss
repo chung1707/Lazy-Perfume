@@ -1,0 +1,135 @@
+.personal-page {
+  margin-top: 60px;
+  font-family: $primary-font;
+}
+.account-content {
+  margin-top: 50px;
+  display: flex;
+}
+.left-account {
+  width: 30%;
+  ul {
+    li {
+      padding: 20px 0px; 
+      border-bottom: 2px solid $blue-sky;
+      align-items: center;
+      a {
+        color: $black-color;
+        font-size: 20px;
+        position: relative;
+        margin-left: 35px;
+      }
+      i {
+        position: absolute;
+        left: -25px;
+        color: $orange-color;
+      }
+    }
+
+  }
+}
+.right-account {
+  margin-left: 3%;
+  width: 67%;
+}
+.order-list {
+  .order {
+    margin: 30px 0px;
+    width: 700px;
+    background-color: $blue-sky;
+    padding: 30px;
+    box-shadow: 0px 5px 20px 0px rgb(0 0 0 / 30%);
+    .order-id, .order-status, .created-time{
+      padding: 15px 0px;
+      font-size: 20px;
+      display: block;
+    }
+    button {
+      background-color: $black-color;
+    }
+    .title-list, .item-in-list,
+    .discount, .shipping, .final-price {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      span {
+        display: block;
+        width: 150px;
+        font-size: 18px;
+        padding: 20px 0px;
+        text-align: center;
+      }
+      span:first-child {
+        text-align: left;
+
+      }
+    }
+    .title-list {
+      span {
+        font-weight: bold;
+      }
+    }
+    .discount, .shipping, .final-price {
+      padding: 10px 0px;
+    }
+    .final-price  {
+      border-top: 1px solid $grey-color;
+      span {
+        font-weight: bold;
+        font-size: 20px;
+        width: 200px;
+      }
+      span:last-child {
+        color: $red-color;
+      }
+    }
+  }
+}
+.info-user {
+  h3 {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .info {
+    label,input {
+      display: block;
+    }
+    label {
+      font-size: 18px;
+      padding: 20px 0px; 
+    }
+    input {
+      padding: 20px;
+      width: 100%;
+      outline: none;
+      border-color: transparent;
+      background-color: $blue-sky;
+      font-family: $primary-font;
+      font-size: 16px;
+      &:focus {
+        border-color: $orange-color;
+        box-shadow: 0px 5px 20px 0px rgb(0 0 0 / 30%);
+      }
+    }
+  }
+  .address {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    .location {
+      label {
+        font-size: 18px;
+      }
+      span {
+        width: 270px !important;
+      }
+      ul {
+        width: 270px !important;
+      }
+    }
+  }
+  .update-button {
+    margin: 30px 0px;
+    background-color: $black-color;
+  }
+}
