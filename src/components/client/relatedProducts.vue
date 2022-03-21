@@ -6,6 +6,7 @@
     :spaceBetween="20"
     :loop="true"
     pagination
+    :autoplay="autoplay"
   >
     <SwiperSlide class="item" v-for="item in relatedProduct" :key="item.id">
       <router-link to="/product" class="img-card">
@@ -50,6 +51,10 @@ export default {
   },
   data() {
     return {
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
       relatedProduct: [
         {
           id: 1,

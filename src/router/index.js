@@ -21,37 +21,37 @@ const routes = [
   {
     path: '/product',
     name: 'Product',
-    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/product.vue'),
+    component: () => import(/* webpackChunkName:"Product"*/ '../pages/client/product.vue'),
     meta: { layout: 'client' }
   },
   {
     path: '/cart',
     name: 'Cart',
-    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/cart.vue'),
+    component: () => import(/* webpackChunkName:"cart"*/ '../pages/client/cart.vue'),
     meta: { layout: 'client' }
   },
   {
     path: '/checkout',
     name: 'Checkout',
-    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/checkout.vue'),
+    component: () => import(/* webpackChunkName:"checkout"*/ '../pages/client/checkout.vue'),
     meta: { layout: 'client' }
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/login.vue'),
+    component: () => import(/* webpackChunkName:"login"*/ '../pages/client/login.vue'),
     meta: { layout: 'client' }
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/register.vue'),
+    component: () => import(/* webpackChunkName:"register"*/ '../pages/client/register.vue'),
     meta: { layout: 'client' }
   },
   {
     path: '/account',
     name: 'Account',
-    component: () => import(/* webpackChunkName:"Products"*/ '../pages/client/personal.vue'),
+    component: () => import(/* webpackChunkName:"account"*/ '../pages/client/personal.vue'),
     meta: { layout: 'client' }
   },
 
@@ -59,7 +59,7 @@ const routes = [
   {
     path: '/admin/dashbroad',
     name: 'Dashbroad',
-    component: () => import(/* webpackChunkName:"Products"*/ '../pages/admin/dashbroad.vue'),
+    component: () => import(/* webpackChunkName:"dashbroad"*/ '../pages/admin/dashbroad.vue'),
     meta: { layout: 'admin' }
   },
 ]

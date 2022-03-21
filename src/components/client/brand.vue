@@ -13,10 +13,7 @@
           :spaceBetween="30"
           :loop="true"
           pagination
-        :breakpoints="{1220 : {
-         slidesPerView: 6,
-          spaceBetween: 30,
-        }}"
+          :autoplay="autoplay"
         >
           <swiper-slide
             class="slide-brand-item"
@@ -35,8 +32,8 @@
 
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay]);
 import "swiper/swiper-bundle.min.css";
 
 export default {
@@ -46,24 +43,28 @@ export default {
   },
   data() {
     return {
-     breakpoints: {
-            1220: {
-              slidesPerView: 4,
-              spaceBetween: 40
-            },
-            768: {
-              slidesPerView: 3,
-              spaceBetween: 30
-            },
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20
-            },
-            320: {
-              slidesPerView: 1,
-              spaceBetween: 10
-            }
-          },
+      autoplay: {
+          delay: 2000,
+          disableOnInteraction: false
+        },
+      breakpoints: {
+        1220: {
+          slidesPerView: 4,
+          spaceBetween: 40,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        320: {
+          slidesPerView: 1,
+          spaceBetween: 10,
+        },
+      },
       listBrand: [
         {
           id: 1,

@@ -1,14 +1,29 @@
 <template>
-<h1>this is admin layout</h1>
-  <slot/>
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper">
+      <adminNav class="adminMainNav" />
+      <adminSidebar />
+      <changeColor />
+      <slot />
+    </div>
+  </div>
 </template>
 
 <script>
-export default {
+import adminNav from "../components/admin/adminNav.vue";
+import adminSidebar from "../components/admin/adminSidebar.vue";
 
-}
+export default {
+  components: {
+    adminNav,
+    adminSidebar,
+  },
+};
 </script>
 
-<style>
+<style scoped lang="css">
 
+.adminMainNav{
+  background-color: black !important;
+}
 </style>

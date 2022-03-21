@@ -31,13 +31,14 @@
           :loop="true"
           navigation
           pagination
+          :autoplay="autoplay"
         >
           <swiper-slide
             class="slide-product-card-item"
             v-for="itemForHim in listForHim"
             :key="itemForHim.id"
           >
-           <router-link to="/product" class="img-card">
+            <router-link to="/product" class="img-card">
               <div class="flip-card">
                 <div class="flip-card-inner">
                   <div class="front">
@@ -146,6 +147,10 @@ export default {
   },
   data() {
     return {
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
       forHim: true,
       forHer: false,
       listForHim: [

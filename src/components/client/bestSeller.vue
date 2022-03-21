@@ -31,6 +31,8 @@
           :loop="true"
           navigation
           pagination
+          :autoplay="autoplay"
+
         >
           <swiper-slide
             class="slide-product-card-item"
@@ -138,6 +140,10 @@ export default {
   },
   data() {
     return {
+      autoplay: {
+          delay: 3000,
+          disableOnInteraction: false
+        },
       forHim: true,
       forHer: false,
       listForHim: [
