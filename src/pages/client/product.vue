@@ -17,12 +17,12 @@
         <div class="left-content">
           <div class="thumbnails-product">
             <img
-              :class="{ visible: image1 == true, hidden: image1 == false }"
+              :class="{ visible: image1 == true, dispay_hidden: image1 == false }"
               src="../../assets/images/for-him.jpg"
               alt="product image"
             />
             <img
-              :class="{ visible: image1 == false, hidden: image1 == true }"
+              :class="{ visible: image1 == false, dispay_hidden: image1 == true }"
               src="../../assets/images/for-her.jpg"
               alt="product image"
             />
@@ -72,7 +72,7 @@
             <div class="capacity-box" @click="selectCapacity = !selectCapacity">
               <i class="fa-solid fa-caret-down"></i>
               <span>{{ capacity }} ml</span>
-              <ul :class="{ hidden: !selectCapacity, visible: selectCapacity }">
+              <ul :class="{ dispay_hidden: !selectCapacity, visible: selectCapacity }">
                 <li>50 ml</li>
                 <li>100 ml</li>
               </ul>
@@ -95,7 +95,7 @@
             </div>
             <div class="tab-content">
               <div
-                class="fragrant-tab hidden"
+                class="fragrant-tab dispay_hidden"
                 :class="{ visible: tabActive == 1 }"
               >
                 <ul>
@@ -137,7 +137,7 @@
               </div>
 
               <div
-                class="features-tab hidden"
+                class="features-tab dispay_hidden"
                 :class="{ visible: tabActive == 2 }"
               >
                 <ul>
@@ -165,7 +165,7 @@
                 </ul>
               </div>
               <div
-                class="recommended-tab hidden"
+                class="recommended-tab dispay_hidden"
                 :class="{ visible: tabActive == 3 }"
               >
                 <div class="season">

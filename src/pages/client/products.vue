@@ -36,7 +36,7 @@
                   <div class="div-checkbox">
                     <i
                       :class="{ visible: this.filterSelected.genderId == gen.id }"
-                      class="hidden fa-solid fa-check"
+                      class="dispay_hidden fa-solid fa-check"
                     ></i>
                   </div>
                   <label>{{ gen.name }} </label>
@@ -55,7 +55,7 @@
                   <div class="div-checkbox">
                     <i
                       :class="{ visible: this.filterSelected.seasonId == season.id }"
-                      class="hidden fa-solid fa-check"
+                      class="dispay_hidden fa-solid fa-check"
                     ></i>
                   </div>
                   <label>{{ season.name }} </label>
@@ -74,7 +74,7 @@
                   <div class="div-checkbox">
                     <i
                       :class="{ visible: this.filterSelected.priceRangeId == range.id }"
-                      class="hidden fa-solid fa-check"
+                      class="dispay_hidden fa-solid fa-check"
                     ></i>
                   </div>
                   <label>{{ range.name }} </label>
@@ -91,7 +91,7 @@
                 @click="arrangeActive = !arrangeActive"
                 >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i></span>
                 <ul 
-                :class="{hidden: !arrangeActive, visible: arrangeActive}"
+                :class="{dispay_hidden: !arrangeActive, visible: arrangeActive}"
                 class="arrange-key-list">
                   <i class="fa-solid fa-caret-down"></i>
                   <li v-for="key in arrange" :key="key.id"

@@ -1,7 +1,7 @@
 <template>
   <main class="wrapper personal-page">
     <section class="header-products">
-      <h1 class="page-title">Thanh Toán</h1>
+      <h1 class="page-title">Trang cá nhân</h1>
     </section>
     <section>
       <div class="path">
@@ -21,7 +21,7 @@
                 :class="{ tabActive: tabActive == 1 }"
               >
                 <i
-                  class="hidden fa-solid fa-arrow-right"
+                  class="dispay_hidden fa-solid fa-arrow-right"
                   :class="{ visible: tabActive == 1 }"
                 ></i>
                 Thông tin cá nhân</a
@@ -34,7 +34,7 @@
                 :class="{ tabActive: tabActive == 2 }"
               >
                 <i
-                  class="hidden fa-solid fa-arrow-right"
+                  class="dispay_hidden fa-solid fa-arrow-right"
                   :class="{ visible: tabActive == 2 }"
                 ></i>
                 Đơn hàng của bạn
@@ -47,7 +47,7 @@
                 :class="{ tabActive: tabActive == 3 }"
               >
                 <i
-                  class="hidden fa-solid fa-arrow-right"
+                  class="dispay_hidden fa-solid fa-arrow-right"
                   :class="{ visible: tabActive == 3 }"
                 ></i>
                 Đổi mật khẩu</a
@@ -55,13 +55,13 @@
             </li>
             <li>
               <a href="#">
-                <i class="hidden fa-solid fa-arrow-right"></i> Đăng xuất</a
+                <i class="dispay_hidden fa-solid fa-arrow-right"></i> Đăng xuất</a
               >
             </li>
           </ul>
         </div>
         <div class="right-account">
-          <div class="order-list hidden" :class="{ visible: tabActive == 1 }">
+          <div class="order-list dispay_hidden" :class="{ visible: tabActive == 1 }">
             <div class="order" v-for="test in tests" :key="test.id">
               <span class="order-id">Mã đơn hàng: CCM211</span>
               <span class="order-status"
@@ -104,7 +104,7 @@
               </div>
             </div>
           </div>
-          <div class="info-user hidden" :class="{ visible: tabActive == 2 }">
+          <div class="info-user dispay_hidden" :class="{ visible: tabActive == 2 }">
             <h3>Thông tin người dùng</h3>
             <div class="info">
               <label for="username">Tên người dùng</label>
@@ -134,7 +134,7 @@
                     >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
                   ></span>
                   <ul
-                    :class="{ hidden: !arrangeActive, visible: arrangeActive }"
+                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
                     class="arrange-key-list"
                   >
                     <i class="fa-solid fa-caret-down"></i>
@@ -155,7 +155,7 @@
                     >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
                   ></span>
                   <ul
-                    :class="{ hidden: !arrangeActive, visible: arrangeActive }"
+                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
                     class="arrange-key-list"
                   >
                     <i class="fa-solid fa-caret-down"></i>
@@ -176,7 +176,7 @@
                     >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
                   ></span>
                   <ul
-                    :class="{ hidden: !arrangeActive, visible: arrangeActive }"
+                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
                     class="arrange-key-list"
                   >
                     <i class="fa-solid fa-caret-down"></i>
@@ -202,7 +202,7 @@
             <button class="button update-button">Cập nhập thông tin</button>
           </div>
           <div
-            class="change-password info-user hidden"
+            class="change-password info-user dispay_hidden"
             :class="{ visible: tabActive == 3 }"
           >
             <h3>Đổi mật khẩu</h3>

@@ -15,7 +15,7 @@ body {
   margin: 0 auto;
 }
 .container {
-  max-width: 1300px;
+  max-width: 1300px !important;
   margin: 0 auto;
   padding: 0 15px;
 }
@@ -28,7 +28,7 @@ body {
   }
   
 }
-.hidden {
+.dispay_hidden {
   overflow: hidden;
   transform: translateY(-1%);
   visibility: collapse;
@@ -40,7 +40,7 @@ body {
   transition: visibility 0.5s, opacity 0.5s, transform 0.3s linear;
 }
 .visible {
-  transform: translateX(0);
+  transform: translateX();
   visibility: visible;
   opacity: 1;
   width: unset;

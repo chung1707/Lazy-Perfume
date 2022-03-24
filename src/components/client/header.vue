@@ -24,7 +24,7 @@
             <div class="header-search">
               <div
                 class="search-box"
-                :class="{ hidden: !searchActive, visible: searchActive }"
+                :class="{ dispay_hidden: !searchActive, visible: searchActive }"
               >
                 <input type="text" class="" v-model="searchKey" />
                 <button>
@@ -43,7 +43,7 @@
               </button>
               <div
                 class="search-results"
-                :class="{ hidden: !searchKey, visible: searchKey }"
+                :class="{ dispay_hidden: !searchKey, visible: searchKey }"
               >
                 <p class="search-title">
                   Kết quả tìm kiếm cho:
@@ -102,7 +102,7 @@
                 ><i class="fa-solid fa-user hover-border-bottom"></i
               ></a>
               <a href="#"
-                ><i class="fa-solid fa-right-to-bracket hidden"></i
+                ><i class="fa-solid fa-right-to-bracket dispay_hidden"></i
               ></a>
             </div>
             <div class="cart-box">
@@ -117,7 +117,7 @@
               <div
                 class="cart-box-inside"
                 @mouseleave="cartActive = false"
-                :class="{ hidden: !cartActive, visible: cartActive }"
+                :class="{ dispay_hidden: !cartActive, visible: cartActive }"
               >
                 <div class="empty-cart" v-if="1 > 2">
                   <p>Giỏ hàng của bạn chưa có sản phẩm nào!</p>

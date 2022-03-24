@@ -23,7 +23,7 @@
         >
           <div
             class="glasses"
-            :class="{ hidden: !glassesForHim, visible: glassesForHim }"
+            :class="{ dispay_hidden: !glassesForHim, visible: glassesForHim }"
           ></div>
           <a href="#">
             <img src="../../assets/images/for-him.jpg" alt="" />
@@ -40,7 +40,7 @@
         >
           <div
             class="glasses"
-            :class="{ hidden: !glassesForHer, visible: glassesForHer }"
+            :class="{ dispay_hidden: !glassesForHer, visible: glassesForHer }"
           ></div>
           <a href="#">
             <img src="../../assets/images/for-her.jpg" alt="" />

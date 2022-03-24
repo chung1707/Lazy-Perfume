@@ -111,7 +111,7 @@
                 <i @click="helpTabActive = 1" v-if="helpTabActive !=1" class="fa-solid fa-plus"></i>
                 <i @click="helpTabActive = 0" v-else class="fa-solid fa-minus"></i>
               </span>
-              <div class="content hidden" :class="{visible: helpTabActive==1}">
+              <div class="content dispay_hidden" :class="{visible: helpTabActive==1}">
                 <p>
                   Nếu trong quá trình đặt hàng có bất kỳ thắc mắc nào, quý khách
                   vui lòng liên hệ theo Hotline:
@@ -128,7 +128,7 @@
                 <i @click="helpTabActive =2" v-if="helpTabActive !=2" class="fa-solid fa-plus"></i>
                 <i @click="helpTabActive =0" v-else class="fa-solid fa-minus"></i>
               </span>
-              <div class="content hidden" :class="{visible: helpTabActive==2}">
+              <div class="content dispay_hidden" :class="{visible: helpTabActive==2}">
                 <p>
                   Lazy Perfume miễn phí ship với tất cả các đơn hàng toàn quốc.
                 </p>
@@ -140,7 +140,7 @@
                 <i @click="helpTabActive =3" v-if="helpTabActive !=3" class="fa-solid fa-plus"></i>
                 <i @click="helpTabActive =0" v-else class="fa-solid fa-minus"></i>
               </span>
-              <ul class="refund content hidden" :class="{visible: helpTabActive==3}">
+              <ul class="refund content dispay_hidden" :class="{visible: helpTabActive==3}">
                 <li>
                   Lazy Perfume hỗ trợ đổi trả sản phẩm trong vòng 3 ngày kể từ
                   khi nhận hàng.

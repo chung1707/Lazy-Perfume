@@ -49,7 +49,7 @@
                     >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
                   ></span>
                   <ul
-                    :class="{ hidden: !arrangeActive, visible: arrangeActive }"
+                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
                     class="arrange-key-list"
                   >
                     <i class="fa-solid fa-caret-down"></i>
@@ -70,7 +70,7 @@
                     >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
                   ></span>
                   <ul
-                    :class="{ hidden: !arrangeActive, visible: arrangeActive }"
+                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
                     class="arrange-key-list"
                   >
                     <i class="fa-solid fa-caret-down"></i>
@@ -91,7 +91,7 @@
                     >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
                   ></span>
                   <ul
-                    :class="{ hidden: !arrangeActive, visible: arrangeActive }"
+                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
                     class="arrange-key-list"
                   >
                     <i class="fa-solid fa-caret-down"></i>
@@ -126,7 +126,7 @@
                   <div class="div-checkbox">
                     <i
                       :class="{visible: payment_method == payment.id}"
-                      class="hidden fa-solid fa-check"
+                      class="dispay_hidden fa-solid fa-check"
                     ></i>
                   </div>
                   <label>{{ payment.name }} </label>
