@@ -150,8 +150,6 @@ export default {
 }
 .logo-img {
   width: 300px;
-  height: 500px;
-
   text-align: center;
   img {
     margin-top: 0px;

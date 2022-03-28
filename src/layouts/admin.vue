@@ -3,7 +3,6 @@
     <div class="container-fluid page-body-wrapper">
       <adminNav class="adminMainNav" />
       <adminSidebar />
-      <changeColor />
       <slot />
     </div>
   </div>
@@ -18,12 +17,11 @@ export default {
     adminNav,
     adminSidebar,
   },
-};
+}
 </script>
 
 <style scoped lang="css">
-
-.adminMainNav{
-  background-color: black !important;
+.header-right {
+  gap: 0px !important;
 }
 </style>

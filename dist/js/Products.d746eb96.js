@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["Products"],{"7ef2":function(t,n,e){"use strict";e.r(n);var c=e("7a23"),u={class:"client-layout"},o=Object(c["f"])("h1",null,"this is products page of perfume shop!",-1),r=[o];function s(t,n,e,o,s,a){return Object(c["r"])(),Object(c["e"])("div",u,r)}var a={setup:function(){},data:function(){return{}}},i=e("6b0d"),p=e.n(i);const d=p()(a,[["render",s]]);n["default"]=d}}]);
-//# sourceMappingURL=Products.d746eb96.js.map

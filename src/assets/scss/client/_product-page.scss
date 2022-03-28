@@ -146,30 +146,32 @@
   .tab-content {
     width: 100%;
     .fragrant-tab {
-      ul .tab-item {
-        display: flex;
-        align-items: center;
-        margin: 40px 0px;
-        font-size: 16px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid $grey-color;
-        span {
-          margin-right: 40px;
-          width: 90px;
-        }
-        ul {
-          font-weight: 300;
+      ul {
+        .tab-item {
           display: flex;
-          li {
-            border-bottom: none;
-            margin-left: 10px;
-            &::after {
-              content: ',';
-            }
+          align-items: center;
+          margin: 40px 0px;
+          font-size: 16px;
+          padding-bottom: 10px;
+          border-bottom: 2px solid $grey-color;
+          span {
+            margin-right: 40px;
+            width: 90px;
           }
-          li:last-child {
-            &::after {
-              content: '';
+          ul {
+            font-weight: 300;
+            display: flex;
+            li {
+              border-bottom: none;
+              margin-left: 10px;
+              &::after {
+                content: ',';
+              }
+            }
+            li:last-child {
+              &::after {
+                content: '';
+              }
             }
           }
         }
@@ -181,7 +183,6 @@
       span {
         font-size: 16px;
         font-weight: 300;
-        width: 100%;
       }
       .item-title {
         display: inline-block;

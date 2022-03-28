@@ -62,6 +62,12 @@ const routes = [
     component: () => import(/* webpackChunkName:"dashbroad"*/ '../pages/admin/dashbroad.vue'),
     meta: { layout: 'admin' }
   },
+  {
+    path: '/admin/profile',
+    name: 'Profile',
+    component: () => import(/* webpackChunkName:"profile"*/ '../pages/admin/profile.vue'),
+    meta: { layout: 'admin' }
+  },
 ]
 
 
