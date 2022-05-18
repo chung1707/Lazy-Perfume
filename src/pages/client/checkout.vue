@@ -2,6 +2,12 @@
   <main class="checkout-page wrapper">
     <section class="header-products">
       <h1 class="page-title">Thanh Toán</h1>
+      <h5 class="unsuccessful" v-if="unsuccessful">
+        <i class="fas fa-times-octagon"></i>Đã có lỗi sãy ra, đặt hàng thất bại!
+      </h5>
+      <h5 class="success" v-if="success">
+        <i class="fas fa-check"></i> Đặt hàng thành công!
+      </h5>
     </section>
     <section>
       <div class="path">
@@ -14,188 +20,237 @@
         </div>
       </div>
       <div class="checkout-content">
-        <div class="container">
-          <div class="left-checkout">
-            <h3>Chi tiết thanh toán</h3>
-            <div class="name-customer">
-              <div class="name">
-                <label for="name">Tên khách hàng</label>
-                <input type="text" name="name" placeholder="Tên của bạn" />
-              </div>
-              <div class="name">
-                <label for="phoneNumber">Số điện thoại</label>
-                <input
-                  type="text"
-                  name="phoneNumber"
-                  placeholder="Số điện thoại của bạn"
-                />
-              </div>
-            </div>
-            <div class="email-address">
-              <div class="email">
-                <label for="email">Email</label>
-                <input type="text" placeholder="Email của bạn" />
-              </div>
-              <div class="address-details">
-                <label for="address">Địa chỉ nhận hàng</label>
-                <input type="text" />
-              </div>
-            </div>
-            <div class="address">
-              <div class="location">
-                <label for="provinces">Tỉnh / Thành phố</label>
-                <div class="arrange">
-                  <span @click="arrangeActive = !arrangeActive"
-                    >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
-                  ></span>
-                  <ul
-                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
-                    class="arrange-key-list"
-                  >
-                    <i class="fa-solid fa-caret-down"></i>
-                    <li
-                      v-for="key in arrange"
-                      :key="key.id"
-                      @click="setArrangKey(key)"
+        <form :messages="messagesOverride">
+          <div class="container">
+            <div class="left-checkout">
+              <h3>Chi tiết thanh toán</h3>
+              <div class="name-customer">
+                <div class="name">
+                  <label for="name">Tên khách hàng</label>
+                  <input
+                    v-model="this.user.name"
+                    type="text"
+                    name="name"
+                    :class="{ errorInput: v$.user.name.$error }"
+                    placeholder="Tên của bạn"
+                  />
+                  <span class="error" v-if="v$.user.name.$error">
+                    <span
+                      v-if="v$.user.name.$errors[0].$params.type == 'required'"
                     >
-                      {{ key.name }}
-                    </li>
-                  </ul>
+                      Trường này không được bỏ trống!
+                    </span>
+                    <span
+                      v-if="v$.user.name.$errors[0].$params.type == 'maxLength'"
+                    >
+                      Trường này yêu cầu tối đa 255 kí tự!
+                    </span>
+                  </span>
+                </div>
+                <div class="name">
+                  <label for="phoneNumber">Số điện thoại</label>
+                  <input
+                    type="text"
+                    :class="{ errorInput: v$.user.phone.$error }"
+                    v-model="this.user.phone"
+                    name="phoneNumber"
+                    placeholder="Số điện thoại của bạn"
+                  />
+                  <span class="error" v-if="v$.user.phone.$error">
+                    <span
+                      v-if="v$.user.phone.$errors[0].$params.type == 'required'"
+                    >
+                      Trường này không được bỏ trống!
+                    </span>
+                    <span
+                      v-if="
+                        v$.user.phone.$errors[0].$params.type == 'maxLength'
+                      "
+                    >
+                      Trường này yêu cầu tối đa 13 kí tự!
+                    </span>
+                    <span
+                      v-if="
+                        v$.user.phone.$errors[0].$params.type == 'minLength'
+                      "
+                    >
+                      Trường này yêu cầu tối thiểu 9 kí tự!
+                    </span>
+                    <span
+                      v-if="v$.user.phone.$errors[0].$params.type == 'numeric'"
+                    >
+                      Trường này yêu cầu là một dãy số!
+                    </span>
+                  </span>
                 </div>
               </div>
-              <div class="location">
-                <label for="districts">Quận / Huyện</label>
-                <div class="arrange">
-                  <span @click="arrangeActive = !arrangeActive"
-                    >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
-                  ></span>
-                  <ul
-                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
-                    class="arrange-key-list"
-                  >
-                    <i class="fa-solid fa-caret-down"></i>
-                    <li
-                      v-for="key in arrange"
-                      :key="key.id"
-                      @click="setArrangKey(key)"
+              <div class="email-address">
+                <div class="email">
+                  <label for="email">Email</label>
+                  <input
+                    type="text"
+                    :class="{ errorInput: v$.user.email.$error }"
+                    v-model="this.user.email"
+                    placeholder="Email của bạn"
+                  />
+                  <span class="error" v-if="v$.user.email.$error">
+                    <span
+                      v-if="v$.user.email.$errors[0].$params.type == 'required'"
                     >
-                      {{ key.name }}
-                    </li>
-                  </ul>
+                      Trường này không được bỏ trống!
+                    </span>
+                    <span
+                      v-if="
+                        v$.user.email.$errors[0].$params.type == 'maxLength'
+                      "
+                    >
+                      Trường này yêu cầu tối đa 255 kí tự!
+                    </span>
+                    <span
+                      v-if="v$.user.email.$errors[0].$params.type == 'email'"
+                    >
+                      Sai định dạng email!
+                    </span>
+                  </span>
+                </div>
+                <div class="address-details">
+                  <label for="address">Địa chỉ nhận hàng</label>
+                  <input
+                    type="text"
+                    :class="{ errorInput: v$.user.address.$error }"
+                    v-model="this.user.address"
+                  />
+                  <span class="error" v-if="v$.user.address.$error">
+                    <span
+                      v-if="
+                        v$.user.address.$errors[0].$params.type == 'required'
+                      "
+                    >
+                      Trường này không được bỏ trống!
+                    </span>
+                    <span
+                      v-if="
+                        v$.user.address.$errors[0].$params.type == 'maxLength'
+                      "
+                    >
+                      Trường này yêu cầu tối đa 255 kí tự!
+                    </span>
+                  </span>
                 </div>
               </div>
-              <div class="location">
-                <label for="wards">Phường / Xã</label>
-                <div class="arrange">
-                  <span @click="arrangeActive = !arrangeActive"
-                    >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
-                  ></span>
-                  <ul
-                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
-                    class="arrange-key-list"
+              <div class="notes">
+                <label for="notes"> Ghi chú cho đơn hàng </label>
+                <textarea
+                  placeholder="Nhập ghi chú cho đơn hàng của bạn"
+                  class=""
+                  v-model="notes"
+                  name="notes"
+                  id=""
+                ></textarea>
+              </div>
+              <div class="payment">
+                <span class="error" v-if="v$.payment_method.$error">
+                  <span> Bạn chưa chọn phương thức thanh toán </span>
+                </span>
+                <h3 class="filter-title">Phương thức thanh toán</h3>
+                <ul class="seasons-filter">
+                  <li
+                    v-for="payment in payments"
+                    :key="payment.id"
+                    @click="selectPaymentMethod(payment)"
                   >
-                    <i class="fa-solid fa-caret-down"></i>
-                    <li
-                      v-for="key in arrange"
-                      :key="key.id"
-                      @click="setArrangKey(key)"
-                    >
-                      {{ key.name }}
-                    </li>
-                  </ul>
-                </div>
+                    <div class="div-checkbox">
+                      <i
+                        :class="{ visible: payment_method.id == payment.id }"
+                        class="dispay_hidden fa-solid fa-check"
+                      ></i>
+                    </div>
+                    <label>{{ payment.name }} </label>
+                  </li>
+                </ul>
               </div>
             </div>
-            <div class="notes">
-              <label for="notes"> Ghi chú cho đơn hàng </label>
-              <textarea
-                placeholder="Nhập ghi chú cho đơn hàng của bạn"
-                class=""
-                name="notes"
-                id=""
-              ></textarea>
-            </div>
-            <div class="payment">
-              <h3 class="filter-title">Phương thức thanh toán</h3>
-              <ul class="seasons-filter">
-                <li
-                  v-for="payment in payments"
-                  :key="payment.id"
-                  @click="selectPaymentMethod(payment.id)"
-                >
-                  <div class="div-checkbox">
-                    <i
-                      :class="{visible: payment_method == payment.id}"
-                      class="dispay_hidden fa-solid fa-check"
-                    ></i>
+            <div class="right-checkout">
+              <div class="discount-box">
+                <h3>Mã giảm giá</h3>
+                <div class="box-content">
+                  <div>
+                    <input type="text" placeholder="Nhập mã ưu đãi" />
+                    <button class="button">Sử dụng</button>
                   </div>
-                  <label>{{ payment.name }} </label>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="right-checkout">
-            <div class="discount-box">
-              <h3>Mã giảm giá</h3>
-              <div class="box-content">
-                <div>
-                  <input type="text" placeholder="Nhập mã ưu đãi" />
-                  <button class="button">Sử dụng</button>
                 </div>
               </div>
-            </div>
-            <div class="bill-info">
-              <h3>Đơn hàng của bạn</h3>
-              <div class="title-bill">
-                <span>Sản phẩm</span>
-                <span>Thành tiền</span>
+              <div class="bill-info">
+                <h3>Đơn hàng của bạn</h3>
+                <div class="title-bill">
+                  <span>Sản phẩm</span>
+                  <span>Thành tiền</span>
+                </div>
+                <div
+                  class="products-in-bill"
+                  v-for="item in itemsInCart"
+                  :key="item"
+                >
+                  <span class="name"
+                    >{{ item.name }} x {{ item.pivot.quantity }}
+                  </span>
+                  <span class="price">
+                    {{ item.pivot.quantity * item.price }} VNĐ
+                  </span>
+                </div>
+                <div class="total-price">
+                  <span>Tổng tiền:</span>
+                  <span> {{ totalPrice }} VNĐ</span>
+                </div>
+                <div class="total-shipping">
+                  <span>Phí vận chuyển:</span>
+                  <span> 30.000 VNĐ</span>
+                </div>
+                <div class="total-discount">
+                  <span>Giảm giá:</span>
+                  <span> 0%</span>
+                </div>
+                <div class="final-price">
+                  <span>Tổng hóa đơn:</span>
+                  <span> {{ totalPrice + 30000 }}VNĐ</span>
+                </div>
+                <button class="button" @click.prevent="submitOrder">
+                  Đặt hàng
+                </button>
               </div>
-              <div class="products-in-bill">
-                <span class="name"> Dior Sauvage x 2 </span>
-                <span class="price"> 3.500.000 VNĐ </span>
-              </div>
-              <div class="products-in-bill">
-                <span class="name"> Dior Sauvage x 2 </span>
-                <span class="price"> 3.500.000 VNĐ </span>
-              </div>
-              <div class="total-price">
-                <span>Tổng tiền:</span>
-                <span> 10.000.000 VNĐ</span>
-              </div>
-              <div class="total-shipping">
-                <span>Phí vận chuyển:</span>
-                <span> 10.000 VNĐ</span>
-              </div>
-              <div class="total-discount">
-                <span>Giảm giá:</span>
-                <span> 10%</span>
-              </div>
-              <div class="final-price">
-                <span>Tổng hóa đơn:</span>
-                <span> 10.000.000 VNĐ</span>
-              </div>
-              <button class="button">Thanh toán</button>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   </main>
 </template>
 
 <script>
+import baseRequest from "../../base/baseRequest";
+import { mapActions, mapGetters } from "vuex";
+import useVuelidate from "@vuelidate/core";
+import {
+  required,
+  email,
+  maxLength,
+  numeric,
+  minLength,
+} from "@vuelidate/validators";
 export default {
+  computed: {
+    ...mapGetters(["itemsInCart", "totalPrice", "totalItemInCart"]),
+  },
   data() {
     return {
-      payment_method: 0,
-      arrangeKey: "Mới nhất",
-      arrangeActive: false,
-      arrange: [
-        { name: "Mới nhất", id: 1 },
-        { name: "Thứ tự theo giá: Từ thấp đến cao", id: 2 },
-        { name: "Thứ tự theo giá: Từ cao đến thấp", id: 3 },
-        { name: "Theo mức độ phổ biến", id: 4 },
-      ],
+      discount_id: null,
+      messagesOverride: {
+        required: "You must fill the {attribute} field to continue",
+        email: "The email must be a genuine email address.",
+      },
+      v$: useVuelidate(),
+      user: this.$store.state.authUser,
+      payment_method: {},
       payments: [
         {
           id: 1,
@@ -206,17 +261,84 @@ export default {
         {
           id: 2,
           name: "Thanh toán bằng tài khoản ngân hàng",
-          description:"Tài khoản thanh toán là tài khoản sử dụng cho việc thanh toán mở tại trung gian thanh toán. Tài khoản này được dùng với mục đích thanh toán là chủ yếu. Số tiền có trong tài khoản khách hàng có thể thanh toán cho bất kỳ nhu cầu dịch vụ nào, chúng vô cùng tiện lợi và nhanh chón"
+          description:
+            "Tài khoản thanh toán là tài khoản sử dụng cho việc thanh toán mở tại trung gian thanh toán. Tài khoản này được dùng với mục đích thanh toán là chủ yếu. Số tiền có trong tài khoản khách hàng có thể thanh toán cho bất kỳ nhu cầu dịch vụ nào, chúng vô cùng tiện lợi và nhanh chón",
         },
       ],
+      notes: null,
+      success: false,
+      unsuccessful: false,
+    };
+  },
+  validations() {
+    return {
+      user: {
+        name: { required, maxLength: maxLength(255) },
+        email: { required, email, maxLength: maxLength(255) },
+        phone: {
+          required,
+          numeric,
+          maxLength: maxLength(13),
+          minLength: minLength(9),
+        },
+        address: { required, maxLength: maxLength(255) },
+      },
+      payment_method: { required },
     };
   },
   methods: {
-    selectPaymentMethod(id){
-      if(this.payment_method ==id) return this.payment_method=0;
-      return this.payment_method = id;
-    }
-  }
+    ...mapActions(["getCart", "clearCart"]),
+    checkItems() {
+      if (this.totalItemInCart < 1) {
+        this.$router.push({ name: "Cart" });
+      }
+    },
+    submitOrder() {
+      this.v$.$validate();
+      this.checkItems();
+      var orderBill = {};
+      orderBill.phone_number = this.user.phone;
+      orderBill.deliveryAddress = this.user.address;
+      if (this.payment_method) {
+        orderBill.payment_methods = this.payment_method.name;
+      }
+      orderBill.email = this.user.email;
+      orderBill.totalPrice = this.totalPrice;
+      orderBill.discount_id = this.discount_id;
+      orderBill.products = this.itemsInCart;
+      orderBill.note = this.notes;
+      baseRequest
+        .post("checkout", orderBill)
+        .then((response) => {
+          if (response.data.success) {
+            this.success = true;
+            this.clearCart();
+            this.$router.push({ name: "Account" });
+            return;
+          }
+          this.unsuccessful = true;
+        })
+        .catch(() => {
+          this.unsuccessful = true;
+          this.success = false;
+        });
+    },
+    selectPaymentMethod(method) {
+      return (this.payment_method = method);
+    },
+  },
+  mounted() {
+    this.checkItems();
+    this.$isLoading(false);
+  },
+  watch: {
+    unsuccessful() {
+      setTimeout(() => (this.unsuccessful = false), 2000);
+    },
+    success() {
+      setTimeout(() => (this.success = false), 1500);
+    },
+  },
 };
 </script>
 

@@ -17,11 +17,11 @@
         >
           <swiper-slide
             class="slide-brand-item"
-            v-for="brand in listBrand"
-            :key="brand.id"
+            v-for="logo in brandLogos"
+            :key="logo.id"
           >
             <a href="#" class="logo-img">
-              <img :src="require('@/assets/images/' + brand.images[0])" />
+              <img :src="imgUrl + logo.logo" />
             </a>
           </swiper-slide>
         </swiper>
@@ -32,115 +32,57 @@
 
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper";
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y, Autoplay]);
 import "swiper/swiper-bundle.min.css";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
   },
+  computed: {
+    ...mapGetters(["brandLogos", "imgUrl"]),
+  },
   data() {
     return {
       autoplay: {
-          delay: 2000,
-          disableOnInteraction: false
-        },
-      breakpoints: {
-        1220: {
-          slidesPerView: 4,
-          spaceBetween: 40,
-        },
-        768: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-        },
-        640: {
-          slidesPerView: 2,
-          spaceBetween: 20,
-        },
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 10,
-        },
+        delay: 2000,
+        disableOnInteraction: false,
       },
-      listBrand: [
-        {
-          id: 1,
-          images: ["brand1.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 2,
-
-          images: ["brand2.png"],
-          name: "Kilian Black Phantom 1 sadasnj",
-        },
-        {
-          id: 3,
-
-          images: ["brand3.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 4,
-          images: ["brand4.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 5,
-
-          images: ["brand5.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 6,
-
-          images: ["brand6.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 7,
-
-          images: ["brand7.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 7,
-
-          images: ["brand8.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 7,
-
-          images: ["brand9.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 7,
-
-          images: ["brand10.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 7,
-
-          images: ["brand11.png"],
-          name: "Kilian Black Phantom 1",
-        },
-        {
-          id: 7,
-
-          images: ["brand12.png"],
-          name: "Kilian Black Phantom 1",
-        },
-      ],
+      // breakpoints: {
+      //   1220: {
+      //     slidesPerView: 4,
+      //     spaceBetween: 40,
+      //   },
+      //   768: {
+      //     slidesPerView: 3,
+      //     spaceBetween: 30,
+      //   },
+      //   640: {
+      //     slidesPerView: 2,
+      //     spaceBetween: 20,
+      //   },
+      //   320: {
+      //     slidesPerView: 1,
+      //     spaceBetween: 10,
+      //   },
+      // },
     };
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    ...mapActions(["setBrandLogos"]),
+  },
+  mounted() {
+    this.setBrandLogos();
+  },
 };
 </script>
 

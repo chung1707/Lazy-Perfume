@@ -1,9 +1,9 @@
 <template>
   <div class="container-scroller">
     <div class="container-fluid page-body-wrapper">
-      <adminNav class="adminMainNav" />
+      <adminNav :class="{adminMainNav: $store.state.hiddenSidebar}" />
       <adminSidebar />
-      <slot />
+      <slot class="" />
     </div>
   </div>
 </template>
@@ -17,6 +17,7 @@ export default {
     adminNav,
     adminSidebar,
   },
+  
 }
 </script>
 

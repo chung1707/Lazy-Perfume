@@ -1,6 +1,9 @@
 .products-page {
   margin-top: 70px;
   font-family: $primary-font;
+  .wrapper {
+    border-bottom: 2px solid grey;
+  }
 }
 .header-products {
   padding: 20px;
@@ -9,6 +12,8 @@
 }
 
 .products-content {
+  padding-bottom: 50px;
+  min-height: 1200px;
   padding-top: 50px;
   display: flex;
   justify-content: space-between;
@@ -55,7 +60,8 @@
           font-weight: 300;
         }
         a:hover {
-          color: $blue-color;
+          color: $orange-color;
+          font-weight: bold;
         }
       }
     }
@@ -127,11 +133,12 @@
   .info-card {
     text-align: center;
     color: white;
-    background-color: $black-color;
+    background-color: $white-color;
     .product-name {
       padding-top: 10px;
       padding-bottom: 20px;
-      font-size: 17px;
+      font-size: 24px;
+      color: $black-color;
     }
     .thumbnail-price {
       color: $yellow-color;
@@ -139,6 +146,7 @@
       font-size: 14px;
     }
     .add-to-cart {
+      margin-top: 20px;
       cursor: pointer;
       display: block;
       padding: 10px 0px;

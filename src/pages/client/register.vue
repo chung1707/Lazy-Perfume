@@ -3,14 +3,28 @@
     <div class="container">
       <h1 class="login-title">Đăng nhập</h1>
       <div class="login-box">
+         <span
+          style="text-align: center; display: block"
+          v-if="errors.error"
+          class="error"
+          >{{ errors.error }}
+        </span>
         <div class="info-box">
-          <label for="">Tài khoản</label>
-          <input type="text" placeholder="Nhập tài khoản của bạn">
+          <label for="">Tên</label>
+          <input type="text" v-model="user.name" placeholder="Nhập tên của bạn">
+          <span v-if="errors.name" class="error">{{ errors.name[0] }}</span>
+          <i class="fa-solid fa-user"></i>
+        </div>
+        <div class="info-box">
+          <label for="">Email</label>
+          <input type="text" v-model="user.email" placeholder="Nhập email của bạn">
+          <span v-if="errors.email" class="error">{{ errors.email[0] }}</span>
           <i class="fa-solid fa-user"></i>
         </div>
         <div class="info-box">
           <label for="">Mật khẩu</label>
-          <input :type="hiddenPassword ? 'password' : 'text'"  placeholder="Nhập mật khẩu">
+          <input :type="hiddenPassword ? 'password' : 'text'" v-model="user.password"  name="password" placeholder="Nhập mật khẩu">
+          <span v-if="errors.password" class="error">{{ errors.password[0] }}</span>
           <i class="fa-solid fa-lock"></i>
           <i 
           @click="hiddenPassword = false"
@@ -23,7 +37,7 @@
         </div>
         <div class="info-box">
           <label for="">Xác nhận mật khẩu</label>
-          <input :type="hiddenConfirmPassword ? 'password' : 'text'"  placeholder="xác nhận mật khẩu trên">
+          <input :type="hiddenConfirmPassword ? 'password' : 'text'" v-model="user.password_confirmation" name="password_confirmation"  placeholder="Xác nhận mật khẩu trên">
           <i class="fa-solid fa-lock"></i>
           <i 
           @click="hiddenConfirmPassword = false"
@@ -36,14 +50,14 @@
         </div>
       </div>
       <span class="forgot-password">Quên mật khẩu?</span>
-      <button class="button login-button">Đăng nhập</button>
-      <div class="socials-login">
+      <button @click.prevent="register" class="button login-button">Đăng Ký</button>
+      <!-- <div class="socials-login">
         <span>Đăng nhập với</span>
         <div class="socials">
           <i class="fa-brands fa-facebook"></i>
           <i class="fa-brands fa-google"></i>
         </div>
-      </div>
+      </div> -->
       <div class="sign-up-box">
         <span>Bạn đã có tài khoản?</span>
         <router-link to="/login" class="button login-button">Đăng nhập</router-link>
@@ -53,13 +67,38 @@
 </template>
 
 <script>
+// import baseRequest from '../../base/baseRequest'
 export default {
   data(){
     return {
+      errors: {},
+      user: {
+        name: null,
+        email: null,
+        password: null,
+        password_confirmation: null,
+      },
       hiddenPassword: true,
       hiddenConfirmPassword: true,
     }
-  }
+  },
+  methods: {
+    register(){
+      this.$isLoading(true);
+        this.$store.dispatch('register', this.user).then(() => {
+          this.$router.push({name: 'Account'});
+          this.errors = {};
+        })
+        .catch((error) => {
+          this.errors = error.response.data.errors;
+        }).finally(()=>{
+          this.$isLoading(false);
+        })
+    }
+  },
+  mounted() {
+    this.$isLoading(false);
+  },
 }
 </script>
 

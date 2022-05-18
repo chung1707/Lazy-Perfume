@@ -1,8 +1,8 @@
 <template>
   <main class="products-page">
     <section class="wrapper header-products">
-      <h1 class="page-title" v-if="1 < 2">Shop</h1>
-      <h1 v-else>Dior Sauvage</h1>
+      <h1 class="page-title" v-if="!brandName">Shop</h1>
+      <h1 v-else>{{ brandName }}</h1>
     </section>
     <section class="wrapper main-products">
       <div class="path">
@@ -21,7 +21,7 @@
               <input type="text" placeholder="Tìm kiếm..." />
               <ul class="brand-list">
                 <li v-for="brand in brands" :key="brand.id">
-                  <a href="#">{{ brand.name }}</a>
+                  <a @click.prevent="brandFilter(brand)">{{ brand.name }}</a>
                 </li>
               </ul>
             </div>
@@ -29,36 +29,19 @@
               <h5 class="filter-title">Giới tính</h5>
               <ul>
                 <li
-                  v-for="gen in gender"
-                  :key="gen.id"
-                  @click="selectGender(gen.id)"
+                  v-for="category in categories"
+                  :key="category.id"
+                  @click="selectCategories(category.id)"
                 >
                   <div class="div-checkbox">
                     <i
-                      :class="{ visible: this.filterSelected.genderId == gen.id }"
+                      :class="{
+                        visible: this.filterSelected.categoryId == category.id,
+                      }"
                       class="dispay_hidden fa-solid fa-check"
                     ></i>
                   </div>
-                  <label>{{ gen.name }} </label>
-                </li>
-              </ul>
-            </div>
-            <div class="seasons">
-              <h5 class="filter-title">Mùa</h5>
-
-              <ul class="seasons-filter">
-                <li 
-                v-for="season in seasons" 
-                :key="season.id"
-                @click="selectSeason(season.id)"
-                >
-                  <div class="div-checkbox">
-                    <i
-                      :class="{ visible: this.filterSelected.seasonId == season.id }"
-                      class="dispay_hidden fa-solid fa-check"
-                    ></i>
-                  </div>
-                  <label>{{ season.name }} </label>
+                  <label>{{ category.name }} </label>
                 </li>
               </ul>
             </div>
@@ -66,14 +49,17 @@
               <h5 class="filter-title">Giá</h5>
 
               <ul class="priceRange">
-                <li 
-                v-for="range in priceRange" 
-                :key="range.id"
-                @click="selectRangePrice(range.id)"
+                <li
+                  v-for="range in priceRange"
+                  :key="range.id"
+                  @click="selectRangePrice(range)"
                 >
                   <div class="div-checkbox">
                     <i
-                      :class="{ visible: this.filterSelected.priceRangeId == range.id }"
+                      v-if="this.filterSelected.priceRange != null"
+                      :class="{
+                        visible: this.filterSelected.priceRange[0] == range.id,
+                      }"
                       class="dispay_hidden fa-solid fa-check"
                     ></i>
                   </div>
@@ -83,245 +69,281 @@
             </div>
           </div>
           <!-- product-list -->
+
           <div class="product-list">
             <div class="arrange-result">
-              <p class="result">Hiển thị: 1-16 trên tổng: 300 sản phẩm</p>
+              <p class="result">Tổng: {{ totalProducts }} sản phẩm</p>
+              <p v-if="this.keyWord" class="result">
+                Kết quả tìm kiếm cho: ' {{ this.keyWord }} '!
+              </p>
               <div class="arrange">
-                <span
-                @click="arrangeActive = !arrangeActive"
-                >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i></span>
-                <ul 
-                :class="{dispay_hidden: !arrangeActive, visible: arrangeActive}"
-                class="arrange-key-list">
+                <span @click="arrangeActive = !arrangeActive"
+                  >{{ filterSelected.arrangeKey[1] }}
+                  <i class="fa-solid fa-caret-down"></i
+                ></span>
+                <ul
+                  :class="{
+                    dispay_hidden: !arrangeActive,
+                    visible: arrangeActive,
+                  }"
+                  class="arrange-key-list"
+                >
                   <i class="fa-solid fa-caret-down"></i>
-                  <li v-for="key in arrange" :key="key.id"
-                  @click="setArrangKey(key)"
+                  <li
+                    v-for="key in arrange"
+                    :key="key.id"
+                    @click="setArrangKey(key)"
                   >
                     {{ key.name }}
                   </li>
                 </ul>
               </div>
             </div>
+            <div
+              class="product-empty"
+              v-if="Object.keys(products).length === 0"
+            >
+              <p v-if="this.keyWord" class="">Không tìm thấy sản phẩm nào!</p>
+              <button class="button" @click="removeFilter">
+                Bỏ lọc sản phẩm
+              </button>
+            </div>
             <div class="item-list">
               <div class="item" v-for="item in products" :key="item.id">
-                <a href="#" class="img-card">
+                <router-link
+                  :to="{ name: 'Product', params: { id: item.id } }"
+                  class="img-card"
+                >
                   <div class="flip-card">
                     <div class="flip-card-inner">
                       <div class="front">
                         <img
                           class="item-img"
-                          :src="require('@/assets/images/' + item.images[0])"
+                          :src="imgUrl + item.pictures[0].img"
                           alt=""
                         />
                       </div>
                       <div class="back">
-                        <img
-                          :src="require('@/assets/images/' + item.images[1])"
-                          alt=""
-                        />
+                        <img :src="imgUrl + item.pictures[1].img" alt="" />
                       </div>
                     </div>
                   </div>
-                </a>
+                </router-link>
                 <div class="info-card">
-                  <span class="quantity-info" v-if="item.quantity">Còn 10 sản phẩm </span>
-                  <span class="discount-info" v-if="!item.discount">Giảm 10%</span>
-                  <a class="add-to-cart">
-                    Thêm vào giỏ hàng
-                    <span><i class="fa-solid fa-cart-plus"></i></span>
-                  </a>
-                  <p class="product-name">{{ item.name }}</p>
+                  <span class="quantity-info" v-if="item.quantity <= 10"
+                    >Còn 10 sản phẩm
+                  </span>
+                  <span class="discount-info" v-if="item.discount"
+                    >Giảm 10%</span
+                  >
+                  <addToCart :product="item"></addToCart>
+
+                  <router-link
+                    :to="{ name: 'Product', params: { id: item.id } }"
+                    class="product-name"
+                    >{{ item.name }}</router-link
+                  >
                   <p class="thumbnail-price">
                     {{ item.price }} <span>VNĐ</span>
                   </p>
                 </div>
               </div>
             </div>
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" v-if="currentPage > 1">
+                  <a
+                    class="page-link"
+                    href="#"
+                    @click.prevent="currentPage--"
+                    tabindex="-1"
+                    >Trang trước</a
+                  >
+                </li>
+                <li
+                  class="page-item"
+                  :class="{ active: currentPage == page }"
+                  v-for="page in totalPage"
+                  :key="page"
+                >
+                  <a
+                  v-if="Object.keys(products).length !== 0"
+                    class="page-link"
+                    @click.prevent="currentPage = page"
+                    href="#"
+                    >{{ page }}</a
+                  >
+                </li>
+                <li class="page-item" v-if="currentPage < totalPage">
+                  <a class="page-link" @click.prevent="currentPage++" href="#"
+                    >Trang tiếp</a
+                  >
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
     </section>
+    <whyLP class="why"></whyLP>
   </main>
 </template>
 
 <script>
+import whyLP from "../../components/client/whyLP.vue";
+import baseRequest from "../../base/baseRequest";
+import { mapGetters } from "vuex";
+import addToCart from "../../components/client/addToCart.vue";
+
 export default {
+  components: {
+    whyLP,
+    addToCart,
+  },
+  computed: {
+    ...mapGetters(["imgUrl"]),
+  },
+  props: {
+    key: {
+      type: String,
+    },
+  },
   data() {
     return {
-      arrangeKey: "Mới nhất",
       arrangeActive: false,
-      filterSelected: 
-        {
-          genderId: null,
-          seasonId: null,
-          priceRangeId: null, 
-        },
-
-      products: [
-        {
-          id: 1,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 2,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1 sadasnj",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 3,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 4,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 5,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 6,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 7,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 8,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 9,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 10,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 11,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 12,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-      ],
-      brands: [
-        { name: "amouage", id: 1 },
-        { name: "dior", id: 2 },
-        { name: "creed", id: 3 },
-        { name: "arrazo", id: 4 },
-        { name: "chanel", id: 5 },
-        { name: "le labo", id: 6 },
-        { name: "guerlain", id: 7 },
-        { name: "hermes", id: 8 },
-        { name: "prada", id: 9 },
-        { name: "nishane", id: 10 },
-        { name: "nautica", id: 11 },
-      ],
-      gender: [
-        { name: "Nam", id: 1 },
-        { name: "Nữ", id: 2 },
-        { name: "Unisex", id: 3 },
-      ],
-      seasons: [
-        { name: "Spring", id: 1 },
-        { name: "Summer", id: 2 },
-        { name: "Fall", id: 3 },
-        { name: "Winter", id: 4 },
-      ],
-      priceRange: [
-        { name: "0-1.000.000", id: 1 },
-        { name: "1.000.000 - 3.000.000", id: 2 },
-        { name: "3.000.000 - 5.000.000", id: 3 },
-        { name: "> 5.000.000", id: 4 },
-      ],
       arrange: [
         { name: "Mới nhất", id: 1 },
         { name: "Thứ tự theo giá: Từ thấp đến cao", id: 2 },
         { name: "Thứ tự theo giá: Từ cao đến thấp", id: 3 },
-        { name: "Theo mức độ phổ biến", id: 4 },
       ],
+      priceRange: [
+        { name: "0-1.000.000", id: 1, min: "0", max: "1000000" },
+        {
+          name: "1.000.000 - 3.000.000",
+          id: 2,
+          min: "1000000",
+          max: "3000000",
+        },
+        {
+          name: "3.000.000 - 5.000.000",
+          id: 3,
+          min: "3000000",
+          max: "5000000",
+        },
+        { name: "> 5.000.000", id: 4, min: "5000000", max: null },
+      ],
+      filterSelected: {
+        categoryId: null,
+        priceRange: null,
+        arrangeKey: [1, "Mới nhất"],
+        keyWord: null,
+        brandId: null,
+      },
+      products: {},
+      totalProducts: 0,
+      totalPage: 0,
+      currentPage: 1,
+      categories: {},
+      brands: {},
+      active: 1,
+      keyWord: null,
+      brandName: null,
     };
   },
   methods: {
-    selectGender(id) {
-      if (this.filterSelected.genderId == id) {
-        return (this.filterSelected.genderId = null);
-      }
-      this.filterSelected.genderId= id;
+    removeFilter() {
+      this.filterSelected.categoryId = null;
+      this.filterSelected.priceRange = null;
+      this.filterSelected.arrangeKey = [1, "Mới nhất"];
+      this.filterSelected.keyWord = null;
+      this.keyWord = null;
+      this.getProducts();
     },
-    selectSeason(id) {
-      if (this.filterSelected.seasonId == id) {
-        return (this.filterSelected.seasonId = null);
-      }
-      this.filterSelected.seasonId= id;
+    getProducts() {
+      baseRequest
+        .get("products?page=" + this.currentPage, this.filterSelected)
+        .then((response) => {
+          this.products = response.data.data;
+          this.totalProducts = response.data.total;
+          this.totalPage = response.data.last_page;
+          this.$isLoading(false);
+        });
     },
-    selectRangePrice(id) {
-      if (this.filterSelected.priceRangeId == id) {
-        return (this.filterSelected.priceRangeId = null);
-      }
-      this.filterSelected.priceRangeId= id;
+    getCategories() {
+      baseRequest.get("getCategories").then((response) => {
+        this.categories = response.data;
+      });
     },
-    setArrangKey(key){
-      this.arrangeKey = key.name;
+    getBrands() {
+      baseRequest.get("getBrands").then((response) => {
+        this.brands = response.data;
+      });
+    },
+    selectCategories(id) {
+      if (this.filterSelected.categoryId == id) {
+        this.filterSelected.categoryId = null;
+        this.getProducts();
+        return;
+      }
+      this.filterSelected.categoryId = id;
+      this.getProducts();
+    },
+    selectRangePrice(range) {
+      if (this.filterSelected.priceRange != null) {
+        if (this.filterSelected.priceRange.includes(range.id)) {
+          this.filterSelected.priceRange = null;
+          this.getProducts();
+          return;
+        }
+      }
+      this.filterSelected.priceRange = [range.id, range.min, range.max];
+      this.getProducts();
+    },
+    setArrangKey(key) {
+      this.filterSelected.arrangeKey = [key.id, key.name];
       this.arrangeActive = false;
-    }
+      this.getProducts();
+    },
+    brandFilter(brand) {
+      this.brandName = brand.name;
+      this.filterSelected.brandId = brand.id;
+      this.getProducts();
+    },
+  },
+  watch: {
+    currentPage() {
+      this.getProducts();
+    },
+    keyWord() {
+      this.filterSelected.keyWord = this.keyWord;
+      this.getProducts();
+    },
+  },
+  mounted() {
+    this.$isLoading(true);
+    this.keyWord = this.$route.params.key;
+    this.getProducts();
+    this.getBrands();
+    this.getCategories();
   },
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.button {
+  color: black;
+}
+// .item-list {
+//   min-height: 600px;
+// }
+.why {
+  padding-top: 50px;
+}
+.product-empty {
+  padding-top: 200px;
+  text-align: center;
+  p {
+    font-size: 24px;
+  }
+}
+</style>

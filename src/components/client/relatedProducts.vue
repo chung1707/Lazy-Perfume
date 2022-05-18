@@ -6,33 +6,43 @@
     :spaceBetween="20"
     :loop="true"
     pagination
-    :autoplay="autoplay"
+    v-if="products"
   >
-    <SwiperSlide class="item" v-for="item in relatedProduct" :key="item.id">
-      <router-link to="/product" class="img-card">
+    <!-- :autoplay="autoplay" -->
+    <SwiperSlide class="item" v-for="item in products" :key="item.id">
+      <router-link
+        :to="{ name: 'Product', params: { id: item.id } }"
+        class="img-card"
+      >
         <div class="flip-card">
           <div class="flip-card-inner">
             <div class="front">
               <img
                 class="item-img"
-                :src="require('@/assets/images/' + item.images[0])"
+                :src="imgUrl + item.pictures[0].img"
                 alt=""
               />
             </div>
             <div class="back">
-              <img :src="require('@/assets/images/' + item.images[1])" alt="" />
+              <img :src="imgUrl + item.pictures[1].img" alt="" />
             </div>
           </div>
         </div>
       </router-link>
       <div class="info-card">
-        <span class="quantity-info" v-if="item.quantity">Còn 10 sản phẩm </span>
-        <span class="discount-info" v-if="!item.discount">Giảm 10%</span>
-        <a class="add-to-cart">
-          Thêm vào giỏ hàng
-          <span><i class="fa-solid fa-cart-plus"></i></span>
-        </a>
-        <p class="product-name">{{ item.name }}</p>
+        <span class="quantity-info" v-if="item.quantity <= 10"
+          >Còn {{ item.quantity }}
+        </span>
+        <span class="discount-info" v-if="item.discount"
+          >Giảm {{ item.discount }} %</span
+        >
+        <addToCart :product="item"></addToCart>
+
+        <router-link
+          :to="{ name: 'Product', params: { id: item.id } }"
+          class="product-name"
+          >{{ item.name }}</router-link
+        >
         <p class="thumbnail-price">{{ item.price }} <span>VNĐ</span></p>
       </div>
     </SwiperSlide>
@@ -40,14 +50,28 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 import "swiper/swiper-bundle.min.css";
+import addToCart from "../../components/client/addToCart.vue";
+
 export default {
+  computed: {
+    ...mapGetters(["imgUrl"]),
+  },
+  props: {
+    products: {
+      type: Object,
+      required: true,
+    },
+  },
   components: {
     Swiper,
     SwiperSlide,
+    addToCart,
   },
   data() {
     return {
@@ -55,60 +79,6 @@ export default {
         delay: 3000,
         disableOnInteraction: false,
       },
-      relatedProduct: [
-        {
-          id: 1,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 2,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1 sadasnj",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 3,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 4,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 5,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 6,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-      ],
     };
   },
 };

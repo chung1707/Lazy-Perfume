@@ -115,7 +115,7 @@
       .search-product-list {
         padding: 20px 0px;
         display: flex;
-        gap: 100px;
+        justify-content: space-around;
         flex-grow: 1;
         li {
           padding: 20px 0;

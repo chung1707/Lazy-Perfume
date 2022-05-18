@@ -1,41 +1,51 @@
 <template>
-  <main class="wrapper product-page">
+  <main class="wrapper product-page" v-if="product">
     <section class="header-products">
-      <h1 class="page-title">White Cristal</h1>
+      <h1 class="page-title">{{ product.name }}</h1>
     </section>
     <section class="wrapper main-product">
       <div class="path">
         <div class="container">
           <router-link class="link" to="/">Trang chủ</router-link>
           <span class="seperate">/</span>
-          <router-link class="link" to="/">Kilian</router-link>
+          <router-link class="link" to="/">{{
+            product.supplier.name
+          }}</router-link>
           <span class="seperate">/</span>
-          <span>Kilian White Sristal</span>
+          <span>{{ product.name }}</span>
         </div>
       </div>
       <div class="container product-content">
         <div class="left-content">
           <div class="thumbnails-product">
             <img
-              :class="{ visible: image1 == true, dispay_hidden: image1 == false }"
-              src="../../assets/images/for-him.jpg"
+              v-if="product.pictures"
+              :class="{
+                visible: image1 == true,
+                dispay_hidden: image1 == false,
+              }"
+              :src="imgUrl + product.pictures[0].img"
               alt="product image"
             />
             <img
-              :class="{ visible: image1 == false, dispay_hidden: image1 == true }"
-              src="../../assets/images/for-her.jpg"
+              v-if="product.pictures[1]"
+              :class="{
+                visible: image1 == false,
+                dispay_hidden: image1 == true,
+              }"
+              :src="imgUrl + product.pictures[1].img"
               alt="product image"
             />
             <div class="mini-thumbnails">
               <a href="#" @click.prevent="image1 = true">
                 <img
-                  src="../../assets/images/for-him.jpg"
+                  :src="imgUrl + product.pictures[0].img"
                   alt="product image"
                 />
               </a>
               <a href="#" @click.prevent="image1 = false">
                 <img
-                  src="../../assets/images/for-her.jpg"
+                  :src="imgUrl + product.pictures[1].img"
                   alt="product image"
                 />
               </a>
@@ -44,40 +54,23 @@
           <div class="description-product">
             <h5>Mô tả</h5>
             <p>
-              Hương chính: Xạ hương, Hoa nhài, Hoắc hương, Gỗ tuyết tùng, Hổ
-              phách, Nhục đậu khấu, Vanilla, Rượu Rum, Trái cây sấy khô Vượt qua
-              mọi giới hạn, ranh giới đề ra trong những tầng hương vốn cần có
-              của một chai nước hoa, Killian Straight to Heaven đưa tới một minh
-              chứng mới dành cho các quý ông mạnh mẽ, thanh lịch chỉ bằng một cú
-              hích ngay từ tầng hương chủ đạo của mình. Không phức tạp, rườm rà
-              bởi sự phân bố từ các tầng hương, Killian Straight to Heaven đi
-              thẳng vào vấn đề như những người đàn ông thực thụ khi sử dụng sức
-              mạnh từ Rượu Rum và sức nóng từ Gỗ tuyết tùng để thể hiện đẳng cấp
-              khác biệt của mình. Ở trên da càng lâu , những nốt hương được bao
-              phủ xung quanh như Xạ hương, Hoa nhài, Hoắc hướng, Hổ Phách, Nhục
-              đậu khấu, Vanilla càng xuất hiện rõ ràng hơn, tấn công dồn dập vào
-              khứu giác của các nàng. Gây ra những cảm giác ngây ngất, say mê
-              khiến đối phương phải quỳ rạp mà cầu xin các quý ngài tiến lại
-              gần.
+              {{ productDetail.description }}
             </p>
           </div>
         </div>
         <div class="right-content">
-          <h4>By Kilian</h4>
-          <h3>Kilian white cristal</h3>
-          <span class="gen"><i class="fa-solid fa-venus"></i>Nam</span>
-          <span class="price">7.500.000 VNĐ</span>
-          <div class="capacity">
-            <label> Dung tích: </label>
-            <div class="capacity-box" @click="selectCapacity = !selectCapacity">
-              <i class="fa-solid fa-caret-down"></i>
-              <span>{{ capacity }} ml</span>
-              <ul :class="{ dispay_hidden: !selectCapacity, visible: selectCapacity }">
-                <li>50 ml</li>
-                <li>100 ml</li>
-              </ul>
-            </div>
-          </div>
+          <h4>{{ product.supplier.name }}</h4>
+          <h3>{{ product.name }}</h3>
+          <span class="gen">
+            <i v-if="product.category.id == 1" class="fa-solid fa-venus"></i>
+            <i v-if="product.category.id == 2" class="fa-solid fa-mars"></i>
+            <i
+              v-if="product.category.id == 3"
+              class="fa-solid fa-mars-and-venus"
+            ></i>
+            {{ product.category.name }}
+          </span>
+          <span class="price">{{ product.price }} VND</span>
           <div class="quantity">
             <div class="quantity-box">
               <input type="number" v-model="quantity" />
@@ -85,7 +78,9 @@
               <i @click="reduce()" class="fa-solid fa-minus minus"></i>
             </div>
 
-            <button class="button">Thêm vào giỏ hàng</button>
+            <button class="button" @click="addProductToCart">
+              Thêm vào giỏ hàng
+            </button>
           </div>
           <div class="featured">
             <div class="tabs">
@@ -102,53 +97,66 @@
                   <li class="tab-item">
                     <span>Mùi hương</span>
                     <ul>
-                      <li>Hương gỗ</li>
-                      <li>Hương trái cây</li>
+                      <li v-for="sc in productDetail.fragrant.scent" :key="sc">
+                        {{ sc }}
+                      </li>
                     </ul>
                   </li>
                   <li class="tab-item">
                     <span>Hương đầu</span>
                     <ul>
-                      <li>Cam begamot</li>
-                      <li>Quả dừa</li>
-                      <li>Táo xanh</li>
-                      <li>Quả lý chua đen</li>
+                      <li
+                        v-for="topNote in productDetail.fragrant.topNotes"
+                        :key="topNote"
+                      >
+                        {{ topNote }}
+                      </li>
                     </ul>
                   </li>
                   <li class="tab-item">
                     <span>Hương giữa</span>
                     <ul>
-                      <li>Hoắc Hương</li>
-                      <li>Hoa nhài Morocco</li>
-                      <li>Gỗ Bu-lô</li>
-                      <li>Hoa Hồng</li>
+                      <li
+                        v-for="middleNote in productDetail.fragrant.middleNotes"
+                        :key="middleNote"
+                      >
+                        {{ middleNote }}
+                      </li>
                     </ul>
                   </li>
                   <li class="tab-item">
                     <span>Hương cuối</span>
                     <ul>
-                      <li>Hương vani</li>
-                      <li>Xạ hương</li>
-                      <li>Rêu xồi</li>
-                      <li>Long diên hương</li>
+                      <li
+                        v-for="base in productDetail.fragrant.baseNote"
+                        :key="base"
+                      >
+                        {{ base }}
+                      </li>
                     </ul>
                   </li>
                 </ul>
               </div>
-
               <div
                 class="features-tab dispay_hidden"
                 :class="{ visible: tabActive == 2 }"
               >
                 <ul>
                   <li class="tab-item">
-                    <span class="item-title">Phát hành:</span> <span>2010</span>
+                    <span class="item-title">Dung tích</span>
+                    <span>{{ product.capacity }} ml</span>
                   </li>
                   <li class="tab-item">
-                    <span class="item-title">Giới tính:</span> <span>Nam</span>
+                    <span class="item-title">Phát hành:</span>
+                    <span>{{ productDetail.release }}</span>
                   </li>
                   <li class="tab-item">
-                    <span class="item-title">Độ tuổi:</span> <span>25+</span>
+                    <span class="item-title">Giới tính:</span>
+                    <span>{{ product.category.name }}</span>
+                  </li>
+                  <li class="tab-item">
+                    <span class="item-title">Độ tuổi:</span>
+                    <span>{{ productDetail.age }}</span>
                   </li>
                   <li class="tab-item">
                     <span class="item-title"> Độ lưu mùi:</span>
@@ -156,7 +164,9 @@
                       <div
                         v-for="it in saveIncense"
                         :key="it"
-                        :class="{ bg_blue: it.id == test }"
+                        :class="{
+                          bg_blue: productDetail.saveIncense == it.saving,
+                        }"
                       >
                         <span class="number">{{ it.saving }}</span>
                       </div>
@@ -171,10 +181,36 @@
                 <div class="season">
                   <span class="item-title">Mùa</span>
                   <div class="rcm-box">
-                    <div class="range-rcm" v-for="ss in seasons" :key="ss.id">
-                      <span class="rcm-name">{{ ss.name }}</span>
+                    <div class="range-rcm">
+                      <span class="rcm-name">Mùa xuân</span>
                       <div class="rcm-range">
-                        <span v-bind:style="{ width: ss.rcm + '%' }"></span>
+                        <span
+                          v-bind:style="{ width: productDetail.spring + '%' }"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="range-rcm">
+                      <span class="rcm-name">Mùa hè</span>
+                      <div class="rcm-range">
+                        <span
+                          v-bind:style="{ width: productDetail.summer + '%' }"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="range-rcm">
+                      <span class="rcm-name">Mùa thu</span>
+                      <div class="rcm-range">
+                        <span
+                          v-bind:style="{ width: productDetail.fall + '%' }"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="range-rcm">
+                      <span class="rcm-name">Mùa đông</span>
+                      <div class="rcm-range">
+                        <span
+                          v-bind:style="{ width: productDetail.winter + '%' }"
+                        ></span>
                       </div>
                     </div>
                   </div>
@@ -182,10 +218,20 @@
                 <div class="times">
                   <span class="item-title">Thời điểm</span>
                   <div class="rcm-box">
-                    <div class="range-rcm" v-for="time in times" :key="time.id">
-                      <span class="rcm-name">{{ time.name }}</span>
+                    <div class="range-rcm">
+                      <span class="rcm-name">Ban ngày</span>
                       <div class="rcm-range">
-                        <span v-bind:style="{ width: time.rcm + '%' }"></span>
+                        <span
+                          v-bind:style="{ width: productDetail.daytime + '%' }"
+                        ></span>
+                      </div>
+                    </div>
+                    <div class="range-rcm">
+                      <span class="rcm-name">Ban đêm</span>
+                      <div class="rcm-range">
+                        <span
+                          v-bind:style="{ width: productDetail.night + '%' }"
+                        ></span>
                       </div>
                     </div>
                   </div>
@@ -197,25 +243,34 @@
       </div>
     </section>
     <section class="wrapper related-product">
-        <h2 class="title-section">Sản phảm liên quan</h2>
-        <relatedProducts></relatedProducts>
+      <h2 class="title-section">Sản phảm liên quan</h2>
+      <relatedProducts :products="relatedProducts"></relatedProducts>
     </section>
+    <whyLP></whyLP>
   </main>
 </template>
 
 <script>
-import relatedProducts from '../../components/client/relatedProducts.vue'
+import relatedProducts from "../../components/client/relatedProducts.vue";
+import whyLP from "../../components/client/whyLP.vue";
+import baseRequest from "../../base/baseRequest";
+
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   components: {
-    relatedProducts
+    relatedProducts,
+    whyLP,
+  },
+  computed: {
+    ...mapGetters(["imgUrl", "authenticated"]),
   },
   data() {
     return {
+      product: null,
+      relatedProducts: {},
+      productDetail: null,
       tabActive: 1,
-      test: 4,
-      selectCapacity: false,
-      capacity: 100,
       image1: true,
       quantity: 1,
       saveIncense: [
@@ -224,28 +279,58 @@ export default {
         { id: 3, saving: 8 },
         { id: 4, saving: 12 },
       ],
-      seasons: [
-        { id: 1, name: "Xuân", rcm: "60" },
-        { id: 2, name: "Hạ", rcm: "20" },
-        { id: 3, name: "Thu", rcm: "78" },
-        { id: 4, name: "Đông", rcm: "95" },
-      ],
-      times: [
-        { id: 1, name: "Ngày", rcm: "70" },
-        { id: 2, name: "Đêm", rcm: "95" },
-      ],
     };
   },
   methods: {
+    ...mapActions(["addToCart"]),
+    addProductToCart() {
+      if (!this.authenticated) {
+        this.$router.push({ name: "Login" });
+      } else {
+        this.product["with"] = { quantity: this.quantity };
+        this.addToCart(this.product);
+      }
+    },
     increase() {
+      if (this.quantity == this.product.quantity) return this.quantity;
       return this.quantity++;
     },
     reduce() {
       if (this.quantity == 1) return this.quantity;
       return this.quantity--;
     },
+    getProduct() {
+      baseRequest.get("product/" + this.$route.params.id).then((response) => {
+        this.product = response.data.product;
+        this.relatedProducts = response.data.relatedProducts;
+        this.productDetail = this.product.product_detail;
+        this.$isLoading(false);
+      });
+    },
+  },
+  watch: {
+    $route() {
+      this.$isLoading(true);
+      this.getProduct();
+    },
+    quantity() {
+      if (this.quantity > this.product.quantity)
+        return (this.quantity = this.product.quantity);
+      if (this.quantity < 1) return (this.quantity = 1);
+    },
+  },
+  mounted() {
+    this.$isLoading(true);
+    // this.getProduct();
+  },
+  beforeMount() {
+    this.getProduct();
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.quantity {
+  margin-top: 50px;
+}
+</style>

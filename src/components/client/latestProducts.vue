@@ -31,42 +31,40 @@
           :loop="true"
           navigation
           pagination
-          :autoplay="autoplay"
         >
+          <!-- :autoplay="autoplay" -->
           <swiper-slide
             class="slide-product-card-item"
-            v-for="itemForHim in listForHim"
+            v-for="itemForHim in latestProductsMale"
             :key="itemForHim.id"
           >
-            <router-link to="/product" class="img-card">
+            <router-link 
+              :to="{ name: 'Product', params: { id: itemForHim.id} }" 
+              class="img-card">
               <div class="flip-card">
-                <div class="flip-card-inner">
+                <div class="flip-card-inner" v-if="itemForHim.pictures">
                   <div class="front">
-                    <img
-                      :src="require('@/assets/images/' + itemForHim.images[0])"
-                    />
+                    <img :src="imgUrl + itemForHim.pictures[0].img" />
                   </div>
-                  <div class="back">
-                    <img
-                      :src="require('@/assets/images/' + itemForHim.images[1])"
-                      alt=""
-                    />
+                  <div class="back" v-if="itemForHim.pictures[1]">
+                    <img :src="imgUrl + itemForHim.pictures[1].img" alt="" />
                   </div>
                 </div>
               </div>
             </router-link>
             <div class="info-card">
-              <span class="quantity-info" v-if="itemForHim.quantity"
+              <span class="quantity-info" v-if="itemForHim.quantity <= 10"
                 >Còn 10 sản phẩm
               </span>
-              <span class="discount-info" v-if="!itemForHim.discount"
+              <span class="discount-info" v-if="itemForHim.discount"
                 >Giảm 10%</span
               >
-              <a class="add-to-cart">
-                Thêm vào giỏ hàng
-                <span><i class="fa-solid fa-cart-plus"></i></span>
-              </a>
-              <p class="product-name">{{ itemForHim.name }}</p>
+              <addToCart :product="itemForHim" ></addToCart>
+              <router-link 
+                :to="{ name: 'Product',  params: { id: itemForHim.id} }" 
+                class="product-name">{{
+                itemForHim.name
+              }}</router-link>
               <p class="thumbnail-price">
                 {{ itemForHim.price }} <span>VNĐ</span>
               </p>
@@ -87,39 +85,36 @@
         >
           <swiper-slide
             class="slide-product-card-item"
-            v-for="itemForHer in listForHer"
+            v-for="itemForHer in latestProductsFemale"
             :key="itemForHer.id"
           >
-            <a href="#" class="img-card">
+            <router-link 
+              :to="{ name: 'Product', params: { id: itemForHer.id} }" 
+              class="img-card">
               <div class="flip-card">
-                <div class="flip-card-inner">
+                <div class="flip-card-inner" v-if="itemForHer.pictures">
                   <div class="front">
-                    <img
-                      :src="require('@/assets/images/' + itemForHer.images[0])"
-                      alt=""
-                    />
+                    <img :src="imgUrl + itemForHer.pictures[0].img" />
                   </div>
-                  <div class="back">
-                    <img
-                      :src="require('@/assets/images/' + itemForHer.images[1])"
-                      alt=""
-                    />
+                  <div class="back" v-if="itemForHer.pictures[1]">
+                    <img :src="imgUrl + itemForHer.pictures[1].img" alt="" />
                   </div>
                 </div>
               </div>
-            </a>
+            </router-link>
             <div class="info-card">
-              <span class="quantity-info" v-if="itemForHer.quantity"
+              <span class="quantity-info" v-if="itemForHer.quantity <= 10"
                 >Còn 10 sản phẩm
               </span>
-              <span class="discount-info" v-if="!itemForHer.discount"
+              <span class="discount-info" v-if="itemForHer.discount"
                 >Giảm 10%</span
               >
-              <a class="add-to-cart">
-                Thêm vào giỏ hàng
-                <span><i class="fa-solid fa-cart-plus"></i></span>
-              </a>
-              <p class="product-name">{{ itemForHer.name }}</p>
+              <addToCart :product="itemForHer" ></addToCart>
+              <router-link 
+                :to="{ name: 'Product', params: { id: itemForHer.id} }" 
+                class="product-name">{{
+                itemForHer.name
+              }}</router-link>
               <p class="thumbnail-price">
                 {{ itemForHer.price }} <span>VNĐ</span>
               </p>
@@ -133,17 +128,23 @@
     </div>
   </section>
 </template>
-
+  
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
 SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
 import "swiper/swiper-bundle.min.css";
+import { mapActions, mapGetters } from "vuex";
+import addToCart from "../../components/client/addToCart.vue";
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
+    addToCart,
+  },
+  computed: {
+    ...mapGetters(["latestProductsMale", "latestProductsFemale", "imgUrl"]),
   },
   data() {
     return {
@@ -153,157 +154,10 @@ export default {
       },
       forHim: true,
       forHer: false,
-      listForHim: [
-        {
-          id: 1,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 2,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1 sadasnj",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 3,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 4,
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 5,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 6,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 7,
-
-          images: ["for-him.jpg", "for-her.jpg"],
-          name: "Kilian Black Phantom 1",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-      ],
-
-      listForHer: [
-        {
-          id: 8,
-
-          images: ["for-her.jpg", "for-him.jpg"],
-          name: "Tomford Rose Prick",
-
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 9,
-
-          images: ["for-her.jpg", "for-him.jpg"],
-
-          name: "Tomford Rose Prick",
-
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 10,
-          images: ["for-her.jpg", "for-him.jpg"],
-
-          name: "Tomford Rose Prick",
-
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 11,
-
-          images: ["for-her.jpg", "for-him.jpg"],
-
-          name: "Tomford Rose Prick",
-
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 12,
-
-          images: ["for-her.jpg", "for-him.jpg"],
-
-          name: "Tomford Rose Prick",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 13,
-
-          images: ["for-her.jpg", "for-him.jpg"],
-
-          name: "Tomford Rose Prick",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 14,
-
-          images: ["for-her.jpg", "for-him.jpg"],
-
-          name: "Tomford Rose Prick",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-        {
-          id: 15,
-
-          images: ["for-her.jpg", "for-him.jpg"],
-
-          name: "Tomford Rose Prick",
-          price: 7500000,
-          quantity: 20,
-          discount: 0,
-        },
-      ],
     };
   },
   methods: {
+    ...mapActions(["setLatestProducts"]),
     activeForHim() {
       this.forHim = true;
       this.forHer = false;
@@ -313,7 +167,9 @@ export default {
       this.forHer = true;
     },
   },
-  mounted() {},
+  mounted() {
+    this.setLatestProducts();
+  },
 };
 </script>
 

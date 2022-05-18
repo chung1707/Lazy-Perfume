@@ -9,7 +9,7 @@
       </div>
       <div class="hero">
         <h2>New collection <span>Lazy Perfume</span></h2>
-        <a class="button" href="#">Khám phá!</a>
+        <router-link class="button" to="/products">Khám phá!</router-link>
       </div>
     </section>
 
@@ -25,13 +25,13 @@
             class="glasses"
             :class="{ dispay_hidden: !glassesForHim, visible: glassesForHim }"
           ></div>
-          <a href="#">
+          <router-link to="/products">
             <img src="../../assets/images/for-him.jpg" alt="" />
             <div>
               <span>Nước hoa Nam</span>
               <span><i class="fa-solid fa-right-long"></i></span>
             </div>
-          </a>
+          </router-link>
         </div>
         <div
           class="for-her"
@@ -42,17 +42,16 @@
             class="glasses"
             :class="{ dispay_hidden: !glassesForHer, visible: glassesForHer }"
           ></div>
-          <a href="#">
+          <router-link to="/products">
             <img src="../../assets/images/for-her.jpg" alt="" />
             <div>
               <span>Nước hoa Nữ</span>
               <span><i class="fa-solid fa-right-long"></i></span>
             </div>
-          </a>
+          </router-link>
         </div>
       </div>
     </section>
-    
     <!-- latest-products -->
     <latestProducts></latestProducts>
     <bestSeller></bestSeller>
@@ -80,6 +79,9 @@ export default {
       glassesForHim: false,
       glassesForHer: false,
     };
+  },
+  mounted() {
+    this.$isLoading(false);
   },
 };
 </script>

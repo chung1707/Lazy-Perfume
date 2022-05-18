@@ -1,13 +1,20 @@
 <template>
-  <main class="main-wrapper">
+  <main
+    class="main-wrapper"
+    :class="{ sidebarHidden: !$store.state.hiddenSidebar }"
+  >
     <section class="section">
-      <div class="container-fluid">
+      <h5 class="success" v-if="success">
+        <i class="fas fa-check"></i> Sửa đổi thông tin thành công!
+      </h5>
+      <h5 class="fail" v-if="fail">Sửa đổi thất bại. Vui lòng thử lại sau!</h5>
+      <div class="container-fluid" v-if="user">
         <!-- ========== title-wrapper start ========== -->
         <div class="title-wrapper pt-30">
           <div class="row align-items-center">
             <div class="col-md-6">
               <div class="titlemb-30">
-                <h2>Hồ sơ tài khoản</h2>
+                <h2>Hồ sơ tài khoản: {{ user.name }}</h2>
               </div>
             </div>
             <!-- end col -->
@@ -18,9 +25,8 @@
                     <li class="breadcrumb-item">
                       <a href="#0">Dashboard</a>
                     </li>
-                    <li class="breadcrumb-item"><a href="#0">Pages</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">
-                      Settings
+                    <li class="breadcrumb-item">
+                      <a href="#0">Trang cá nhân</a>
                     </li>
                   </ol>
                 </nav>
@@ -46,49 +52,60 @@
               <div class="profile-info">
                 <div class="d-flex align-items-center mb-30">
                   <div class="profile-image">
-                    <img src="assets/images/profile/profile-1.png" alt="" />
+                    <img :src="imgUrl + user.avatar" alt="" />
                     <div class="update-image">
                       <input type="file" />
                       <label for=""><i class="lni lni-cloud-upload"></i></label>
                     </div>
                   </div>
                   <div class="profile-meta">
-                    <h5 class="text-bold text-dark mb-10">John Doe</h5>
-                    <p class="text-sm text-gray">Web &amp; UI/UX Design</p>
+                    <h5 class="text-bold text-dark mb-10">{{ user.name }}</h5>
+                    <p class="text-sm text-gray">
+                      Quyền hạn:
+                      <span v-if="user.role_id == 1">Quản trị viên</span>
+                      <span v-if="user.role_id == 2">Khách hàng</span>
+                      <span v-if="user.role_id == 3">Nhân viên</span>
+                    </p>
                   </div>
                 </div>
-                <div class="input-style-1">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    placeholder="admin@example.com"
-                    value="admin@example.com"
-                  />
+                <!-- <div>
+                  <ImgUploader></ImgUploader>
+                </div> -->
+                <div>
+                  <loadfile></loadfile>
                 </div>
-                <div class="input-style-1">
-                  <label>Password</label>
-                  <input type="password" value="admin@example.com" />
-                </div>
-                <div class="input-style-1">
-                  <label>Website</label>
+                <!-- <loader></loader> -->
+                <div class="input-style-1" v-if="isAdmin">
+                  <label>Chức vụ:</label>
                   <input
                     type="text"
-                    placeholder="www.uideck.com"
-                    value="www.uideck.com"
+                    v-model="user.position"
+                    :class="{ errorInput: error.position }"
                   />
+                  <span class="error" v-if="error.position">{{
+                    error.position[0]
+                  }}</span>
                 </div>
                 <div class="input-style-1">
-                  <label>Bio</label>
-                  <textarea placeholder="Write your bio here" rows="4">
-Crafted for – Business, Startup, SaaS, Apps, Event, Software, Agency, Resume and Portfolio. All Landing Pages comes with clean design and responsive layout. Also packed with all essential sections, elements, and features you need to launch</textarea
-                  >
+                  <label>Thời gian tạo tài khoản:</label>
+                  <input type="text" disabled v-model="user.created_at" />
+                </div>
+                <div class="input-style-1" v-if="isAdmin">
+                  <label>Hưởng lương:</label>
+                  <input
+                    type="text"
+                    :class="{ errorInput: error.wage }"
+                    v-model="user.wage"
+                  />
+                  <span class="error" v-if="error.wage">{{
+                    error.wage[0]
+                  }}</span>
                 </div>
               </div>
             </div>
             <!-- end card -->
           </div>
           <!-- end col -->
-
           <div class="col-lg-6">
             <div class="card-style settings-card-2 mb-30">
               <div class="title mb-30">
@@ -98,64 +115,66 @@ Crafted for – Business, Startup, SaaS, Apps, Event, Software, Agency, Resume a
                 <div class="row">
                   <div class="col-12">
                     <div class="input-style-1">
-                      <label>Full Name</label>
-                      <input type="text" placeholder="Full Name" />
+                      <label>Tên người dùng:</label>
+                      <input
+                        type="text"
+                        v-model="user.name"
+                        :class="{ errorInput: error.name }"
+                        placeholder="Full Name"
+                      />
+                      <span class="error" v-if="error.name">{{
+                        error.name[0]
+                      }}</span>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="input-style-1">
                       <label>Email</label>
-                      <input type="email" placeholder="Email" />
+                      <input
+                        type="email"
+                        v-model="user.email"
+                        :class="{ errorInput: error.email }"
+                        placeholder="Email"
+                      />
+                      <span class="error" v-if="error.email">{{
+                        error.email[0]
+                      }}</span>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="input-style-1">
-                      <label>Company</label>
-                      <input type="text" placeholder="Company" />
+                      <label>Số điện thoại</label>
+                      <input
+                        :class="{ errorInput: error.phone }"
+                        type="text"
+                        v-model="user.phone"
+                        placeholder="Số điện thoại"
+                      />
+                      <span class="error" v-if="error.phone">{{
+                        error.phone[0]
+                      }}</span>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="input-style-1">
                       <label>Address</label>
-                      <input type="text" placeholder="Address" />
-                    </div>
-                  </div>
-                  <div class="col-xxl-4">
-                    <div class="input-style-1">
-                      <label>City</label>
-                      <input type="text" placeholder="City" />
-                    </div>
-                  </div>
-                  <div class="col-xxl-4">
-                    <div class="input-style-1">
-                      <label>Zip Code</label>
-                      <input type="text" placeholder="Zip Code" />
-                    </div>
-                  </div>
-                  <div class="col-xxl-4">
-                    <div class="select-style-1">
-                      <label>Country</label>
-                      <div class="select-position">
-                        <select class="light-bg">
-                          <option value="">Select category</option>
-                          <option value="">USA</option>
-                          <option value="">UK</option>
-                          <option value="">Canada</option>
-                          <option value="">India</option>
-                          <option value="">Bangladesh</option>
-                        </select>
-                      </div>
+                      <input
+                        :class="{ errorInput: error.address }"
+                        type="text"
+                        v-model="user.address"
+                        placeholder="Address"
+                      />
+                      <span class="error" v-if="error.address">{{
+                        error.address[0]
+                      }}</span>
                     </div>
                   </div>
                   <div class="col-12">
-                    <div class="input-style-1">
-                      <label>About </label>
-                      <textarea placeholder="Type here" rows="6"></textarea>
-                    </div>
-                  </div>
-                  <div class="col-12">
-                    <button class="main-btn primary-btn btn-hover">
-                      Cập nhập 
+                    <button
+                      @click.prevent="changeInfor"
+                      class="main-btn primary-btn btn-hover"
+                    >
+                      Cập nhập
                     </button>
                   </div>
                 </div>
@@ -172,7 +191,69 @@ Crafted for – Business, Startup, SaaS, Apps, Event, Software, Agency, Resume a
 </template>
 
 <script>
-export default {};
+import { mapGetters } from "vuex";
+import baseRequest from "../../base/baseRequest";
+// import ImgUploader from "../../components/admin/imgUploader.vue";
+import loadfile from "../../components/admin/loadfile.vue";
+export default {
+  components: {
+    // ImgUploader,
+    loadfile,
+  },
+    computed: {
+        ...mapGetters(["imgUrl", "authUser", "isAdmin"]),
+    },
+    data() {
+        return {
+            user: this.$store.state.authUser,
+            error: {},
+            success: false,
+            fail: false,
+        };
+    },
+    methods: {
+        changeInfor() {
+            this.$isLoading(true);
+            if(this.$store.state.pictures.length>0){
+              this.user.avatar = this.$store.state.pictures[0];
+            }
+            baseRequest
+                .post("admin/changeInfor", this.user)
+                .then((response) => {
+                if (response.data.status == 401) {
+                    return (this.fail = true);
+                }
+                else {
+                    // this.$store.commit("setAuthUser", response.data.user);
+                    console.log(response.data);
+                    this.success = true;
+                    this.error = {};
+                    this.$isLoading(false);
+                }
+            })
+                .catch((error) => {
+                this.error = error.response.data.errors;
+                console.log(this.error);
+                this.success = false;
+                this.$isLoading(false);
+            });
+        },
+    },
+    watch: {
+        success() {
+            setTimeout(() => (this.success = false), 1500);
+        },
+        fail() {
+            setTimeout(() => (this.fail = false), 1500);
+        },
+    },
+    mounted() {
+        this.$isLoading(false);
+    },
+    beforeRouteLeave () {
+      this.$store.commit('setPictures',[]);
+    }
+};
 </script>
 
 <style scoped>

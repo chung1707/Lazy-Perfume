@@ -1,9 +1,9 @@
 <template>
-  <main class="wrapper personal-page">
+  <main class="wrapper personal-page" v-if="user">
     <section class="header-products">
-      <h1 class="page-title">Trang cá nhân</h1>
+      <h1 class="page-title">{{ user.name }}</h1>
     </section>
-    <section>
+    <section v-if="user">
       <div class="path">
         <div class="container">
           <router-link class="link" to="/">Trang chủ</router-link>
@@ -24,7 +24,7 @@
                   class="dispay_hidden fa-solid fa-arrow-right"
                   :class="{ visible: tabActive == 1 }"
                 ></i>
-                Thông tin cá nhân</a
+                Đơn hàng của bạn</a
               >
             </li>
             <li>
@@ -37,7 +37,7 @@
                   class="dispay_hidden fa-solid fa-arrow-right"
                   :class="{ visible: tabActive == 2 }"
                 ></i>
-                Đơn hàng của bạn
+                Thông tin cá nhân
               </a>
             </li>
             <li>
@@ -54,45 +54,56 @@
               >
             </li>
             <li>
-              <a href="#">
-                <i class="dispay_hidden fa-solid fa-arrow-right"></i> Đăng xuất</a
+              <a @click.prevent="logout" style="cursor: pointer">
+                <i class="dispay_hidden fa-solid fa-arrow-right"></i> Đăng
+                xuất</a
               >
             </li>
           </ul>
         </div>
         <div class="right-account">
-          <div class="order-list dispay_hidden" :class="{ visible: tabActive == 1 }">
-            <div class="order" v-for="test in tests" :key="test.id">
-              <span class="order-id">Mã đơn hàng: CCM211</span>
-              <span class="order-status"
-                >Trạng thái đơn hàng: Chờ xác nhận</span
+          <div
+            class="order-list dispay_hidden"
+            :class="{ visible: tabActive == 1 }"
+            v-if="orders"
+          >
+            <div class="order" v-for="order in orders" :key="order.id">
+              <span class="order-id"
+                >Mã đơn hàng: {{ order.transaction_id }}</span
+              >
+              <span class="order-status" v-if="order.pending"
+                >Trạng thái đơn hàng: Chờ xác nhận!</span
+              >
+              <span class="order-status" v-if="order.processing"
+                >Trạng thái đơn hàng: Đang xử lý!</span
+              >
+              <span class="order-status" v-if="order.delivered"
+                >Trạng thái đơn hàng: Đã giao hàng!</span
+              >
+              <span class="order-status" v-if="order.canceled"
+                >Trạng thái đơn hàng: Đã hủy!</span
+              >
+              <span class="order-status" v-if="order.refunded"
+                >Trạng thái đơn hàng: Đã hoàn trả!</span
               >
               <span class="order-id"
-                >Địa chỉ nhận hàng: Tây Tựu- Bắc Từ Liêm - Hà Nội
+                >Địa chỉ nhận hàng: {{ order.deliveryAddress }}
               </span>
-              <button class="button">Hủy đơn hàng</button>
-              <span class="created-time">Thời gian tạo: 2022-03-16</span>
+              <button class="button" v-if="order.pending" @click.prevent="cancelOrder(order)">Hủy đơn hàng</button>
+              <span class="created-time"
+                >Thời gian bạn đặt hàng: {{ order.created_at }}</span
+              >
               <div class="title-list">
                 <span>Sản phẩm</span>
                 <span>Số lượng</span>
                 <span>Giá</span>
                 <span>Tổng tiền</span>
               </div>
-              <div class="item-in-list">
-                <span>Dior Sauvage</span>
-                <span>2</span>
-                <span>4.000.000 VNĐ</span>
-                <span>8.000.000 VNĐ</span>
-              </div>
-              <div class="item-in-list">
-                <span>Creed Aventus</span>
-                <span>2</span>
-                <span>7.000.000 VNĐ</span>
-                <span>14.000.000 VNĐ</span>
-              </div>
-              <div class="shipping">
-                <span>Phí vận chuyển</span>
-                <span>10.000 VNĐ</span>
+              <div class="item-in-list" v-for="product in order.products" :key="product">
+                <span>{{product.name}}</span>
+                <span>{{product.pivot.quantity}}</span>
+                <span>{{product.price}}</span>
+                <span>{{product.price * product.pivot.quantity}}</span>
               </div>
               <div class="discount">
                 <span>Mã giảm giá</span>
@@ -100,133 +111,152 @@
               </div>
               <div class="final-price">
                 <span>Tổng hóa đơn</span>
-                <span>10.000.000 VNĐ</span>
+                <span>{{ order.totalPrice }}</span>
               </div>
             </div>
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" v-if="currentPage > 1">
+                  <a
+                    class="page-link"
+                    href="#"
+                    @click.prevent="currentPage--"
+                    tabindex="-1"
+                    >Trang trước</a
+                  >
+                </li>
+                <li
+                  class="page-item"
+                  :class="{ active: currentPage == page }"
+                  v-for="page in totalPage"
+                  :key="page"
+                >
+                  <a
+                  v-if="Object.keys(orders).length !== 0"
+
+                    class="page-link"
+                    @click.prevent="currentPage = page"
+                    href="#"
+                    >{{ page }}</a
+                  >
+                </li>
+                <li class="page-item" v-if="currentPage < totalPage">
+                  <a class="page-link" @click.prevent="currentPage++" href="#"
+                    >Trang tiếp</a
+                  >
+                </li>
+              </ul>
+            </nav>
           </div>
-          <div class="info-user dispay_hidden" :class="{ visible: tabActive == 2 }">
+          <div
+            class="info-user dispay_hidden"
+            :class="{ visible: tabActive == 2 }"
+          >
             <h3>Thông tin người dùng</h3>
+            <h5 class="success" v-if="success">
+              <i class="fas fa-check"></i> Sửa đổi thành công!
+            </h5>
+            <h5 class="fail" v-if="fail">
+              Sửa đổi thất bại. Vui lòng thử lại sau!
+            </h5>
             <div class="info">
               <label for="username">Tên người dùng</label>
               <input
+                v-model="user.name"
                 type="text"
                 name="username"
+                :class="{ errorInput: error.name }"
                 placeholder="Tên người dùng..."
               />
+              <span class="error" v-if="error.name">{{ error.name[0] }}</span>
             </div>
             <div class="info">
               <label for="email">Địa chỉ Email</label>
-              <input type="text" name="email" placeholder="Tên người dùng..." />
+              <input
+                type="text"
+                name="email"
+                v-model="user.email"
+                :class="{ errorInput: error.email }"
+                placeholder="Tên người dùng..."
+              />
+              <span class="error" v-if="error.email">{{ error.email[0] }}</span>
             </div>
             <div class="info">
               <label for="phoneNumber">Số điện thoại</label>
               <input
+                v-model="user.phone"
                 type="text"
+                :class="{ errorInput: error.phone }"
                 name="phoneNumber"
                 placeholder="Tên người dùng..."
               />
-            </div>
-            <div class="address">
-              <div class="location">
-                <label for="provinces">Tỉnh / Thành phố</label>
-                <div class="arrange">
-                  <span @click="arrangeActive = !arrangeActive"
-                    >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
-                  ></span>
-                  <ul
-                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
-                    class="arrange-key-list"
-                  >
-                    <i class="fa-solid fa-caret-down"></i>
-                    <li
-                      v-for="key in arrange"
-                      :key="key.id"
-                      @click="setArrangKey(key)"
-                    >
-                      {{ key.name }}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="location">
-                <label for="districts">Quận / Huyện</label>
-                <div class="arrange">
-                  <span @click="arrangeActive = !arrangeActive"
-                    >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
-                  ></span>
-                  <ul
-                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
-                    class="arrange-key-list"
-                  >
-                    <i class="fa-solid fa-caret-down"></i>
-                    <li
-                      v-for="key in arrange"
-                      :key="key.id"
-                      @click="setArrangKey(key)"
-                    >
-                      {{ key.name }}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="location">
-                <label for="wards">Phường / Xã</label>
-                <div class="arrange">
-                  <span @click="arrangeActive = !arrangeActive"
-                    >{{ arrangeKey }} <i class="fa-solid fa-caret-down"></i
-                  ></span>
-                  <ul
-                    :class="{ dispay_hidden: !arrangeActive, visible: arrangeActive }"
-                    class="arrange-key-list"
-                  >
-                    <i class="fa-solid fa-caret-down"></i>
-                    <li
-                      v-for="key in arrange"
-                      :key="key.id"
-                      @click="setArrangKey(key)"
-                    >
-                      {{ key.name }}
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <span class="error" v-if="error.phone">{{ error.phone[0] }}</span>
             </div>
             <div class="info">
               <label for="address">Địa chỉ giao hàng chi tiết</label>
               <input
                 type="text"
+                :class="{ errorInput: error.address }"
                 name="address"
+                v-model="user.address"
                 placeholder="Địa chỉ chi tiết"
               />
+              <span class="error" v-if="error.address">{{
+                error.addrees[0]
+              }}</span>
             </div>
-            <button class="button update-button">Cập nhập thông tin</button>
+            <button class="button update-button" @click="changeInfor">
+              Cập nhập thông tin
+            </button>
           </div>
           <div
             class="change-password info-user dispay_hidden"
             :class="{ visible: tabActive == 3 }"
           >
             <h3>Đổi mật khẩu</h3>
+            <span class="error" v-if="error.result">{{ error.result }}</span>
             <div class="info">
               <label for="username">Mật khẩu hiện tại</label>
               <input
-                type="text"
+                type="password"
+                v-model="userPass.currentPass"
                 name="username"
+                :class="{ errorInput: error.currentPass }"
                 placeholder="Nhập mật khẩu hiện tại của bạn"
               />
+              <span class="error" v-if="error.currentPass">{{
+                error.currentPass[0]
+              }}</span>
             </div>
             <div class="info">
               <label for="email">Nhập mật khẩu mới</label>
-              <input type="text" name="email" placeholder="Nhập mật khẩu mới" />
+              <input
+                type="password"
+                v-model="userPass.password"
+                name="email"
+                :class="{ errorInput: error.password }"
+                placeholder="Nhập mật khẩu mới"
+              />
+              <span class="error" v-if="error.password">{{
+                error.password[0]
+              }}</span>
             </div>
             <div class="info">
               <label for="phoneNumber">Xác nhận mật khẩu</label>
               <input
-                type="text"
+                type="password"
+                v-model="userPass.password_confirmation"
                 name="phoneNumber"
+                :class="{ errorInput: error.password_confirmation }"
                 placeholder="Nhập lại mật khẩu mới của bạn"
               />
+              <span class="error" v-if="error.password_confirmation">{{
+                error.password_confirmation[0]
+              }}</span>
             </div>
-            <button class="button update-button">Đổi mật khẩu</button>
+            <button class="button update-button" @click.prevent="changePass">
+              Đổi mật khẩu
+            </button>
           </div>
         </div>
       </div>
@@ -235,20 +265,117 @@
 </template>
 
 <script>
+import baseRequest from "../../base/baseRequest";
 export default {
   data() {
     return {
+      user: this.$store.getters.authUser,
+      totalPage: 0,
+      currentPage: 1,
+      orders: null,
+      error: {},
       tabActive: 1,
-      arrangeKey: "Mới nhất",
-      arrangeActive: false,
-      arrange: [
-        { name: "Mới nhất", id: 1 },
-        { name: "Thứ tự theo giá: Từ thấp đến cao", id: 2 },
-        { name: "Thứ tự theo giá: Từ cao đến thấp", id: 3 },
-        { name: "Theo mức độ phổ biến", id: 4 },
-      ],
-      tests: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
+      success: false,
+      fail: false,
+      userPass: {
+        currentPass: null,
+        password: null,
+        password_confirmation: null,
+      },
     };
+  },
+  methods: {
+    getOrders() {
+      baseRequest
+        .get("orders?page=" + this.currentPage, this.$store.getters.authUser.id)
+        .then((response) => {
+          this.orders = response.data.orders.data;
+          this.totalOrders = response.data.orders.total;
+          this.totalPage = response.data.orders.last_page;
+          this.$isLoading(false);
+        });
+    },
+    cancelOrder(order) {
+    order.pending = false;
+    order.canceled = true;
+    baseRequest
+      .post("order/canceled/" + order.id)
+      .then(() => {
+          this.success = true;
+      });
+    },
+    changeInfor() {
+      this.$isLoading(true);
+      baseRequest
+        .post("changeInfor", this.user)
+        .then((response) => {
+          if (response.data.status == 401) {
+            this.fail = true;
+          } else {
+            this.$store.commit("setAuthUser", response.data.user);
+            console.log(response.data);
+            this.success = true;
+            this.error = {};
+            this.$isLoading(false);
+          }
+        })
+        .catch((error) => {
+          this.error = error.response.data.errors;
+          console.log(this.error);
+          this.success = false;
+          this.$isLoading(false);
+        });
+    },
+    changePass() {
+      this.$isLoading(true);
+      baseRequest
+        .post("changePass", this.userPass)
+        .then((response) => {
+          if (response.data.success == true) {
+            this.success = true;
+            this.error = {};
+          } else {
+            this.success = false;
+            this.error = response.data;
+          }
+          this.$isLoading(false);
+        })
+        .catch((error) => {
+          this.error = error.response.data.errors;
+          console.log(this.error);
+          this.success = false;
+          this.$isLoading(false);
+        });
+    },
+    logout() {
+      this.$isLoading(true);
+      this.$store
+        .dispatch("logout")
+        .then(() => {
+          this.$router.push({ name: "Login" });
+        })
+        .catch(() => {
+          alert("Đã có lỗi sảy ra. Thử lại sau!");
+        })
+        .finally(() => {
+          this.$isLoading(false);
+        });
+    },
+  },
+  watch: {
+    currentPage() {
+      this.getOrders();
+    },
+    success() {
+      setTimeout(() => (this.success = false), 1500);
+    },
+    fail() {
+      setTimeout(() => (this.fail = false), 1500);
+    },
+  },
+  mounted() {
+    this.$isLoading(true);
+    this.getOrders();
   },
 };
 </script>
