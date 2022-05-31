@@ -20,15 +20,16 @@
         <div class="row">
           <div class="col-xl-3 col-lg-4 col-sm-6">
             <div class="icon-card mb-30">
-              <div class="icon purple">
+              <div class="icon primary">
                 <i class="lni lni-cart-full"></i>
               </div>
               <div class="content">
-                <h6 class="mb-10">Đơn hàng mới</h6>
-                <h3 class="text-bold mb-10">34567</h3>
-                <p class="text-sm text-success">
-                  <i class="lni lni-arrow-up"></i> +2.00%
-                  <span class="text-gray">(30 days)</span>
+                <h6 class="mb-10">Đơn hàng đang xử lý</h6>
+                <h3 class="text-bold mb-10">{{ totalProcessOrder }}</h3>
+                <p class="text-sm text-danger">
+                  <router-link to="/admin/processOrders" class="text-gray"
+                    >Xem chi tiết</router-link
+                  >
                 </p>
               </div>
             </div>
@@ -36,15 +37,16 @@
           </div>
           <div class="col-xl-3 col-lg-4 col-sm-6">
             <div class="icon-card mb-30">
-              <div class="icon purple">
+              <div class="icon primary">
                 <i class="lni lni-cart-full"></i>
               </div>
               <div class="content">
-                <h6 class="mb-10">Tài khoản mới</h6>
-                <h3 class="text-bold mb-10">34567</h3>
-                <p class="text-sm text-success">
-                  <i class="lni lni-arrow-up"></i> +2.00%
-                  <span class="text-gray">(30 days)</span>
+                <h6 class="mb-10">Đơn hàng đã giao</h6>
+                <h3 class="text-bold mb-10">{{ totalDeliveredOrder }}</h3>
+                <p class="text-sm text-danger">
+                  <router-link to="/admin/deliveredOrders" class="text-gray"
+                    >Xem chi tiết</router-link
+                  >
                 </p>
               </div>
             </div>
@@ -57,11 +59,12 @@
                 <i class="lni lni-credit-cards"></i>
               </div>
               <div class="content">
-                <h6 class="mb-10">Tổng số đơn hàng</h6>
-                <h3 class="text-bold mb-10">$24,567</h3>
+                <h6 class="mb-10">Tổng số sản phẩm</h6>
+                <h3 class="text-bold mb-10">{{ totalProduct }}</h3>
                 <p class="text-sm text-danger">
-                  <i class="lni lni-arrow-down"></i> -2.00%
-                  <span class="text-gray">Expense</span>
+                  <router-link to="/admin/products" class="text-gray"
+                    >Xem chi tiết</router-link
+                  >
                 </p>
               </div>
             </div>
@@ -75,10 +78,11 @@
               </div>
               <div class="content">
                 <h6 class="mb-10">Tổng số người dùng</h6>
-                <h3 class="text-bold mb-10">34567</h3>
+                <h3 class="text-bold mb-10">{{ totalUser }}</h3>
                 <p class="text-sm text-danger">
-                  <i class="lni lni-arrow-down"></i> -25.00%
-                  <span class="text-gray"> Earning</span>
+                  <router-link to="/admin/clientUsers" class="text-gray"
+                    >Xem chi tiết</router-link
+                  >
                 </p>
               </div>
             </div>
@@ -87,67 +91,14 @@
           <!-- End Col -->
         </div>
         <div class="row">
-          <div class="col-lg-5">
-            <div class="card-style mb-30">
-              <div
-                class="title d-flex flex-wrap align-items-center justify-content-between"
-              >
-                <div class="left">
-                  <h6 class="text-medium mb-30">Sales/Revenue</h6>
-                </div>
-                <div class="right">
-                  <div class="select-style-1">
-                    <div class="select-position select-sm">
-                      <select class="light-bg">
-                        <option value="">Yearly</option>
-                        <option value="">Monthly</option>
-                        <option value="">Weekly</option>
-                      </select>
-                    </div>
-                  </div>
-                  <!-- end select -->
-                </div>
-              </div>
-              <!-- End Title -->
-              <div class="chart">
-                <div class="chartjs-size-monitor">
-                  <div class="chartjs-size-monitor-expand">
-                    <div class=""></div>
-                  </div>
-                  <div class="chartjs-size-monitor-shrink">
-                    <div class=""></div>
-                  </div>
-                </div>
-                <canvas
-                  id="Chart2"
-                  style="width: 419px; height: 326px; display: block"
-                  width="523"
-                  height="407"
-                  class="chartjs-render-monitor"
-                ></canvas>
-              </div>
-              <!-- End Chart -->
-            </div>
-          </div>
           <!-- End Col -->
-          <div class="col-lg-7">
+          <div class="col-lg-6" v-if="newOrders">
             <div class="card-style mb-30">
               <div
                 class="title d-flex flex-wrap align-items-center justify-content-between"
               >
                 <div class="left">
-                  <h6 class="text-medium mb-30">Sales History</h6>
-                </div>
-                <div class="right">
-                  <div class="select-style-1">
-                    <div class="select-position select-sm">
-                      <select class="light-bg">
-                        <option value="">Today</option>
-                        <option value="">Yesterday</option>
-                      </select>
-                    </div>
-                  </div>
-                  <!-- end select -->
+                  <h6 class="text-medium mb-30">Đơn hàng mới</h6>
                 </div>
               </div>
               <!-- End Title -->
@@ -156,221 +107,99 @@
                   <thead>
                     <tr>
                       <th>
-                        <h6 class="text-sm text-medium">Products</h6>
+                        <h6 class="text-sm text-medium">Mã đơn hàng</h6>
                       </th>
                       <th class="min-width">
-                        <h6 class="text-sm text-medium">
-                          Category <i class="lni lni-arrows-vertical"></i>
-                        </h6>
+                        <h6 class="text-sm text-medium">Số điện thoại</h6>
                       </th>
                       <th class="min-width">
-                        <h6 class="text-sm text-medium">
-                          Revenue <i class="lni lni-arrows-vertical"></i>
-                        </h6>
-                      </th>
-                      <th class="min-width">
-                        <h6 class="text-sm text-medium">
-                          Status <i class="lni lni-arrows-vertical"></i>
-                        </h6>
+                        <h6 class="text-sm text-medium">Tổng tiền</h6>
                       </th>
                       <th>
-                        <h6 class="text-sm text-medium text-end">
-                          Actions <i class="lni lni-arrows-vertical"></i>
-                        </h6>
+                        <h6 class="text-sm text-medium text-end">Hành động</h6>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr v-for="order in newOrders" :key="order.id">
                       <td>
                         <div class="product">
-                          <div class="image">
-                            <img
-                              src="assets/images/products/product-mini-1.jpg"
-                              alt=""
-                            />
-                          </div>
-                          <p class="text-sm">Bedroom</p>
+                          <p class="text-sm">{{ order.transaction_id }}</p>
                         </div>
                       </td>
                       <td>
-                        <p class="text-sm">Interior</p>
+                        <p class="text-sm">{{ order.phone_number }}</p>
                       </td>
                       <td>
-                        <p class="text-sm">$345</p>
+                        <p class="text-sm">{{ order.totalPrice }} VNĐ</p>
                       </td>
                       <td>
-                        <span class="status-btn close-btn">Pending</span>
-                      </td>
-                      <td>
-                        <div class="action justify-content-end">
-                          <button class="edit">
-                            <i class="lni lni-pencil"></i>
-                          </button>
-                          <button
-                            class="more-btn ml-10 dropdown-toggle"
-                            id="moreAction1"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <i class="lni lni-more-alt"></i>
-                          </button>
-                          <ul
-                            class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="moreAction1"
-                          >
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Remove</a>
-                            </li>
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Edit</a>
-                            </li>
-                          </ul>
-                        </div>
+                        <router-link
+                          :to="{
+                            name: 'OrderDetail',
+                            params: { id: order.id },
+                          }"
+                          class="status-btn btn btn-primary close-btn"
+                          >Xem</router-link
+                        >
                       </td>
                     </tr>
+                  </tbody>
+                </table>
+                <!-- End Table -->
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6" v-if="newAccounts && $store.getters.isAdmin">
+            <div class="card-style mb-30">
+              <div
+                class="title d-flex flex-wrap align-items-center justify-content-between"
+              >
+                <div class="left">
+                  <h6 class="text-medium mb-30">Người dùng mới</h6>
+                </div>
+              </div>
+              <!-- End Title -->
+              <div class="table-responsive">
+                <table class="table top-selling-table">
+                  <thead>
                     <tr>
-                      <td>
-                        <div class="product">
-                          <div class="image">
-                            <img
-                              src="assets/images/products/product-mini-2.jpg"
-                              alt=""
-                            />
-                          </div>
-                          <p class="text-sm">Arm Chair</p>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-sm">Interior</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">$345</p>
-                      </td>
-                      <td>
-                        <span class="status-btn warning-btn">Refund</span>
-                      </td>
-                      <td>
-                        <div class="action justify-content-end">
-                          <button class="edit">
-                            <i class="lni lni-pencil"></i>
-                          </button>
-                          <button
-                            class="more-btn ml-10 dropdown-toggle"
-                            id="moreAction1"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <i class="lni lni-more-alt"></i>
-                          </button>
-                          <ul
-                            class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="moreAction1"
-                          >
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Remove</a>
-                            </li>
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Edit</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
+                      <th>
+                        <h6 class="text-sm text-medium">Tên</h6>
+                      </th>
+                      <th class="min-width">
+                        <h6 class="text-sm text-medium">Email</h6>
+                      </th>
+                      <th class="min-width">
+                        <h6 class="text-sm text-medium">Quyền</h6>
+                      </th>
+                      <th>
+                        <h6 class="text-sm text-medium text-end">Hành động</h6>
+                      </th>
                     </tr>
-                    <tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="user in newAccounts" :key="user.id">
                       <td>
                         <div class="product">
-                          <div class="image">
-                            <img
-                              src="assets/images/products/product-mini-3.jpg"
-                              alt=""
-                            />
-                          </div>
-                          <p class="text-sm">Sofa</p>
+                          <p class="text-sm">{{ user.name }}</p>
                         </div>
                       </td>
                       <td>
-                        <p class="text-sm">Interior</p>
+                        <p class="text-sm">{{ user.email }}</p>
                       </td>
                       <td>
-                        <p class="text-sm">$345</p>
+                        <p class="text-sm">{{ user.role.name }}</p>
                       </td>
                       <td>
-                        <span class="status-btn success-btn">Completed</span>
-                      </td>
-                      <td>
-                        <div class="action justify-content-end">
-                          <button class="edit">
-                            <i class="lni lni-pencil"></i>
-                          </button>
-                          <button
-                            class="more-btn ml-10 dropdown-toggle"
-                            id="moreAction1"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <i class="lni lni-more-alt"></i>
-                          </button>
-                          <ul
-                            class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="moreAction1"
-                          >
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Remove</a>
-                            </li>
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Edit</a>
-                            </li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div class="product">
-                          <div class="image">
-                            <img
-                              src="assets/images/products/product-mini-4.jpg"
-                              alt=""
-                            />
-                          </div>
-                          <p class="text-sm">Kitchen</p>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-sm">Interior</p>
-                      </td>
-                      <td>
-                        <p class="text-sm">$345</p>
-                      </td>
-                      <td>
-                        <span class="status-btn close-btn">Canceled</span>
-                      </td>
-                      <td>
-                        <div class="action justify-content-end">
-                          <button class="edit">
-                            <i class="lni lni-pencil"></i>
-                          </button>
-                          <button
-                            class="more-btn ml-10 dropdown-toggle"
-                            id="moreAction1"
-                            data-bs-toggle="dropdown"
-                            aria-expanded="false"
-                          >
-                            <i class="lni lni-more-alt"></i>
-                          </button>
-                          <ul
-                            class="dropdown-menu dropdown-menu-end"
-                            aria-labelledby="moreAction1"
-                          >
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Remove</a>
-                            </li>
-                            <li class="dropdown-item">
-                              <a href="#0" class="text-gray">Edit</a>
-                            </li>
-                          </ul>
-                        </div>
+                        <router-link
+                          :to="{
+                            name: 'UserDetail',
+                            params: { id: user.id },
+                          }"
+                          class="status-btn btn btn-primary close-btn"
+                          >Xem</router-link
+                        >
                       </td>
                     </tr>
                   </tbody>
@@ -393,10 +222,7 @@
         <div class="row">
           <div class="col-md-6 order-last order-md-first">
             <div class="copyright text-center text-md-start">
-              <p class="text-sm">
-                Designed and Developed by
-                  PlainAdmin
-              </p>
+              <p class="text-sm">Designed and Developed by PlainAdmin</p>
             </div>
           </div>
           <!-- end col-->
@@ -419,10 +245,35 @@
 
 <script>
 // import guards from "../../router/guards"
+import baseRequest from "../../base/baseRequest";
 export default {
   // beforeRouteEnter: guards.checkRole,
-  methods: {},
+  data() {
+    return {
+      totalProduct: null,
+      totalProcessOrder: null,
+      totalDeliveredOrder: null,
+      newAccounts: null,
+      totalUser: null,
+      newOrders: null,
+    };
+  },
+  methods: {
+    getDashbroadInfo() {
+      this.$isLoading(true);
+      baseRequest.get("admin/get_dashboard_info").then((response) => {
+        this.totalProduct = response.data.totalProduct;
+        this.totalProcessOrder = response.data.totalProcessOrder;
+        this.totalDeliveredOrder = response.data.totalDeliveredOrder;
+        this.newAccounts = response.data.newAccounts;
+        this.totalUser = response.data.totalUser;
+        this.newOrders = response.data.newOrders;
+        this.$isLoading(false);
+      });
+    },
+  },
   mounted() {
+    this.getDashbroadInfo();
     this.$isLoading(false);
   },
 };

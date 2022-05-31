@@ -22,7 +22,7 @@
                   class="form-control"
                 />
               </div>
-              <div class="col-md-3" v-if="image!= ''">
+              <div class="col-md-3" v-if="image != ''">
                 <button class="btn btn-success btn-block" @click="uploadImage">
                   Tải lên
                 </button>
@@ -30,16 +30,18 @@
             </div>
           </div>
           <div class="row preview">
-            <p  v-if="$store.state.pictures.length > 0" >Đã tải lên</p>
+            <p v-if="$store.state.pictures.length > 0">Đã tải lên</p>
             <div class="col-md-3">
-              <div v-for="(img,index) in $store.state.pictures" :key="index"> 
+              <div v-for="(img, index) in $store.state.pictures" :key="index">
                 <img
                   :src="imgUrl + img"
                   class="img-responsive"
                   height="70"
                   width="90"
                 />
-                <i class="fa-solid fa-x" @click="$store.commit('removePicture',index)"></i>
+                <a @click.prevent="$store.commit('removePicture', index)">
+                  <i class="fa-solid fa-x"></i>
+                </a>
               </div>
             </div>
           </div>
@@ -53,7 +55,7 @@
 import { mapGetters } from "vuex";
 import axios from "axios";
 export default {
-    computed: {
+  computed: {
     ...mapGetters(["imgUrl", "pictures"]),
   },
   data() {
@@ -80,7 +82,7 @@ export default {
         .post("http://localhost:8000/api/uploads", { image: this.image })
         .then((response) => {
           if (response.data.success) {
-            this.$store.commit('addPicture',response.data.fileName);
+            this.$store.commit("addPicture", response.data.fileName);
             this.image = "";
           }
         });

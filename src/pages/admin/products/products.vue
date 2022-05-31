@@ -64,6 +64,7 @@
                       <th><h6>#</h6></th>
                       <th><h6>Tên</h6></th>
                       <th><h6>Giá</h6></th>
+                      <th><h6>Khuyến mãi</h6></th>
                       <th><h6>Số lượng</h6></th>
                       <th><h6>Dung tích</h6></th>
                       <th><h6>Thao tác</h6></th>
@@ -74,27 +75,52 @@
                     <tr v-for="product in products" :key="product.id">
                       <td>
                         <div class="employee-image" v-if="product.pictures">
-                          <img :src="imgUrl + product.pictures[0].img" alt="" />
+                          <img
+                            v-if="product.pictures.length > 0"
+                            :src="imgUrl + product.pictures[0].img"
+                            alt=""
+                          />
                         </div>
                         <div class="employee-image" v-else>
                           <img alt="Không có ảnh" />
                         </div>
                       </td>
                       <td class="min-width">
-                        <p><router-link to="/products">{{ product.name }}</router-link></p>
+                        <p>
+                          <router-link to="/products">{{
+                            product.name
+                          }}</router-link>
+                        </p>
                       </td>
                       <td class="min-width">
                         <p>
-                          <span>{{ product.price }} VNĐ </span>
+                          <span
+                            >{{
+                              (product.price * (100 - product.discount)) / 100
+                            }}
+                            VNĐ
+                          </span>
                         </p>
                       </td>
                       <td class="min-width">
-                         <p>
-                          <span>{{ product.quantity }} </span>
+                        <p v-if="product.discount != 0">
+                          <span style="color: red"
+                            >{{ product.discount }} %</span
+                          >
                         </p>
                       </td>
-                           <td class="min-width">
-                         <p>
+                      <td class="min-width">
+                        <p>
+                          <span v-if="product.quantity > 0"
+                            >{{ product.quantity }}
+                          </span>
+                          <span class="status-btn danger-btn" v-else>
+                            Hết hàng
+                          </span>
+                        </p>
+                      </td>
+                      <td class="min-width">
+                        <p>
                           <span>{{ product.capacity }} Ml </span>
                         </p>
                       </td>
@@ -195,7 +221,7 @@ export default {
     getProducts() {
       this.$isLoading(true);
       baseRequest
-        .get("admin/products?page=" + this.currentPage,this.searchKey)
+        .get("admin/products?page=" + this.currentPage, this.searchKey)
         .then((response) => {
           this.products = response.data.data;
           this.total = response.data.total;
@@ -204,16 +230,24 @@ export default {
         });
     },
     deleteProduct(product) {
-      let index = this.products.indexOf(product);
-      if (index > -1) {
-        this.products.splice(index, 1);
-        this.total -= 1;
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            product.name +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.products.indexOf(product);
+        if (index > -1) {
+          this.products.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest
+          .delete("admin/product/" + product.id, product.id)
+          .then((response) => {
+            console.log(response.data);
+          });
       }
-      baseRequest
-        .delete("admin/product/" + product.id, product.id)
-        .then((response) => {
-          console.log(response.data);
-        });
     },
   },
   watch: {
@@ -228,4 +262,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.red_color {
+  color: red;
+}
+</style>

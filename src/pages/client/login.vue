@@ -18,7 +18,7 @@
             placeholder="Nhập tài khoản của bạn"
           />
           <span v-if="errors.email" class="error">{{ errors.email[0] }}</span>
-          <i class="fa-solid fa-user"></i>
+          <span class="icon"><i class="fa-solid fa-user"></i> </span>
         </div>
         <div class="info-box">
           <label for="">Mật khẩu</label>
@@ -31,17 +31,17 @@
           <span v-if="errors.password" class="error">{{
             errors.password[0]
           }}</span>
-          <i class="fa-solid fa-lock"></i>
-          <i
-            @click="hiddenPassword = false"
+       
+          <span class="icon">   <i class="fa-solid fa-lock"></i> </span>
+          <a
             v-if="hiddenPassword"
-            class="fa-solid fa-eye"
-          ></i>
-          <i
-            @click="hiddenPassword = true"
-            v-else
-            class="fa-solid fa-eye-slash"
-          ></i>
+            @click.prevent="hiddenPassword = false"
+          >
+            <i class="fa-solid fa-eye"></i>
+          </a>
+          <a href="" @click.prevent="hiddenPassword = true" v-else>
+            <i class="fa-solid fa-eye-slash"></i>
+          </a>
         </div>
       </div>
       <span class="forgot-password">Quên mật khẩu?</span>

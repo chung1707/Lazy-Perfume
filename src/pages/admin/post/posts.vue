@@ -33,7 +33,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="card-style mb-30">
-              <h6 class="mb-10">Bài viết của người dùng!</h6>
+              <h6 class="mb-10">Bài viết của hệ thống đã được phê duyệt!</h6>
               <div
                 class="d-flex flex-wrap justify-content-between align-items-center py-3"
               >
@@ -61,7 +61,7 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th><h6>logo</h6></th>
+                      <th><h6>thumbnail</h6></th>
                       <th><h6>Tiêu đề</h6></th>
                       <th><h6>Thể loại</h6></th>
                       <th><h6>Người đăng</h6></th>
@@ -82,16 +82,16 @@
                         <p>{{ post.title }}</p>
                       </td>
                       <td class="min-width">
-                          <p >{{post.category.name}}</p>
+                        <p v-if="post.category">{{ post.category.name }}</p>
                       </td>
-                         <td class="min-width">
-                          <p >{{post.user.name}}</p>
+                      <td class="min-width">
+                        <p>{{ post.user.name }}</p>
                       </td>
                       <td>
                         <div class="action">
                           <router-link
                             :to="{
-                              name: 'UserDetail',
+                              name: 'PostDetail',
                               params: { id: post.id },
                             }"
                             class="text-success"
@@ -99,7 +99,7 @@
                             <i class="fa fa-eye" aria-hidden="true"></i>
                           </router-link>
                           <button
-                            @click="deleteUser(post)"
+                            @click="deletePost(post)"
                             class="text-danger"
                             style="margin-left: 20px"
                           >
@@ -180,12 +180,11 @@ export default {
     };
   },
   methods: {
-
     getPosts() {
       console.log(this.searchKey);
       this.$isLoading(true);
       baseRequest
-        .get("admin/post?page=" + this.currentPage, this.searchKey)
+        .get("admin/approved_posts?page=" + this.currentPage, this.searchKey)
         .then((response) => {
           this.posts = response.data.data;
           this.total = response.data.total;
@@ -193,17 +192,25 @@ export default {
           this.$isLoading(false);
         });
     },
-    deleteUser(post) {
-      let index = this.posts.indexOf(post);
-      if (index > -1) {
-        this.posts.splice(index, 1);
-        this.total -= 1;
+    deletePost(post) {
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            post.title +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.posts.indexOf(post);
+        if (index > -1) {
+          this.posts.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest
+          .delete("admin/post/" + post.id, post.id)
+          .then((response) => {
+            console.log(response.data);
+          });
       }
-      baseRequest
-        .delete("user_delete/" + post.id, post.id)
-        .then((response) => {
-          console.log(response.data);
-        });
     },
   },
   watch: {

@@ -71,31 +71,33 @@
                     <tr v-for="category in categories" :key="category.id">
                       <td>
                         <p>{{ category.id }}</p>
-                        
                       </td>
                       <td class="min-width">
                         <p>{{ category.name }}</p>
                       </td>
                       <td class="min-width">
                         <p>
-                          <span v-if="category.for_product">Danh mục sản phẩm</span>
-                          <span v-else >Danh mục bài viết</span>
+                          <span v-if="category.for_product"
+                            >Danh mục sản phẩm</span
+                          >
+                          <span v-else>Danh mục bài viết</span>
                         </p>
                       </td>
-                     
+
                       <td>
                         <div class="action">
                           <router-link
                             :to="{
-                              name: 'UserDetail',
+                              name: 'CategoryDetail',
                               params: { id: category.id },
                             }"
                             class="text-success"
                           >
                             <i class="fa fa-eye" aria-hidden="true"></i>
                           </router-link>
+
                           <button
-                            @click="deleteUser(category)"
+                            @click="deleteCategory(category)"
                             class="text-danger"
                             style="margin-left: 20px"
                           >
@@ -160,7 +162,6 @@
 <script>
 import { mapGetters } from "vuex";
 import baseRequest from "../../../base/baseRequest";
-
 export default {
   computed: {
     ...mapGetters(["imgUrl"]),
@@ -168,6 +169,7 @@ export default {
   components: {},
   data() {
     return {
+      deleteLink: "admin/category/",
       searchKey: "",
       categories: {},
       total: 0,
@@ -176,7 +178,6 @@ export default {
     };
   },
   methods: {
-
     getClients() {
       console.log(this.searchKey);
       this.$isLoading(true);
@@ -189,17 +190,21 @@ export default {
           this.$isLoading(false);
         });
     },
-    deleteUser(category) {
-      let index = this.categories.indexOf(category);
-      if (index > -1) {
-        this.categories.splice(index, 1);
-        this.total -= 1;
+    deleteCategory(category) {
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            category.name +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.categories.indexOf(category);
+        if (index > -1) {
+          this.categories.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest.delete("admin/category/" + category.id);
       }
-      baseRequest
-        .delete("user_delete/" + category.id, category.id)
-        .then((response) => {
-          console.log(response.data);
-        });
     },
   },
   watch: {

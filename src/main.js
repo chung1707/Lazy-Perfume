@@ -7,10 +7,21 @@ import router from './router';
 import { registerGlobalComponents } from './utils/import';
 import Loading from 'vue3-loading-screen'
 
-
+import CKEditor from '@ckeditor/ckeditor5-vue';
 import Vuex from 'vuex';
 
 import storeConfig from './store';
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas);
+import { fab } from '@fortawesome/free-brands-svg-icons';
+library.add(fab);
+import { far } from '@fortawesome/free-regular-svg-icons';
+library.add(far);
+import { dom } from "@fortawesome/fontawesome-svg-core";
+dom.watch();
+
 
 export const store = new Vuex.Store(storeConfig);
 
@@ -18,6 +29,8 @@ const app = createApp(App);
 
 app.use(router);
 app.use(store)
+app.use( CKEditor );
+app.component('fa',FontAwesomeIcon)
 
 // loading screen custom
 app.use(Loading, {

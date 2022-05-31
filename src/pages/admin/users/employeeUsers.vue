@@ -90,21 +90,32 @@
                           v-if="!employee.blocked"
                           @click="block(employee)"
                         >
-                           Bình thường
+                          Bình thường
                         </button>
-                        <button 
+                        <button
                           @click="unBlock(employee)"
-                        class="status-btn danger-btn" v-else>
+                          class="status-btn danger-btn"
+                          v-else
+                        >
                           Bị khóa
                         </button>
                       </td>
                       <td>
                         <div class="action">
-                          <router-link :to="{ name: 'UserDetail', params: { id: employee.id } }"
-                           class="text-success">
+                          <router-link
+                            :to="{
+                              name: 'UserDetail',
+                              params: { id: employee.id },
+                            }"
+                            class="text-success"
+                          >
                             <i class="fa fa-eye" aria-hidden="true"></i>
                           </router-link>
-                          <button @click="deleteUser(employee)" class="text-danger" style="margin-left: 20px">
+                          <button
+                            @click="deleteUser(employee)"
+                            class="text-danger"
+                            style="margin-left: 20px"
+                          >
                             <i class="lni lni-trash-can"></i>
                           </button>
                         </div>
@@ -182,23 +193,31 @@ export default {
     };
   },
   methods: {
-    block(user){
+    block(user) {
       user.blocked = true;
-      baseRequest.post('block_user/'+ user.id);
+      baseRequest.post("block_user/" + user.id);
     },
-    unBlock(user){
+    unBlock(user) {
       user.blocked = false;
-      baseRequest.post('unblock_user/'+ user.id,);
+      baseRequest.post("unblock_user/" + user.id);
     },
-    deleteUser(employee){
-      let index = this.employees.indexOf(employee);
-      if(index > -1){
-        this.employees.splice(index, 1);
-        this.total -= 1;
+    deleteUser(employee) {
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            employee.name +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.employees.indexOf(employee);
+        if (index > -1) {
+          this.employees.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest
+          .delete("user_delete/" + employee.id, employee.id)
+          .then(() => {});
       }
-      baseRequest.delete('user_delete/'+employee.id, employee.id).then(response =>{
-        console.log(response.data);
-      })
     },
     getEmployees() {
       this.$isLoading(true);

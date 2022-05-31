@@ -17,4 +17,7 @@ export default {
   // management pages
   user: null,
   pictures: [],
+
+  // import
+  itemsInBill: [],
 }

@@ -20,10 +20,6 @@
                 @click.prevent="tabActive = 1"
                 :class="{ tabActive: tabActive == 1 }"
               >
-                <i
-                  class="dispay_hidden fa-solid fa-arrow-right"
-                  :class="{ visible: tabActive == 1 }"
-                ></i>
                 Đơn hàng của bạn</a
               >
             </li>
@@ -33,10 +29,6 @@
                 @click.prevent="tabActive = 2"
                 :class="{ tabActive: tabActive == 2 }"
               >
-                <i
-                  class="dispay_hidden fa-solid fa-arrow-right"
-                  :class="{ visible: tabActive == 2 }"
-                ></i>
                 Thông tin cá nhân
               </a>
             </li>
@@ -46,18 +38,11 @@
                 @click.prevent="tabActive = 3"
                 :class="{ tabActive: tabActive == 3 }"
               >
-                <i
-                  class="dispay_hidden fa-solid fa-arrow-right"
-                  :class="{ visible: tabActive == 3 }"
-                ></i>
                 Đổi mật khẩu</a
               >
             </li>
             <li>
-              <a @click.prevent="logout" style="cursor: pointer">
-                <i class="dispay_hidden fa-solid fa-arrow-right"></i> Đăng
-                xuất</a
-              >
+              <a @click.prevent="logout" style="cursor: pointer"> Đăng xuất</a>
             </li>
           </ul>
         </div>
@@ -89,7 +74,13 @@
               <span class="order-id"
                 >Địa chỉ nhận hàng: {{ order.deliveryAddress }}
               </span>
-              <button class="button" v-if="order.pending" @click.prevent="cancelOrder(order)">Hủy đơn hàng</button>
+              <button
+                class="button"
+                v-if="order.pending"
+                @click.prevent="cancelOrder(order)"
+              >
+                Hủy đơn hàng
+              </button>
               <span class="created-time"
                 >Thời gian bạn đặt hàng: {{ order.created_at }}</span
               >
@@ -99,15 +90,28 @@
                 <span>Giá</span>
                 <span>Tổng tiền</span>
               </div>
-              <div class="item-in-list" v-for="product in order.products" :key="product">
-                <span>{{product.name}}</span>
-                <span>{{product.pivot.quantity}}</span>
-                <span>{{product.price}}</span>
-                <span>{{product.price * product.pivot.quantity}}</span>
+              <div
+                class="item-in-list"
+                v-for="product in order.products"
+                :key="product"
+              >
+                <span>
+                  <router-link
+                    :to="{ name: 'Product', params: { id: product.id } }"
+                    >{{ product.name }}</router-link
+                  >
+                </span>
+
+                <span>{{ product.pivot.quantity }}</span>
+                <span>{{ product.pivot.price }}</span>
+                <span>{{ product.pivot.price * product.pivot.quantity }}</span>
               </div>
               <div class="discount">
-                <span>Mã giảm giá</span>
-                <span>0%</span>
+                <span>Giảm giá</span>
+                <span v-if="order.discount"
+                  >{{ order.discount.discount }}%</span
+                >
+                <span v-else>Không</span>
               </div>
               <div class="final-price">
                 <span>Tổng hóa đơn</span>
@@ -132,8 +136,7 @@
                   :key="page"
                 >
                   <a
-                  v-if="Object.keys(orders).length !== 0"
-
+                    v-if="Object.keys(orders).length !== 0"
                     class="page-link"
                     @click.prevent="currentPage = page"
                     href="#"
@@ -296,12 +299,16 @@ export default {
         });
     },
     cancelOrder(order) {
-    order.pending = false;
-    order.canceled = true;
-    baseRequest
-      .post("order/canceled/" + order.id)
-      .then(() => {
+      baseRequest.post("order/canceled/" + order.id).then((response) => {
+        if (response.data.success) {
           this.success = true;
+          order.pending = false;
+          order.canceled = true;
+        } else {
+          order.pending = false;
+          order.processing = true;
+          this.fail = true;
+        }
       });
     },
     changeInfor() {

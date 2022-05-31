@@ -42,16 +42,16 @@
       border-color: $blue-color;
     }
   }
-  i {
+  .icon,a {
     position: absolute;
     top: 48%;
     font-size: 22px;
     color: $grey-color;
   }
-  .fa-lock, .fa-user {
+  .icon,.fa-lock, .fa-user {
     left: 5px;
   }
-  .fa-eye, .fa-eye-slash {
+  a {
     right: 5px;
   }
 }

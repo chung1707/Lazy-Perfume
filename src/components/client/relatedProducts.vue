@@ -19,19 +19,24 @@
             <div class="front">
               <img
                 class="item-img"
+                v-if="item.pictures.length > 0"
                 :src="imgUrl + item.pictures[0].img"
                 alt=""
               />
             </div>
             <div class="back">
-              <img :src="imgUrl + item.pictures[1].img" alt="" />
+              <img
+                v-if="item.pictures.length > 1"
+                :src="imgUrl + item.pictures[1].img"
+                alt=""
+              />
             </div>
           </div>
         </div>
       </router-link>
       <div class="info-card">
         <span class="quantity-info" v-if="item.quantity <= 10"
-          >Còn {{ item.quantity }}
+          >Còn {{ item.quantity }} sản phẩm
         </span>
         <span class="discount-info" v-if="item.discount"
           >Giảm {{ item.discount }} %</span
@@ -43,7 +48,7 @@
           class="product-name"
           >{{ item.name }}</router-link
         >
-        <p class="thumbnail-price">{{ item.price }} <span>VNĐ</span></p>
+        <p class="thumbnail-price">{{item.price *(100-item.discount)/100 }} <span>VNĐ</span></p>
       </div>
     </SwiperSlide>
   </Swiper>

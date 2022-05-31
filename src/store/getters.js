@@ -42,4 +42,13 @@ export default {
     }
     return Number(total);
   },
+  // import
+  itemsInBill: state => state.itemsInBill,
+  sumPrice(state){
+    let total = 0;
+    for(let i = 0; i < state.itemsInBill.length; i++){
+        total += state.itemsInBill[i].quantity * state.itemsInBill[i].price;
+    }
+    return total;
+},
 }

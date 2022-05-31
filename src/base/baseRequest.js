@@ -24,6 +24,14 @@ export default {
       {headers:  {'Content-Type': 'multipart/form-data'}},
     );
   },
+  put(url,data) {
+    return axios.put(
+      apiUrl+url,
+      data, 
+      {headers: this.getHeaders()},
+      {headers:  {'Content-Type': 'multipart/form-data'}},
+    );
+  },
   delete(url,data) {
     return axios.delete(
       apiUrl+url,

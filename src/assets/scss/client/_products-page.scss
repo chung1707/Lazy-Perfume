@@ -70,14 +70,18 @@
   
   .gender {
     ul {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 20px;
       li {
         cursor: pointer;
         display: flex;
         align-items: center;
         width: 33%;
         margin-right: 5px;
+        label {
+          display: inline-block;
+        }
       }
     }
     margin-bottom: 40px;

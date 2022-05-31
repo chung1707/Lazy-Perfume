@@ -13,40 +13,44 @@
           <label for="">Tên</label>
           <input type="text" v-model="user.name" placeholder="Nhập tên của bạn">
           <span v-if="errors.name" class="error">{{ errors.name[0] }}</span>
-          <i class="fa-solid fa-user"></i>
+                <span class="icon"><i class="fa-solid fa-user"></i> </span>
+
         </div>
         <div class="info-box">
           <label for="">Email</label>
           <input type="text" v-model="user.email" placeholder="Nhập email của bạn">
           <span v-if="errors.email" class="error">{{ errors.email[0] }}</span>
-          <i class="fa-solid fa-user"></i>
+               <span class="icon"><i class="fa-solid fa-user"></i> </span>
+
         </div>
         <div class="info-box">
           <label for="">Mật khẩu</label>
           <input :type="hiddenPassword ? 'password' : 'text'" v-model="user.password"  name="password" placeholder="Nhập mật khẩu">
           <span v-if="errors.password" class="error">{{ errors.password[0] }}</span>
-          <i class="fa-solid fa-lock"></i>
-          <i 
-          @click="hiddenPassword = false"
-          v-if="hiddenPassword" 
-          class="fa-solid fa-eye"></i>
-          <i 
-          @click="hiddenPassword = true"
-          v-else 
-          class="fa-solid fa-eye-slash"></i>
+          <span class="icon">   <i class="fa-solid fa-lock"></i> </span>
+          <a
+            v-if="hiddenPassword"
+            @click.prevent="hiddenPassword = false"
+          >
+            <i class="fa-solid fa-eye"></i>
+          </a>
+          <a href="" @click.prevent="hiddenPassword = true" v-else>
+            <i class="fa-solid fa-eye-slash"></i>
+          </a>
         </div>
         <div class="info-box">
           <label for="">Xác nhận mật khẩu</label>
           <input :type="hiddenConfirmPassword ? 'password' : 'text'" v-model="user.password_confirmation" name="password_confirmation"  placeholder="Xác nhận mật khẩu trên">
-          <i class="fa-solid fa-lock"></i>
-          <i 
-          @click="hiddenConfirmPassword = false"
-          v-if="hiddenConfirmPassword" 
-          class="fa-solid fa-eye"></i>
-          <i 
-          @click="hiddenConfirmPassword = true"
-          v-else 
-          class="fa-solid fa-eye-slash"></i>
+          <span class="icon">   <i class="fa-solid fa-lock"></i> </span>
+          <a
+            v-if="hiddenConfirmPassword"
+            @click.prevent="hiddenConfirmPassword = false"
+          >
+            <i class="fa-solid fa-eye"></i>
+          </a>
+          <a href="" @click.prevent="hiddenConfirmPassword = true" v-else>
+            <i class="fa-solid fa-eye-slash"></i>
+          </a>
         </div>
       </div>
       <span class="forgot-password">Quên mật khẩu?</span>

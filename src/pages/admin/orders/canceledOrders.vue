@@ -205,6 +205,13 @@ export default {
         });
     },
     deleteOrder(order) {
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            order.transaction_id +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
       let index = this.orders.indexOf(order);
       if (index > -1) {
         this.orders.splice(index, 1);
@@ -215,6 +222,7 @@ export default {
         .then((response) => {
           console.log(response.data);
         });
+      }
     },
   },
   watch: {

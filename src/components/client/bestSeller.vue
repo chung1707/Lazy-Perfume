@@ -45,20 +45,28 @@
               <div class="flip-card">
                 <div class="flip-card-inner" v-if="itemForHim.pictures">
                   <div class="front">
-                    <img :src="imgUrl + itemForHim.pictures[0].img" alt="" />
+                    <img
+                      v-if="itemForHim.pictures.length > 0"
+                      :src="imgUrl + itemForHim.pictures[0].img"
+                      alt=""
+                    />
                   </div>
                   <div class="back" v-if="itemForHim.pictures[1]">
-                    <img :src="imgUrl + itemForHim.pictures[1].img" alt="" />
+                    <img
+                      v-if="itemForHim.pictures.length > 1"
+                      :src="imgUrl + itemForHim.pictures[1].img"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
             </router-link>
             <div class="info-card">
               <span class="quantity-info" v-if="itemForHim.quantity <= 10"
-                >Còn 10 sản phẩm
+                >Còn {{ itemForHim.quantity }} sản phẩm
               </span>
               <span class="discount-info" v-if="itemForHim.discount"
-                >Giảm 10%</span
+                >Giảm {{itemForHim.quantity}}%</span
               >
               <addToCart :product="itemForHim"></addToCart>
 
@@ -68,7 +76,7 @@
                 >{{ itemForHim.name }}</router-link
               >
               <p class="thumbnail-price">
-                {{ itemForHim.price }} <span>VNĐ</span>
+                {{  itemForHim.price *(100-itemForHim.discount)/100 }} <span>VNĐ</span>
               </p>
             </div>
           </swiper-slide>
@@ -97,20 +105,27 @@
               <div class="flip-card">
                 <div class="flip-card-inner" v-if="itemForHer.pictures">
                   <div class="front">
-                    <img :src="imgUrl + itemForHer.pictures[0].img" />
+                    <img
+                      v-if="itemForHer.pictures.length > 0"
+                      :src="imgUrl + itemForHer.pictures[0].img"
+                    />
                   </div>
                   <div class="back" v-if="itemForHer.pictures[1]">
-                    <img :src="imgUrl + itemForHer.pictures[1].img" alt="" />
+                    <img
+                      v-if="itemForHer.pictures.length > 1"
+                      :src="imgUrl + itemForHer.pictures[1].img"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
             </router-link>
             <div class="info-card">
               <span class="quantity-info" v-if="itemForHer.quantity <= 10"
-                >Còn 10 sản phẩm
+                >Còn {{itemForHer.quantity}} sản phẩm
               </span>
               <span class="discount-info" v-if="itemForHer.discount"
-                >Giảm 10%</span
+                >Giảm {{itemForHer.discount}}%</span
               >
               <addToCart :product="itemForHer"></addToCart>
 
@@ -120,7 +135,7 @@
                 >{{ itemForHer.name }}</router-link
               >
               <p class="thumbnail-price">
-                {{ itemForHer.price }} <span>VNĐ</span>
+                {{ itemForHer.price *(100-itemForHer.discount)/100 }} <span>VNĐ</span>
               </p>
             </div>
           </swiper-slide>

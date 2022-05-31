@@ -15,34 +15,36 @@
           </section>
           <div class="container product-content">
             <div class="left-content">
-              <div class="thumbnails-product">
+              <div class="thumbnails-product" v-if="product.pictures">
                 <img
-                  v-if="product.pictures"
                   :class="{
                     visible: image1 == true,
                     dispay_hidden: image1 == false,
                   }"
+                  v-if="product.pictures.length > 0"
                   :src="imgUrl + product.pictures[0].img"
                   alt="product image"
                 />
                 <img
-                  v-if="product.pictures[1]"
                   :class="{
                     visible: image1 == false,
                     dispay_hidden: image1 == true,
                   }"
+                  v-if="product.pictures.length > 1"
                   :src="imgUrl + product.pictures[1].img"
                   alt="product image"
                 />
-                <div class="mini-thumbnails">
+                <div class="mini-thumbnails" v-if="product.pictures">
                   <a href="#" @click.prevent="image1 = true">
                     <img
+                      v-if="product.pictures.length > 0"
                       :src="imgUrl + product.pictures[0].img"
                       alt="product image"
                     />
                   </a>
                   <a href="#" @click.prevent="image1 = false">
                     <img
+                      v-if="product.pictures.length > 1"
                       :src="imgUrl + product.pictures[1].img"
                       alt="product image"
                     />
@@ -59,7 +61,7 @@
             <div class="right-content">
               <h4>{{ product.supplier.name }}</h4>
               <h3>{{ product.name }}</h3>
-              <span class="gen">
+              <span class="gen" v-if="product.category">
                 <i
                   v-if="product.category.id == 1"
                   class="fa-solid fa-venus"
@@ -74,17 +76,13 @@
               <span class="price">{{ product.price }} VND</span>
               <div class="quantity">
                 <div class="quantity-box">
-                  <input
-                    type="number"
-                    v-model="product.quantity"
-                    @change="check()"
-                  />
-                  <i @click="increase()" class="fa-solid fa-plus plus"></i>
-                  <i
-                    v-if="this.product.quantity > 1"
-                    @click="reduce()"
-                    class="fa-solid fa-minus minus"
-                  ></i>
+                  <input type="number" v-model="quantity" />
+                  <a @click.prevent="increase()">
+                    <i class="fa-solid fa-plus plus"></i>
+                  </a>
+                  <a @click.prevent="reduce()">
+                    <i class="fa-solid fa-minus minus"></i>
+                  </a>
                 </div>
                 <button class="button" @click="setNewQuantity">
                   sửa số lượng
@@ -164,7 +162,7 @@
                       </li>
                       <li class="tab-item">
                         <span class="item-title">Giới tính:</span>
-                        <span>{{ product.category.name }}</span>
+                        <span v-if="product.category">{{ product.category.name }}</span>
                       </li>
                       <li class="tab-item">
                         <span class="item-title">Độ tuổi:</span>
@@ -172,7 +170,7 @@
                       </li>
                       <li class="tab-item">
                         <span class="item-title"> Độ lưu mùi:</span>
-                        <div class="saving">
+                        <!-- <div class="saving">
                           <div
                             v-for="it in saveIncense"
                             :key="it"
@@ -181,6 +179,19 @@
                             }"
                           >
                             <span class="number">{{ it.saving }}</span>
+                          </div>
+                        </div> -->
+                        <div class="saving">
+                          <div
+                            v-for="it in saveIncense"
+                            :key="it"
+                            :class="{
+                              bg_blue: it.saving.includes(
+                                productDetail.saveIncense
+                              ),
+                            }"
+                          >
+                            <span class="number">{{ it.saving[0] }}</span>
                           </div>
                         </div>
                       </li>
@@ -299,21 +310,24 @@ export default {
       product: null,
       productDetail: null,
       tabActive: 1,
+      quantity: 0,
       image1: true,
       success: false,
       fail: false,
       saveIncense: [
-        { id: 1, saving: 3 },
-        { id: 2, saving: 6 },
-        { id: 3, saving: 8 },
-        { id: 4, saving: 12 },
+        { id: 1, saving: [3, 4, 5, 1, 2] },
+        { id: 2, saving: [6, 7] },
+        { id: 3, saving: [8, 9, 10, 11] },
+        { id: 4, saving: [12, 13, 14, 15] },
       ],
     };
   },
   methods: {
     setNewQuantity() {
       baseRequest
-        .post("admin/updateQty/product/" + this.product.id, this.product)
+        .post("admin/updateQty/product/" + this.product.id, {
+          quantity: this.quantity,
+        })
         .then(() => {
           this.success = true;
         })
@@ -321,30 +335,31 @@ export default {
           this.fail = true;
         });
     },
-    check() {
-      if (this.product.quantity > 10000) return (this.product.quantity = 10000);
-      if (this.product.quantity < 1) return (this.product.quantity = 1);
-      if (this.product.quantity == 0) return (this.product.quantity = 1);
-    },
+
     increase() {
-      if (this.product.quantity > 10000) return (this.product.quantity = 10000);
-      return this.product.quantity++;
+      if (this.quantity == 100000) return this.quantity;
+      return this.quantity++;
     },
     reduce() {
-      if (this.product.quantity < 1) return (this.product.quantity = 1);
-      return this.product.quantity--;
+      if (this.quantity == 0) return this.quantity;
+      return this.quantity--;
     },
     getProduct() {
       baseRequest
         .get("admin/product/" + this.$route.params.id)
         .then((response) => {
           this.product = response.data;
+          this.quantity = response.data.quantity;
           this.productDetail = response.data.product_detail;
           this.$isLoading(false);
         });
     },
   },
   watch: {
+    quantity() {
+      if (this.quantity > 100000) return (this.quantity = 100000);
+      if (this.quantity < 0) return (this.quantity = 0);
+    },
     $route() {
       this.$isLoading(true);
       this.getProduct();

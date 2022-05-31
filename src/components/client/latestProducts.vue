@@ -38,35 +38,43 @@
             v-for="itemForHim in latestProductsMale"
             :key="itemForHim.id"
           >
-            <router-link 
-              :to="{ name: 'Product', params: { id: itemForHim.id} }" 
-              class="img-card">
+            <router-link
+              :to="{ name: 'Product', params: { id: itemForHim.id } }"
+              class="img-card"
+            >
               <div class="flip-card">
                 <div class="flip-card-inner" v-if="itemForHim.pictures">
                   <div class="front">
-                    <img :src="imgUrl + itemForHim.pictures[0].img" />
+                    <img
+                      v-if="itemForHim.pictures.length > 0"
+                      :src="imgUrl + itemForHim.pictures[0].img"
+                    />
                   </div>
                   <div class="back" v-if="itemForHim.pictures[1]">
-                    <img :src="imgUrl + itemForHim.pictures[1].img" alt="" />
+                    <img
+                      v-if="itemForHim.pictures.length > 1"
+                      :src="imgUrl + itemForHim.pictures[1].img"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
             </router-link>
             <div class="info-card">
               <span class="quantity-info" v-if="itemForHim.quantity <= 10"
-                >Còn 10 sản phẩm
+                >còn: {{itemForHim.quantity}}
               </span>
               <span class="discount-info" v-if="itemForHim.discount"
-                >Giảm 10%</span
+                >Giảm {{itemForHim.discount}} %</span
               >
-              <addToCart :product="itemForHim" ></addToCart>
-              <router-link 
-                :to="{ name: 'Product',  params: { id: itemForHim.id} }" 
-                class="product-name">{{
-                itemForHim.name
-              }}</router-link>
+              <addToCart :product="itemForHim"></addToCart>
+              <router-link
+                :to="{ name: 'Product', params: { id: itemForHim.id } }"
+                class="product-name"
+                >{{ itemForHim.name }}</router-link
+              >
               <p class="thumbnail-price">
-                {{ itemForHim.price }} <span>VNĐ</span>
+                {{ itemForHim.price *(100-itemForHim.discount)/100}} <span>VNĐ</span>
               </p>
             </div>
           </swiper-slide>
@@ -88,35 +96,43 @@
             v-for="itemForHer in latestProductsFemale"
             :key="itemForHer.id"
           >
-            <router-link 
-              :to="{ name: 'Product', params: { id: itemForHer.id} }" 
-              class="img-card">
+            <router-link
+              :to="{ name: 'Product', params: { id: itemForHer.id } }"
+              class="img-card"
+            >
               <div class="flip-card">
                 <div class="flip-card-inner" v-if="itemForHer.pictures">
                   <div class="front">
-                    <img :src="imgUrl + itemForHer.pictures[0].img" />
+                    <img
+                      v-if="itemForHer.pictures.length > 0"
+                      :src="imgUrl + itemForHer.pictures[0].img"
+                    />
                   </div>
                   <div class="back" v-if="itemForHer.pictures[1]">
-                    <img :src="imgUrl + itemForHer.pictures[1].img" alt="" />
+                    <img
+                      v-if="itemForHer.pictures.length > 1"
+                      :src="imgUrl + itemForHer.pictures[1].img"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
             </router-link>
             <div class="info-card">
               <span class="quantity-info" v-if="itemForHer.quantity <= 10"
-                >Còn 10 sản phẩm
+                >Còn {{itemForHer.quantity}} sản phẩm
               </span>
               <span class="discount-info" v-if="itemForHer.discount"
-                >Giảm 10%</span
+                >Giảm {{itemForHim.discount}} %</span
               >
-              <addToCart :product="itemForHer" ></addToCart>
-              <router-link 
-                :to="{ name: 'Product', params: { id: itemForHer.id} }" 
-                class="product-name">{{
-                itemForHer.name
-              }}</router-link>
+              <addToCart :product="itemForHer"></addToCart>
+              <router-link
+                :to="{ name: 'Product', params: { id: itemForHer.id } }"
+                class="product-name"
+                >{{ itemForHer.name }}</router-link
+              >
               <p class="thumbnail-price">
-                {{ itemForHer.price }} <span>VNĐ</span>
+                {{itemForHer.price *(100-itemForHer.discount)/100 }} <span>VNĐ</span>
               </p>
             </div>
           </swiper-slide>
@@ -128,7 +144,7 @@
     </div>
   </section>
 </template>
-  
+
 <script>
 import { Swiper, SwiperSlide } from "swiper/vue";
 import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";

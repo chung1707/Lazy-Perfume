@@ -25,7 +25,9 @@
             class="glasses"
             :class="{ dispay_hidden: !glassesForHim, visible: glassesForHim }"
           ></div>
-          <router-link to="/products">
+          <router-link
+                    :to="{ name: 'Products', params: { categoryId: 1 } }"
+          >
             <img src="../../assets/images/for-him.jpg" alt="" />
             <div>
               <span>Nước hoa Nam</span>
@@ -42,7 +44,9 @@
             class="glasses"
             :class="{ dispay_hidden: !glassesForHer, visible: glassesForHer }"
           ></div>
-          <router-link to="/products">
+          <router-link
+                    :to="{ name: 'Products', params: { categoryId: 2 } }"
+          >
             <img src="../../assets/images/for-her.jpg" alt="" />
             <div>
               <span>Nước hoa Nữ</span>

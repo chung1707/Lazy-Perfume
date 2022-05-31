@@ -19,32 +19,34 @@
         <div class="left-content">
           <div class="thumbnails-product">
             <img
-              v-if="product.pictures"
               :class="{
                 visible: image1 == true,
                 dispay_hidden: image1 == false,
               }"
+              v-if="product.pictures.length > 0"
               :src="imgUrl + product.pictures[0].img"
               alt="product image"
             />
             <img
-              v-if="product.pictures[1]"
               :class="{
                 visible: image1 == false,
                 dispay_hidden: image1 == true,
               }"
+              v-if="product.pictures.length > 1"
               :src="imgUrl + product.pictures[1].img"
               alt="product image"
             />
             <div class="mini-thumbnails">
               <a href="#" @click.prevent="image1 = true">
                 <img
+                  v-if="product.pictures.length > 0"
                   :src="imgUrl + product.pictures[0].img"
                   alt="product image"
                 />
               </a>
               <a href="#" @click.prevent="image1 = false">
                 <img
+                  v-if="product.pictures.length > 1"
                   :src="imgUrl + product.pictures[1].img"
                   alt="product image"
                 />
@@ -61,7 +63,7 @@
         <div class="right-content">
           <h4>{{ product.supplier.name }}</h4>
           <h3>{{ product.name }}</h3>
-          <span class="gen">
+          <span class="gen" v-if="product.category">
             <i v-if="product.category.id == 1" class="fa-solid fa-venus"></i>
             <i v-if="product.category.id == 2" class="fa-solid fa-mars"></i>
             <i
@@ -70,17 +72,33 @@
             ></i>
             {{ product.category.name }}
           </span>
-          <span class="price">{{ product.price }} VND</span>
+          <span class="price price-item line-through"
+                v-if="product.discount"
+                  >{{ (product.price * 100) / 100 }} VNĐ </span
+                >
+                <span style="color: red" class="price" v-if="product.discount"> -{{product.discount}} %</span>
+                <span class="price new-price"
+                  >{{ ((100 - product.discount) * product.price) / 100 }}VNĐ </span
+                >
           <div class="quantity">
-            <div class="quantity-box">
+            <div class="quantity-box" v-if="product.quantity > 0">
               <input type="number" v-model="quantity" />
-              <i @click="increase()" class="fa-solid fa-plus plus"></i>
-              <i @click="reduce()" class="fa-solid fa-minus minus"></i>
+              <a @click.prevent="increase()">
+                <i class="fa-solid fa-plus plus"></i>
+              </a>
+              <a @click.prevent="reduce()">
+                <i class="fa-solid fa-minus minus"></i>
+              </a>
             </div>
 
-            <button class="button" @click="addProductToCart">
+            <button
+              class="button"
+              @click="addProductToCart"
+              v-if="product.quantity > 0"
+            >
               Thêm vào giỏ hàng
             </button>
+            <button class="button" disabled v-else>Hết hàng</button>
           </div>
           <div class="featured">
             <div class="tabs">
@@ -152,7 +170,7 @@
                   </li>
                   <li class="tab-item">
                     <span class="item-title">Giới tính:</span>
-                    <span>{{ product.category.name }}</span>
+                    <span v-if="product.category">{{ product.category.name }}</span>
                   </li>
                   <li class="tab-item">
                     <span class="item-title">Độ tuổi:</span>
@@ -165,10 +183,12 @@
                         v-for="it in saveIncense"
                         :key="it"
                         :class="{
-                          bg_blue: productDetail.saveIncense == it.saving,
+                          bg_blue: it.saving.includes(
+                            productDetail.saveIncense
+                          ),
                         }"
                       >
-                        <span class="number">{{ it.saving }}</span>
+                        <span class="number">{{ it.saving[0] }}</span>
                       </div>
                     </div>
                   </li>
@@ -274,10 +294,10 @@ export default {
       image1: true,
       quantity: 1,
       saveIncense: [
-        { id: 1, saving: 3 },
-        { id: 2, saving: 6 },
-        { id: 3, saving: 8 },
-        { id: 4, saving: 12 },
+        { id: 1, saving: [3, 4, 5, 1, 2] },
+        { id: 2, saving: [6, 7] },
+        { id: 3, saving: [8, 9, 10, 11] },
+        { id: 4, saving: [12, 13, 14, 15] },
       ],
     };
   },

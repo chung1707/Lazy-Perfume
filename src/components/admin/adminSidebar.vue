@@ -73,7 +73,7 @@
               <router-link to="/admin/category">Danh sách danh mục</router-link>
             </li>
             <li>
-              <router-link to="/admin/category">Thêm danh mục</router-link>
+              <router-link to="/admin/add_category">Thêm danh mục</router-link>
             </li>
           </ul>
         </li>
@@ -91,7 +91,7 @@
             aria-label="Toggle navigation"
           >
             <span class="icon">
-             <i class="fa-brands fa-docker"></i>
+              <i class="fa-brands fa-docker"></i>
             </span>
             <span class="text">Nhà cung cấp</span>
           </a>
@@ -100,7 +100,9 @@
               <router-link to="/admin/supplier">Các nhà cung cấp</router-link>
             </li>
             <li>
-              <router-link to="/admin/supplier">Thêm nhà cung cấp</router-link>
+              <router-link to="/admin/add_supplier"
+                >Thêm nhà cung cấp</router-link
+              >
             </li>
           </ul>
         </li>
@@ -162,6 +164,13 @@
             <li>
               <router-link to="/admin/import">Nhập sản phẩm</router-link>
             </li>
+            <li>
+              <router-link
+                v-if="this.$store.getters.isAdmin"
+                to="/admin/importHistory"
+                >Lịch sử nhập kho</router-link
+              >
+            </li>
           </ul>
         </li>
 
@@ -206,10 +215,7 @@
             </li>
           </ul>
         </li>
-         <li
-          class="nav-item nav-item-has-children"
-          v-if="$store.getters.isAdmin"
-        >
+        <li class="nav-item nav-item-has-children">
           <a
             href="#0"
             class="collapsed"
@@ -220,22 +226,50 @@
             aria-label="Toggle navigation"
           >
             <span class="icon">
-            <i class="fa-solid fa-signs-post"></i>
+              <i class="fa-solid fa-signs-post"></i>
             </span>
-            <span class="text">Bài viết và khuyến mãi</span>
+            <span class="text">Bài viết</span>
           </a>
           <ul id="ddmenu_9" class="collapse dropdown-nav">
             <li>
-              <router-link to="/admin/post">Các bài viết chưa duyệt</router-link>
+              <router-link to="/admin/newPost"
+                >Các bài viết chưa duyệt</router-link
+              >
+            </li>
+            <li v-if="$store.getters.isAdmin">
+              <router-link to="/admin/approved_post"
+                >Danh sách bài viết</router-link
+              >
             </li>
             <li>
-              <router-link to="/admin/post">Danh sách bài viết</router-link>
+              <router-link to="/admin/addPost">Thêm bài viết</router-link>
             </li>
-                 <li>
-              <router-link to="/admin/post">Thêm bài viết</router-link>
+          </ul>
+        </li>
+        <li
+          class="nav-item nav-item-has-children"
+          v-if="$store.getters.isAdmin"
+        >
+          <a
+            href="#0"
+            class="collapsed"
+            data-bs-toggle="collapse"
+            data-bs-target="#ddmenu_10"
+            aria-controls="ddmenu_10"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="icon">
+              <i class="fas fa-bullseye"></i>
+            </span>
+            <span class="text">CSBH và KM</span>
+          </a>
+          <ul id="ddmenu_10" class="collapse dropdown-nav">
+            <li>
+              <router-link to="/admin/policy">Chính sách bán hàng</router-link>
             </li>
-              <li>
-              <router-link to="/admin/post">Khuyến mãi</router-link>
+            <li>
+              <router-link to="/admin/discount">Khuyến mãi</router-link>
             </li>
           </ul>
         </li>
@@ -270,16 +304,10 @@
           </a>
           <ul id="ddmenu_4" class="collapse dropdown-nav">
             <li>
-              <a href="alerts.html"> Alerts </a>
+              <a href="/admin/statistic/sales">Doanh số</a>
             </li>
             <li>
-              <a href="buttons.html"> Buttons </a>
-            </li>
-            <li>
-              <a href="cards.html"> Cards </a>
-            </li>
-            <li>
-              <a href="typography.html"> Typography </a>
+              <a href="/admin/statistic/products">Sản phẩm</a>
             </li>
           </ul>
         </li>

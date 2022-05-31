@@ -16,6 +16,9 @@ header, footer {
   text-decoration: line-through !important;
   text-decoration-color: $red-color !important;
 }
+.new-price {
+  color: $red-color;
+}
 .wrapper {
   max-width: 1600px;
   margin: 0 auto;
@@ -248,7 +251,7 @@ header, footer {
   height: 30px;
   border-radius: 5px;
   position: relative;
-  i {
+  a {
     color: $blue-color;
     font-size: 18px;
     width: 30px;
@@ -324,7 +327,7 @@ header, footer {
     border: 2px solid $grey-color;
     text-align: center;
   }
-  i {
+  .plus, .minus {
     position: absolute;
     cursor: pointer;
     font-size: 20px;
@@ -531,7 +534,7 @@ header, footer {
     top: -1px;
     position: absolute;
   }
-  i {
+  a {
     display: block;
     padding: 10px;
     font-size: 15px;
@@ -582,4 +585,15 @@ header, footer {
     font-size: 14px;
     margin: 0px 10px;
   }
+}
+.invoice-header {
+  padding-bottom: 0px !important;
+}
+@media print {
+  .header, .breadcrumb-wrapper, .invoice-action, .sidebar-nav-wrapper, .order_action {
+      display: none;
+   }
+   .example-print {
+      display: block;
+   }
 }

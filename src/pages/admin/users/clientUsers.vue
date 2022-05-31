@@ -213,16 +213,20 @@ export default {
         });
     },
     deleteUser(client) {
-      let index = this.clients.indexOf(client);
-      if (index > -1) {
-        this.clients.splice(index, 1);
-        this.total -= 1;
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            client.name +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.clients.indexOf(client);
+        if (index > -1) {
+          this.clients.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest.delete("user_delete/" + client.id, client.id);
       }
-      baseRequest
-        .delete("user_delete/" + client.id, client.id)
-        .then((response) => {
-          console.log(response.data);
-        });
     },
   },
   watch: {

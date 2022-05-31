@@ -6,9 +6,7 @@
     <div class="not-empty-cart" v-else>
       <ul class="list-product-in-cart">
         <li v-for="item in itemsInCart" :key="item.id">
-          <router-link 
-              :to="{ name: 'Product', params: { id: item.id } }"
-              >
+          <router-link :to="{ name: 'Product', params: { id: item.id } }">
             <img
               v-if="item.pictures"
               :src="imgUrl + item.pictures[0].img"
@@ -16,13 +14,14 @@
             />
           </router-link>
           <div class="info-product-in-cart">
-            <a href="#" class="product-name">{{item.name}}</a>
-            <span>{{item.price}}</span>
-            <span>{{item.pivot.quantity}}</span>
-            <i
-            @click="deleteProductInCart(item)"
-              class="remove-item-in-cart fa-solid fa-xmark close-search-results"
-            ></i>
+            <a href="#" class="product-name">{{ item.name }}</a>
+            <span>{{ item.price *(100-item.discount)/100 }} VNĐ</span>
+            <span>{{ item.pivot.quantity }}</span>
+            <a @click="deleteProductInCart(item)">
+              <i
+                class="remove-item-in-cart fa-solid fa-xmark close-search-results"
+              ></i>
+            </a>
           </div>
         </li>
       </ul>

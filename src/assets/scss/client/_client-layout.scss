@@ -355,15 +355,21 @@
       cursor: pointer;
       right: 10%;
       top: 5%;
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      // justify-content: space-around;
       width: 30%;
       height: 90%;
       border-radius: 40px; 
       background-color: $yellow-color;
       font-size: 16px;
       transition: all 0.5s linear;
-      i {
-        display: inline-block;
+      span {
+        padding-left: 30px;
+        padding-right: 5px;
+      }
+      svg {
+        // display: inline-block;
         padding: 20px;
         border-radius: 50%;
         background-color: $blue-sky;

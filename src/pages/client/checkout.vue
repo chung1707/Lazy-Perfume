@@ -5,6 +5,9 @@
       <h5 class="unsuccessful" v-if="unsuccessful">
         <i class="fas fa-times-octagon"></i>Đã có lỗi sãy ra, đặt hàng thất bại!
       </h5>
+      <h5 class="unsuccessful" v-if="fail">
+        <i class="fas fa-times-octagon"></i>Mã không thể sử dụng!
+      </h5>
       <h5 class="success" v-if="success">
         <i class="fas fa-check"></i> Đặt hàng thành công!
       </h5>
@@ -160,10 +163,12 @@
                     @click="selectPaymentMethod(payment)"
                   >
                     <div class="div-checkbox">
-                      <i
+                      <a
                         :class="{ visible: payment_method.id == payment.id }"
-                        class="dispay_hidden fa-solid fa-check"
-                      ></i>
+                        class="dispay_hidden"
+                      >
+                        <i class="fa-solid fa-check"></i>
+                      </a>
                     </div>
                     <label>{{ payment.name }} </label>
                   </li>
@@ -172,11 +177,22 @@
             </div>
             <div class="right-checkout">
               <div class="discount-box">
-                <h3>Mã giảm giá</h3>
+                <h3>
+                  Mã giảm giá:
+                  <span style="color: red" v-if="discount.id"
+                    >Đang sử dụng mã: {{ discount.code }}</span
+                  >
+                </h3>
                 <div class="box-content">
                   <div>
-                    <input type="text" placeholder="Nhập mã ưu đãi" />
-                    <button class="button">Sử dụng</button>
+                    <input
+                      v-model="code"
+                      type="text"
+                      placeholder="Nhập mã ưu đãi"
+                    />
+                    <button @click.prevent="getDiscount" class="button">
+                      Sử dụng
+                    </button>
                   </div>
                 </div>
               </div>
@@ -195,7 +211,11 @@
                     >{{ item.name }} x {{ item.pivot.quantity }}
                   </span>
                   <span class="price">
-                    {{ item.pivot.quantity * item.price }} VNĐ
+                    {{
+                      item.pivot.quantity *
+                      ((item.price * (100 - item.discount)) / 100)
+                    }}
+                    VNĐ
                   </span>
                 </div>
                 <div class="total-price">
@@ -204,15 +224,22 @@
                 </div>
                 <div class="total-shipping">
                   <span>Phí vận chuyển:</span>
-                  <span> 30.000 VNĐ</span>
+                  <span> Miên phí</span>
                 </div>
                 <div class="total-discount">
                   <span>Giảm giá:</span>
-                  <span> 0%</span>
+                  <span v-if="discount.id"> {{ discount.discount }}%</span>
+                  <span v-else>Không</span>
                 </div>
                 <div class="final-price">
                   <span>Tổng hóa đơn:</span>
-                  <span> {{ totalPrice + 30000 }}VNĐ</span>
+                  <span v-if="discount.id"
+                    >{{
+                      (totalPrice * (100 - discount.discount)) / 100
+                    }}
+                    VNĐ</span
+                  >
+                  <span v-else> {{ totalPrice }}VNĐ</span>
                 </div>
                 <button class="button" @click.prevent="submitOrder">
                   Đặt hàng
@@ -243,7 +270,10 @@ export default {
   },
   data() {
     return {
-      discount_id: null,
+      discount: {
+        id: null,
+      },
+      code: null,
       messagesOverride: {
         required: "You must fill the {attribute} field to continue",
         email: "The email must be a genuine email address.",
@@ -267,6 +297,7 @@ export default {
       ],
       notes: null,
       success: false,
+      fail: false,
       unsuccessful: false,
     };
   },
@@ -288,12 +319,25 @@ export default {
   },
   methods: {
     ...mapActions(["getCart", "clearCart"]),
+    getDiscount() {
+      this.$isLoading(true);
+      baseRequest.get("admin/use_discount/" + this.code).then((response) => {
+        if (response.data.status == 201) {
+          this.discount = response.data.discount;
+          this.$isLoading(false);
+        } else {
+          this.fail = true;
+          this.$isLoading(false);
+        }
+      });
+    },
     checkItems() {
       if (this.totalItemInCart < 1) {
         this.$router.push({ name: "Cart" });
       }
     },
     submitOrder() {
+      this.$isLoading(true);
       this.v$.$validate();
       this.checkItems();
       var orderBill = {};
@@ -303,24 +347,32 @@ export default {
         orderBill.payment_methods = this.payment_method.name;
       }
       orderBill.email = this.user.email;
-      orderBill.totalPrice = this.totalPrice;
-      orderBill.discount_id = this.discount_id;
+      if (this.discount.id) {
+        orderBill.totalPrice =
+          (this.totalPrice * (100 - this.discount.discount)) / 100;
+      } else {
+        orderBill.totalPrice = this.totalPrice;
+      }
+      orderBill.discount_id = this.discount.id;
       orderBill.products = this.itemsInCart;
       orderBill.note = this.notes;
       baseRequest
         .post("checkout", orderBill)
         .then((response) => {
           if (response.data.success) {
-            this.success = true;
             this.clearCart();
+            this.discount.id = null;
             this.$router.push({ name: "Account" });
-            return;
+          } else {
+            this.unsuccessful = true;
           }
-          this.unsuccessful = true;
         })
         .catch(() => {
           this.unsuccessful = true;
           this.success = false;
+        })
+        .finally(() => {
+          this.$isLoading(false);
         });
     },
     selectPaymentMethod(method) {
@@ -337,6 +389,9 @@ export default {
     },
     success() {
       setTimeout(() => (this.success = false), 1500);
+    },
+    fail() {
+      setTimeout(() => (this.fail = false), 2500);
     },
   },
 };

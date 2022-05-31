@@ -86,7 +86,7 @@
                       <td class="min-width">
                         <button
                           class="status-btn active-btn"
-                          v-if="!admin.blocked"
+                          v-if="!admin.blocked && authUser.id !== admin.id"
                           @click="block(admin)"
                         >
                           Bình thường
@@ -94,7 +94,7 @@
                         <button
                           @click="unBlock(admin)"
                           class="status-btn danger-btn"
-                          v-else
+                          v-if="admin.blocked && authUser.id !== admin.id"
                         >
                           Bị khóa
                         </button>
@@ -213,16 +213,24 @@ export default {
         });
     },
     deleteUser(admin) {
-      let index = this.admins.indexOf(admin);
-      if (index > -1) {
-        this.admins.splice(index, 1);
-        this.total -= 1;
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            admin.name +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.admins.indexOf(admin);
+        if (index > -1) {
+          this.admins.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest
+          .delete("user_delete/" + admin.id, admin.id)
+          .then((response) => {
+            console.log(response.data);
+          });
       }
-      baseRequest
-        .delete("user_delete/" + admin.id, admin.id)
-        .then((response) => {
-          console.log(response.data);
-        });
     },
   },
 

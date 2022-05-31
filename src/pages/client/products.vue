@@ -34,12 +34,14 @@
                   @click="selectCategories(category.id)"
                 >
                   <div class="div-checkbox">
-                    <i
+                    <a
+                      class="dispay_hidden"
                       :class="{
                         visible: this.filterSelected.categoryId == category.id,
                       }"
-                      class="dispay_hidden fa-solid fa-check"
-                    ></i>
+                    >
+                      <i class="fa-solid fa-check"></i>
+                    </a>
                   </div>
                   <label>{{ category.name }} </label>
                 </li>
@@ -55,13 +57,15 @@
                   @click="selectRangePrice(range)"
                 >
                   <div class="div-checkbox">
-                    <i
-                      v-if="this.filterSelected.priceRange != null"
+                    <a
+                      class="dispay_hidden"
                       :class="{
                         visible: this.filterSelected.priceRange[0] == range.id,
                       }"
-                      class="dispay_hidden fa-solid fa-check"
-                    ></i>
+                      v-if="this.filterSelected.priceRange != null"
+                    >
+                      <i class="fa-solid fa-check"></i>
+                    </a>
                   </div>
                   <label>{{ range.name }} </label>
                 </li>
@@ -119,22 +123,27 @@
                       <div class="front">
                         <img
                           class="item-img"
+                          v-if="item.pictures.length > 0"
                           :src="imgUrl + item.pictures[0].img"
                           alt=""
                         />
                       </div>
                       <div class="back">
-                        <img :src="imgUrl + item.pictures[1].img" alt="" />
+                        <img
+                          v-if="item.pictures.length > 1"
+                          :src="imgUrl + item.pictures[1].img"
+                          alt=""
+                        />
                       </div>
                     </div>
                   </div>
                 </router-link>
                 <div class="info-card">
                   <span class="quantity-info" v-if="item.quantity <= 10"
-                    >Còn 10 sản phẩm
+                    >còn {{ item.quantity }} sản phẩm
                   </span>
                   <span class="discount-info" v-if="item.discount"
-                    >Giảm 10%</span
+                    >Giảm {{ item.discount }}%</span
                   >
                   <addToCart :product="item"></addToCart>
 
@@ -144,7 +153,8 @@
                     >{{ item.name }}</router-link
                   >
                   <p class="thumbnail-price">
-                    {{ item.price }} <span>VNĐ</span>
+                    {{ (item.price * (100 - item.discount)) / 100 }}
+                    <span>VNĐ</span>
                   </p>
                 </div>
               </div>
@@ -167,7 +177,7 @@
                   :key="page"
                 >
                   <a
-                  v-if="Object.keys(products).length !== 0"
+                    v-if="Object.keys(products).length !== 0"
                     class="page-link"
                     @click.prevent="currentPage = page"
                     href="#"
@@ -248,6 +258,7 @@ export default {
       active: 1,
       keyWord: null,
       brandName: null,
+      category_id: null,
     };
   },
   methods: {
@@ -257,6 +268,7 @@ export default {
       this.filterSelected.arrangeKey = [1, "Mới nhất"];
       this.filterSelected.keyWord = null;
       this.keyWord = null;
+      this.category_id = null;
       this.getProducts();
     },
     getProducts() {
@@ -318,10 +330,17 @@ export default {
       this.filterSelected.keyWord = this.keyWord;
       this.getProducts();
     },
+    category_id() {
+      this.filterSelected.categoryId = this.category_id;
+      this.getProducts();
+    },
   },
   mounted() {
     this.$isLoading(true);
     this.keyWord = this.$route.params.key;
+    if (this.$route.params.categoryId) {
+      this.category_id = this.$route.params.categoryId;
+    }
     this.getProducts();
     this.getBrands();
     this.getCategories();

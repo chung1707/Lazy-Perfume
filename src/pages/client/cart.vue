@@ -19,9 +19,10 @@
               <div class="info-item">
                 <router-link :to="{ name: 'Product', params: { id: item.id } }"
                   >{{ item.name }}
-                  <span class="discount-item">{{ item.discount }}%</span>
+                  <span v-if="item.discount" class="discount-item">-{{ item.discount }}%</span>
                 </router-link>
                 <span class="price-item line-through"
+                v-if="item.discount"
                   >{{ (item.price * 100) / 100 }} VNĐ</span
                 >
                 <span class="new-price"
@@ -34,8 +35,12 @@
                   v-model="item.pivot.quantity"
                   @change="check(item)"
                 />
-                <i @click="increase(item)" class="fa-solid fa-plus plus"></i>
-                <i @click="reduce(item)" class="fa-solid fa-minus minus"></i>
+                <a @click.prevent="increase(item)">
+                  <i class="fa-solid fa-plus plus"></i>
+                </a>
+                <a @click.prevent="reduce(item)">
+                  <i class="fa-solid fa-minus minus"></i>
+                </a>
               </div>
               <div class="total">
                 <span class="title-price">Tổng giá:</span>
@@ -47,7 +52,9 @@
                   VNĐ
                 </span>
               </div>
-              <i class="fa-solid fa-x" @click="deleteProductInCart(item)"></i>
+              <a @click.prevent="deleteProductInCart(item)">
+                <i class="fa-solid fa-x"></i>
+              </a>
             </li>
           </ul>
           <div class="discount-box">
@@ -58,7 +65,7 @@
               <button
                 class="button"
                 style="margin-top: 50px"
-                @click="reloadCart"
+                @click.prevent="reloadCart"
               >
                 Cập nhập giỏ hàng
               </button>
@@ -88,16 +95,12 @@
             <div class="help">
               <span
                 >Trợ giúp ?
-                <i
-                  @click="helpTabActive = 1"
-                  v-if="helpTabActive != 1"
-                  class="fa-solid fa-plus"
-                ></i>
-                <i
-                  @click="helpTabActive = 0"
-                  v-else
-                  class="fa-solid fa-minus"
-                ></i>
+                <a v-if="helpTabActive != 1" @click.prevent="helpTabActive = 1">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+                <a @click.prevent="helpTabActive = 0" v-else
+                  ><i class="fa-solid fa-minus"></i
+                ></a>
               </span>
               <div
                 class="content dispay_hidden"
@@ -116,16 +119,12 @@
             <div class="help">
               <span
                 >Thông tin ship ?
-                <i
-                  @click="helpTabActive = 2"
-                  v-if="helpTabActive != 2"
-                  class="fa-solid fa-plus"
-                ></i>
-                <i
-                  @click="helpTabActive = 0"
-                  v-else
-                  class="fa-solid fa-minus"
-                ></i>
+                <a @click.prevent="helpTabActive = 2" v-if="helpTabActive != 2">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+                <a @click.prevent="helpTabActive = 0" v-else>
+                  <i class="fa-solid fa-minus"></i
+                ></a>
               </span>
               <div
                 class="content dispay_hidden"
@@ -139,16 +138,12 @@
             <div class="help">
               <span
                 >Đổi trả và hoàn tiền
-                <i
-                  @click="helpTabActive = 3"
-                  v-if="helpTabActive != 3"
-                  class="fa-solid fa-plus"
-                ></i>
-                <i
-                  @click="helpTabActive = 0"
-                  v-else
-                  class="fa-solid fa-minus"
-                ></i>
+                <a @click.prevent="helpTabActive = 3" v-if="helpTabActive != 3">
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+                <a @click.prevent="helpTabActive = 0" v-else>
+                  <i class="fa-solid fa-minus"></i>
+                </a>
               </span>
               <ul
                 class="refund content dispay_hidden"
@@ -253,5 +248,8 @@ export default {
     color: white;
     font-size: 20px;
   }
+}
+.plus {
+  right: 60px;
 }
 </style>

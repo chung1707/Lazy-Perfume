@@ -5,7 +5,7 @@ import {
 export default {
   requireAuth(to, from, next) {
     // check user in state
-    if (store.getters.authenticated) {
+    if (store.getters.authenticated&& !store.state.authUser.blocked) {
       next();
     }
     //check user with token 
@@ -22,21 +22,21 @@ export default {
 
   checkManagerRole(to, from, next) {
     // let adminRoleId = 1;
-    if (store.getters.isManager) {
+    if (store.getters.isManager&& !store.state.authUser.blocked) {
       next();
     } else {
       next({
-        name: 'Home'
+        name: 'Error'
       });
     }
   },
   checkAdminRole(to, from, next) {
     // let adminRoleId = 1;
-    if (store.getters.isAdmin) {
+    if (store.getters.isAdmin&& !store.state.authUser.blocked) {
       next();
     } else {
       next({
-        name: 'Dashbroad'
+        name: 'Error'
       });
     }
   },

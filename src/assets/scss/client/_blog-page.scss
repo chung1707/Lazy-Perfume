@@ -1,0 +1,13 @@
+.post {
+  &-title {
+    padding: 50px 0px;
+    text-align: center;
+  }
+  &-related{
+    h4 {
+      padding-bottom: 10px; 
+      border-bottom: 2px solid black;
+      margin-bottom: 40px;
+    }
+  }
+}

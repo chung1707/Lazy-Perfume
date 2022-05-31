@@ -82,16 +82,16 @@
                         <p>{{ supplier.name }}</p>
                       </td>
                       <td class="min-width">
-                          <p >{{supplier.email}}</p>
+                        <p>{{ supplier.email }}</p>
                       </td>
-                         <td class="min-width">
-                          <p >{{supplier.phone}}</p>
+                      <td class="min-width">
+                        <p>{{ supplier.phone }}</p>
                       </td>
                       <td>
                         <div class="action">
                           <router-link
                             :to="{
-                              name: 'UserDetail',
+                              name: 'SupplierDetail',
                               params: { id: supplier.id },
                             }"
                             class="text-success"
@@ -99,7 +99,7 @@
                             <i class="fa fa-eye" aria-hidden="true"></i>
                           </router-link>
                           <button
-                            @click="deleteUser(supplier)"
+                            @click="deleteSupplier(supplier)"
                             class="text-danger"
                             style="margin-left: 20px"
                           >
@@ -180,7 +180,6 @@ export default {
     };
   },
   methods: {
-
     getSuppliers() {
       console.log(this.searchKey);
       this.$isLoading(true);
@@ -193,17 +192,25 @@ export default {
           this.$isLoading(false);
         });
     },
-    deleteUser(supplier) {
-      let index = this.suppliers.indexOf(supplier);
-      if (index > -1) {
-        this.suppliers.splice(index, 1);
-        this.total -= 1;
+    deleteSupplier(supplier) {
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            supplier.name +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.suppliers.indexOf(supplier);
+        if (index > -1) {
+          this.suppliers.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest
+          .delete("admin/supplier/" + supplier.id, supplier.id)
+          .then((response) => {
+            console.log(response.data);
+          });
       }
-      baseRequest
-        .delete("user_delete/" + supplier.id, supplier.id)
-        .then((response) => {
-          console.log(response.data);
-        });
     },
   },
   watch: {

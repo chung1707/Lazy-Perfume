@@ -21,7 +21,9 @@
                     <li class="breadcrumb-item">
                       <a href="#0">Dashboard</a>
                     </li>
-                    <li class="breadcrumb-item"><a>Đơn đã bị hoàn trả lại</a></li>
+                    <li class="breadcrumb-item">
+                      <a>Đơn đã bị hoàn trả lại</a>
+                    </li>
                   </ol>
                 </nav>
               </div>
@@ -73,7 +75,7 @@
                     <tr v-for="order in orders" :key="order.id">
                       <td>
                         <div>
-                          {{order.id}}
+                          {{ order.id }}
                         </div>
                       </td>
                       <td class="min-width">
@@ -84,15 +86,13 @@
                           <a href="#0">{{ order.phone_number }}</a>
                         </p>
                       </td>
-                            <td class="min-width">
+                      <td class="min-width">
                         <p>
                           <a href="#0">{{ order.totalPrice }} VNĐ</a>
                         </p>
                       </td>
                       <td class="min-width">
-                        <button
-                          class="status-btn danger-btn"
-                        >
+                        <button class="status-btn danger-btn">
                           Bị hoàn trả
                         </button>
                       </td>
@@ -109,7 +109,7 @@
                           </router-link>
                           <button
                             @click="deleteOrder(order)"
-                          v-if="$store.getters.isAdmin"
+                            v-if="$store.getters.isAdmin"
                             class="text-danger"
                             style="margin-left: 20px"
                           >
@@ -187,9 +187,9 @@ export default {
       totalPage: 0,
       currentPage: 1,
       key: {
-      orderType: 'refunded',
-      searchKey: "",
-      }
+        orderType: "refunded",
+        searchKey: "",
+      },
     };
   },
   methods: {
@@ -205,16 +205,22 @@ export default {
         });
     },
     deleteOrder(order) {
-      let index = this.orders.indexOf(order);
-      if (index > -1) {
-        this.orders.splice(index, 1);
-        this.total -= 1;
-      }
-      baseRequest
-        .delete("admin/order/" + order.id)
-        .then((response) => {
+      if (
+        confirm(
+          "Một số dữ liệu liên quan đến: '" +
+            order.transaction_id +
+            "' có thể sẽ bị mất. Vẫn xóa!"
+        )
+      ) {
+        let index = this.orders.indexOf(order);
+        if (index > -1) {
+          this.orders.splice(index, 1);
+          this.total -= 1;
+        }
+        baseRequest.delete("admin/order/" + order.id).then((response) => {
           console.log(response.data);
         });
+      }
     },
   },
   watch: {

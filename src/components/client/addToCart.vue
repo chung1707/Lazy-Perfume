@@ -1,5 +1,5 @@
 <template>
-  <a class="add-to-cart" @click.prevent="addBookToCart">
+  <a class="add-to-cart" @click.prevent="addBookToCart" v-if="product.quantity>0">
     Thêm vào giỏ hàng
     <span><i class="fa-solid fa-cart-plus"></i></span>
   </a>

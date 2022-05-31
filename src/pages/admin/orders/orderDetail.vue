@@ -14,7 +14,7 @@
             <div class="col-md-6">
               <div class="title d-flex align-items-center flex-wrap mb-30">
                 <h2 class="mr-40">Đơn hàng: {{ order.transaction_id }}</h2>
-                <div>
+                <div class="order_action">
                   <a
                     @click.prevent="markProcess"
                     v-if="order.pending"
@@ -274,9 +274,7 @@
                       </a>
                     </li>
                     <li class="m-2">
-                      <a href="#0" class="main-btn primary-btn btn-hover">
-                        In hóa đơn
-                      </a>
+                      <print></print>
                     </li>
                   </ul>
                 </div>
@@ -296,7 +294,12 @@
 <script>
 import { mapGetters } from "vuex";
 import baseRequest from "../../../base/baseRequest";
+import print from "../../../components/print.vue";
+
 export default {
+  components: {
+print
+  },
   computed: {
     ...mapGetters(["imgUrl", "authUser", "isAdmin"]),
   },

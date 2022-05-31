@@ -18,10 +18,14 @@
               >
             </li>
             <li>
-              <router-link class="hover-border-bottom" to="/products">THƯƠNG HIỆU</router-link>
+              <router-link class="hover-border-bottom" to="/products"
+                >THƯƠNG HIỆU</router-link
+              >
             </li>
             <li>
-              <router-link class="hover-border-bottom" to="/blog">BLOG</router-link>
+              <router-link class="hover-border-bottom" to="/blog"
+                >BLOG</router-link
+              >
             </li>
           </ul>
           <ul class="header-right">
@@ -30,14 +34,18 @@
                 class="search-box"
                 :class="{ dispay_hidden: !searchActive, visible: searchActive }"
               >
-                <input type="text" class="" placeholder="Nhập tên sản phẩm để tự động tìm kiếm!" @input="search" />
+                <input
+                  type="text"
+                  class=""
+                  placeholder="Nhập tên sản phẩm để tự động tìm kiếm!"
+                  @input="search"
+                />
                 <button>
                   <i class="fa-solid fa-magnifying-glass find-icon"></i>
                 </button>
-                <i
-                  class="fa-solid fa-xmark close-find-input"
-                  @click="closeSearchBox"
-                ></i>
+                <a @click.prevent="closeSearchBox">
+                  <i class="fa-solid fa-xmark close-find-input"></i>
+                </a>
               </div>
               <button
                 @click.prevent="closeSearchBox"
@@ -53,15 +61,17 @@
                   Kết quả tìm kiếm cho:
                   <span class="key-word">"{{ searchKey }}"</span>
                 </p>
-                <i
-                  class="fa-solid fa-xmark close-search-results"
-                  @click="closeSearchBox"
-                ></i>
                 <div>
-                  <ul class="search-product-list" >
+                  <ul class="search-product-list">
                     <li v-for="product in products" :key="product.id">
-                      <router-link to="/product">
-                        <img :src="imgUrl + product.pictures[0].img" alt="search-product-img" />
+                      <router-link
+                        @click="closeSearchBox"
+                        :to="{ name: 'Product', params: { id: product.id } }"
+                      >
+                        <img
+                          :src="imgUrl + product.pictures[0].img"
+                          alt="search-product-img"
+                        />
                         <p class="product-name">{{ product.name }}</p>
                         <p class="product-price">{{ product.price }}</p>
                         <p>
@@ -69,12 +79,14 @@
                         </p>
                       </router-link>
                     </li>
-                    
                   </ul>
-                  <router-link class="button"  @click="closeSearchBox"
-                  :to="{ name: 'Products', params: { key: searchKey } }"
+                  <router-link
+                    class="button"
+                    @click="closeSearchBox"
+                    :to="{ name: 'Products', params: { key: searchKey } }"
                   >
-                    Xem tất cả kết quả liên quan ({{ total }})</router-link>
+                    Xem tất cả kết quả liên quan ({{ total }})</router-link
+                  >
                 </div>
               </div>
             </div>
@@ -94,13 +106,15 @@
               ></router-link>
             </div>
             <div class="cart-box">
-              <router-link to="/cart" class="hover-border-bottom"
-                ><i
-                  class="fa-solid fa-cart-shopping cart-icon"
-                  @mouseover="cartActive = !cartActive"
-                ></i>
-                <span class="quantity-in-cart" v-if="totalItemInCart">({{totalItemInCart}})</span>
-              </router-link>
+              <div @mouseover="cartActive = !cartActive">
+                <router-link to="/cart" class="hover-border-bottom"
+                  ><p></p>
+                  <i class="fa-solid fa-cart-shopping cart-icon"></i>
+                  <span class="quantity-in-cart" v-if="totalItemInCart"
+                    >({{ totalItemInCart }})</span
+                  >
+                </router-link>
+              </div>
 
               <div
                 class="cart-box-inside"
@@ -125,13 +139,13 @@
 <script>
 import baseRequest from "../../base/baseRequest";
 import { mapGetters, mapActions } from "vuex";
-import cartIcon from "../../components/client/cartIcon.vue"
+import cartIcon from "../../components/client/cartIcon.vue";
 export default {
   components: {
-    cartIcon
+    cartIcon,
   },
-    computed: {
-    ...mapGetters(["imgUrl","totalItemInCart"]),
+  computed: {
+    ...mapGetters(["imgUrl", "totalItemInCart"]),
   },
   data() {
     return {
@@ -164,7 +178,7 @@ export default {
   },
   beforeMount() {
     this.getCart();
-  }
+  },
 };
 </script>
 

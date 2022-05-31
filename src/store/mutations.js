@@ -75,4 +75,15 @@ export default {
   removePicture(state, index) {
     state.pictures.splice(index, 1);
   },
+  // import 
+  setItemsInBill(state, items) {
+    state.itemsInBill = items;
+  },
+  addItemToBill(state, item) {
+    state.itemsInBill.push(item);
+  },
+  removeItemInBill(state, item) {
+    let index = state.itemsInBill.indexOf(item);
+    state.itemsInBill.splice(index, 1);
+  },
 }
