@@ -76,7 +76,7 @@
               </div>
               <div class="content">
                 <h6 class="mb-10">Nhà cung cấp số 1</h6>
-                <h3 class="text-bold mb-10">{{ bestSupplier.name }} VNĐ</h3>
+                <h3 class="text-bold mb-10">{{ bestSupplier.name }}</h3>
                 <p class="text-sm text-danger">{{ bestSupplier.email }}</p>
                 <p
                   class="text-sm text-danger"

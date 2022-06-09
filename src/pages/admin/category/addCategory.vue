@@ -58,7 +58,7 @@
                       <div class="select-position">
                         <select
                           v-model="category.for_product"
-                          :class="{ errorInput: errors.description }"
+                          :class="{ errorInput: errors.for_product }"
                         >
                           <option value="null">Chọn loại danh mục</option>
                           <option value="1">Danh mục cho sản phẩm</option>

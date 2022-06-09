@@ -14,7 +14,7 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <div class="title mb-30">
-                <h2>Thêm nhà cung cấp</h2>
+                <h2>Sửa khuyến mãi</h2>
               </div>
             </div>
 
@@ -27,7 +27,7 @@
                       <a href="#0">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item">
-                      <a href="#0">Thêm nhà cung cấp</a>
+                      <a href="#0">Sửa khuyến mãi</a>
                     </li>
                   </ol>
                 </nav>
@@ -39,7 +39,7 @@
                 <div class="col-lg-6 newAdd">
                   <!-- input style start -->
                   <div class="card-style mb-30">
-                    <h6 class="mb-25">Thêm nhà cung cấp</h6>
+                    <h6 class="mb-25">Sửa khuyến mãi</h6>
                     <div class="input-style-1">
                       <label>Mã (code giảm giá)</label>
                       <input

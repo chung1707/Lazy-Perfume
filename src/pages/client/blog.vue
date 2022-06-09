@@ -42,8 +42,7 @@
                   style="padding: 10px 0px; display: block; color: grey"
                   ><p>{{ post.title }}</p>
                 </router-link>
-                <p class="card-text">
-                  {{ post.content.substring(0, 100) + ".." }}
+                <p class="card-text" v-html=" post.content.substring(0, 100) + '....'">
                 </p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">

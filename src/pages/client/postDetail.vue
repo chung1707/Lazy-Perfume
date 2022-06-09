@@ -89,19 +89,18 @@ export default {
       baseRequest.get("post/" + this.$route.params.id).then((response) => {
         this.post = response.data.post;
         this.relatedPosts = response.data.relatedPosts;
-        this.$isLoading(false);
+      }).finally(() =>{
+        setTimeout(() => this.$isLoading(false), 1000);
       });
     },
   },
   watch: {
     $route() {
-      this.$isLoading(true);
       this.getPost();
     },
   },
   beforeMount() {
     this.getPost();
-    this.$isLoading(false);
   },
 };
 </script>

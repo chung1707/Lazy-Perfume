@@ -10,7 +10,15 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <div class="titlemb-30">
-                <h2>Quản lý Sản phẩm!</h2>
+                <h2>Quản lý giao diện trang chủ</h2>
+              </div>
+              <div class="post_action">
+                <router-link
+                  to="/admin/addbanner/"
+                  class="main-btn primary-btn btn-hover btn-sm"
+                >
+                  <i class="lni lni-plus mr-5"></i>Thêm Banner</router-link
+                >
               </div>
             </div>
             <!-- end col -->
@@ -21,7 +29,9 @@
                     <li class="breadcrumb-item">
                       <a href="#0">Dashboard</a>
                     </li>
-                    <li class="breadcrumb-item"><a>Quản lý sản phẩm</a></li>
+                    <li class="breadcrumb-item">
+                      <a>Quản lý chính sách bán hàng</a>
+                    </li>
                   </ol>
                 </nav>
               </div>
@@ -33,13 +43,13 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="card-style mb-30">
-              <h6 class="mb-10">Các sản phẩm trong kho!</h6>
+              <h6 class="mb-10">Chính sách bán hàng của hệ thống!</h6>
               <div
                 class="d-flex flex-wrap justify-content-between align-items-center py-3"
               >
                 <div class="left">
-                  <p class="text-sm mb-20" v-if="products">
-                    Tổng cộng: {{ total }} sản phẩm!
+                  <p class="text-sm mb-20" v-if="banners">
+                    Tổng cộng: {{ total }} chính sách
                   </p>
                 </div>
                 <div class="right">
@@ -50,7 +60,7 @@
                         v-model="searchKey"
                         placeholder="Search..."
                       />
-                      <button class @click.prevent="getProducts">
+                      <button class @click.prevent="getBanners">
                         <i class="lni lni-search-alt"></i>
                       </button>
                     </form>
@@ -61,89 +71,59 @@
                 <table class="table">
                   <thead>
                     <tr>
-                      <th><h6>#</h6></th>
-                      <th><h6>Tên</h6></th>
-                      <th><h6>Giá</h6></th>
-                      <th><h6>Khuyến mãi</h6></th>
-                      <th><h6>Số lượng</h6></th>
-                      <th><h6>Dung tích</h6></th>
-                      <th><h6>Thao tác</h6></th>
+                      <th><h6>Banner</h6></th>
+                      <th><h6>Tiêu đề</h6></th>
+                      <th><h6>Người tạo</h6></th>
+                      <th><h6>Trạng thái</h6></th>
                     </tr>
                     <!-- end table row-->
                   </thead>
-                  <tbody v-if="products">
-                    <tr v-for="product in products" :key="product.id">
+                  <tbody v-if="banners">
+                    <tr v-for="banner in banners" :key="banner.id">
                       <td>
-                        <div class="employee-image" v-if="product.pictures">
-                          <img
-                            v-if="product.pictures.length > 0"
-                            :src="imgUrl + product.pictures[0].img"
-                            alt=""
-                          />
+                        <div
+                          class="employee-image"
+                          v-if="banner.banner && banner.type == 'video'"
+                        >
+                          <video autoplay loop muted plays-inline>
+                            <source :src="imgUrl + banner.banner" />
+                          </video>
                         </div>
-                        <div class="employee-image" v-else>
+                        <div
+                          class="employee-image"
+                          v-if="banner.banner && banner.type == 'image'"
+                        >
+                          <img :src="imgUrl + banner.banner" alt="" />
+                        </div>
+                        <div class="employee-image" v-if="!banner.banner">
                           <img alt="Không có ảnh" />
                         </div>
                       </td>
                       <td class="min-width">
-                        <p>
-                          
-                          <router-link 
-                         :to="{
-                              name: 'AdminProductDetail',
-                              params: { id: product.id },
-                            }"
-                          >{{
-                            product.name
-                          }}</router-link>
-                        </p>
+                        <p>{{ banner.title }}</p>
+                      </td>
+   
+                      <td class="min-width">
+                        <p>{{ banner.user.name }}</p>
                       </td>
                       <td class="min-width">
-                        <p>
-                          <span
-                            >{{
-                              (product.price * (100 - product.discount)) / 100
-                            }}
-                            VNĐ
-                          </span>
-                        </p>
-                      </td>
-                      <td class="min-width">
-                        <p v-if="product.discount != 0">
-                          <span style="color: red"
-                            >{{ product.discount }} %</span
-                          >
-                        </p>
-                      </td>
-                      <td class="min-width">
-                        <p>
-                          <span v-if="product.quantity > 0"
-                            >{{ product.quantity }}
-                          </span>
-                          <span class="status-btn danger-btn" v-else>
-                            Hết hàng
-                          </span>
-                        </p>
-                      </td>
-                      <td class="min-width">
-                        <p>
-                          <span>{{ product.capacity }} Ml </span>
-                        </p>
+                        <p v-if="banner.homeBanner">Banner chính</p>
+                        <p v-if="banner.thumbnail1">Ảnh danh mục 1</p>
+                        <p v-if="banner.thumbnail2">Ảnh danh mục 2</p>
                       </td>
                       <td>
                         <div class="action">
                           <router-link
                             :to="{
-                              name: 'AdminProductDetail',
-                              params: { id: product.id },
+                              name: 'BannerDetail',
+                              params: { id: banner.id },
                             }"
                             class="text-success"
                           >
                             <i class="fa fa-eye" aria-hidden="true"></i>
                           </router-link>
                           <button
-                            v-if="$store.getters.isAdmin"
-                            @click="deleteProduct(product)"
+                            @click="deletePolicy(banner)"
                             class="text-danger"
                             style="margin-left: 20px"
                           >
@@ -157,7 +137,7 @@
                 <nav
                   aria-label="Page navigation example"
                   style="margin-top: 20px"
-                  v-if="products"
+                  v-if="banners"
                 >
                   <ul class="pagination justify-content-center">
                     <li class="page-item" v-if="currentPage > 1">
@@ -176,7 +156,7 @@
                       :key="page"
                     >
                       <a
-                        v-if="Object.keys(products).length !== 0"
+                        v-if="Object.keys(banners).length !== 0"
                         class="page-link"
                         @click.prevent="currentPage = page"
                         href="#"
@@ -217,39 +197,39 @@ export default {
   data() {
     return {
       searchKey: "",
-      products: {},
+      banners: {},
       total: 0,
       totalPage: 0,
       currentPage: 1,
     };
   },
   methods: {
-    getProducts() {
+    getBanners() {
       this.$isLoading(true);
       baseRequest
-        .get("admin/products?page=" + this.currentPage, this.searchKey)
+        .get("admin/banners?page=" + this.currentPage, this.searchKey)
         .then((response) => {
-          this.products = response.data.data;
+          this.banners = response.data.data;
           this.total = response.data.total;
           this.totalPage = response.data.last_page;
           this.$isLoading(false);
         });
     },
-    deleteProduct(product) {
+    deletePolicy(banner) {
       if (
         confirm(
           "Một số dữ liệu liên quan đến: '" +
-            product.name +
-            "' có thể sẽ bị mất. Vẫn xóa!"
+            banner.title +
+            "' có thể sẽ bị mất. Vẫn xóa?"
         )
       ) {
-        let index = this.products.indexOf(product);
+        let index = this.banners.indexOf(banner);
         if (index > -1) {
-          this.products.splice(index, 1);
+          this.banners.splice(index, 1);
           this.total -= 1;
         }
         baseRequest
-          .delete("admin/product/" + product.id, product.id)
+          .delete("admin/banner/" + banner.id, banner.id)
           .then((response) => {
             console.log(response.data);
           });
@@ -258,18 +238,17 @@ export default {
   },
   watch: {
     currentPage() {
-      this.getProducts();
+      this.getBanners();
     },
   },
   mounted() {
-    this.getProducts();
-    this.$isLoading(false);
+    this.getBanners();
   },
 };
 </script>
 
-<style>
-.red_color {
-  color: red;
+<style scoped>
+.post_action {
+  margin: 20px 0px;
 }
 </style>

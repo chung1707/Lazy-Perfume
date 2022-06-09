@@ -104,6 +104,9 @@
                       <loadfile></loadfile>
                     </div>
                     <div class="btn-zone">
+                      <button @click="$router.back()" class="button">
+                        Quay lại
+                      </button>
                       <button @click="changeInfor" class="button">
                         Sửa thông tin
                       </button>

@@ -408,15 +408,6 @@ const routes = [
     beforeEnter: [guards.requireAuth, guards.checkAdminRole]
   },
   {
-    path: '/admin/statistic/system',
-    name: 'systemStatistic',
-    component: () => import( /* webpackChunkName:"policy"*/ '../pages/admin/statistic/system.vue'),
-    meta: {
-      layout: 'admin'
-    },
-    beforeEnter: [guards.requireAuth, guards.checkAdminRole]
-  },
-  {
     path: '/admin/addPolicy',
     name: 'AddPolicy',
     component: () => import( /* webpackChunkName:"policy"*/ '../pages/admin/policy_discount/addPolicy.vue'),
@@ -429,6 +420,33 @@ const routes = [
     path: '/admin/policy/:id',
     name: 'PolicyDetail',
     component: () => import( /* webpackChunkName:"policy"*/ '../pages/admin/policy_discount/policyDetail.vue'),
+    meta: {
+      layout: 'admin'
+    },
+    beforeEnter: [guards.requireAuth, guards.checkAdminRole]
+  },
+  {
+    path: '/admin/banner',
+    name: 'AdminBanner',
+    component: () => import( /* webpackChunkName:"banner"*/ '../pages/admin/banner/banners.vue'),
+    meta: {
+      layout: 'admin'
+    },
+    beforeEnter: [guards.requireAuth, guards.checkAdminRole]
+  },
+  {
+    path: '/admin/banner/:id',
+    name: 'BannerDetail',
+    component: () => import( /* webpackChunkName:"banner"*/ '../pages/admin/banner/editBanner.vue'),
+    meta: {
+      layout: 'admin'
+    },
+    beforeEnter: [guards.requireAuth, guards.checkAdminRole]
+  },
+  {
+    path: '/admin/addbanner/',
+    name: 'AddBanner',
+    component: () => import( /* webpackChunkName:"banner"*/ '../pages/admin/banner/addBanner.vue'),
     meta: {
       layout: 'admin'
     },

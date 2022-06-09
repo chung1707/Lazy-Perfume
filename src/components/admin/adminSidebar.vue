@@ -273,6 +273,14 @@
             </li>
           </ul>
         </li>
+           <li class="nav-item">
+          <router-link to="/admin/banner">
+            <span class="icon">
+              <i class="fas fa-store"></i>
+            </span>
+            <span class="text">Giao diện trang khách</span>
+          </router-link>
+        </li>
         <span class="divider"><hr /></span>
         <li
           class="nav-item nav-item-has-children"
@@ -304,10 +312,10 @@
           </a>
           <ul id="ddmenu_4" class="collapse dropdown-nav">
             <li>
-              <a href="/admin/statistic/sales">Doanh số</a>
+              <router-link to="/admin/statistic/sales">Doanh số</router-link>
             </li>
             <li>
-              <a href="/admin/statistic/products">Sản phẩm</a>
+              <router-link to="/admin/statistic/products">Sản phẩm</router-link>
             </li>
           </ul>
         </li>

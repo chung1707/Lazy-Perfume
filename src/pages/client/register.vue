@@ -1,7 +1,7 @@
 <template>
   <main class="wrapper login-page">
     <div class="container">
-      <h1 class="login-title">Đăng nhập</h1>
+      <h1 class="login-title">Đăng Ký</h1>
       <div class="login-box">
          <span
           style="text-align: center; display: block"

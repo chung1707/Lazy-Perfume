@@ -267,6 +267,7 @@ export default {
       this.filterSelected.priceRange = null;
       this.filterSelected.arrangeKey = [1, "Mới nhất"];
       this.filterSelected.keyWord = null;
+      this.filterSelected.brandId = null;
       this.keyWord = null;
       this.category_id = null;
       this.getProducts();
@@ -334,12 +335,16 @@ export default {
       this.filterSelected.categoryId = this.category_id;
       this.getProducts();
     },
+    $route() {
+      this.$isLoading(true);
+      this.getProducts();
+    },
   },
   mounted() {
     this.$isLoading(true);
     this.keyWord = this.$route.params.key;
     if (this.$route.params.categoryId) {
-      this.category_id = this.$route.params.categoryId;
+      this.filterSelected.categoryId = this.$route.params.categoryId;
     }
     this.getProducts();
     this.getBrands();

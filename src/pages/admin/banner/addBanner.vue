@@ -14,7 +14,7 @@
           <div class="row align-items-center">
             <div class="col-md-6">
               <div class="title mb-30">
-                <h2>Sửa chính sách</h2>
+                <h2>Thêm banner</h2>
               </div>
             </div>
 
@@ -27,7 +27,7 @@
                       <a href="#0">Dashboard</a>
                     </li>
                     <li class="breadcrumb-item">
-                      <a href="#0">Sửa chính sách</a>
+                      <a href="#0">Thêm banner</a>
                     </li>
                   </ol>
                 </nav>
@@ -39,13 +39,13 @@
                 <div class="col-lg-6 newAdd">
                   <!-- input style start -->
                   <div class="card-style mb-30">
-                    <h6 class="mb-25">Sửa chính sách</h6>
+                    <h6 class="mb-25">Thêm banner</h6>
                     <div class="input-style-1">
                       <label>Tiêu đề</label>
                       <input
                         type="text"
                         :class="{ errorInput: errors.title }"
-                        v-model="policy.title"
+                        v-model="banner.title"
                         placeholder="Tiêu đề"
                       />
                       <span v-if="errors.title" class="error">{{
@@ -53,39 +53,106 @@
                       }}</span>
                     </div>
                     <div class="input-style-1">
-                      <label>Nội dung chính sách</label>
+                      <label>Nội dung banner</label>
                       <textarea
                         placeholder="Mô tả"
-                        v-model="policy.content"
-                        :class="{ errorInput: errors.content }"
+                        v-model="banner.description"
+                        :class="{ errorInput: errors.description }"
                         rows="5"
                       ></textarea>
-                      <span v-if="errors.content" class="error">{{
-                        errors.content[0]
+                      <span v-if="errors.description" class="error">{{
+                        errors.description[0]
                       }}</span>
                     </div>
-                    <div class="row preview">
-                      <p v-if="policy.logo">ảnh hiện tại</p>
-                      <div class="col-md-3">
-                        <img
-                          :src="imgUrl + policy.logo"
-                          class="img-responsive"
-                          height="70"
-                          width="90"
-                        />
+                    <div class="select-style-1">
+                      <label>Đặt làm</label>
+                      <div class="position_box">
+                        <div
+                          class="form-check checkbox-style checkbox-success mb-20"
+                        >
+                          <input
+                            class="form-check-input"
+                            value="true"
+                            type="checkbox"
+                            v-model="banner.homeBanner"
+                            :checked="banner.homeBanner"
+                            id="checkbox-3"
+                          />
+                          <label
+                            class="form-check-label"
+                            style=""
+                            for="checkbox-3"
+                          >
+                            Banner chính</label
+                          >
+                        </div>
+                        <div
+                          class="form-check checkbox-style checkbox-success mb-20"
+                        >
+                          <input
+                            class="form-check-input"
+                            value="true"
+                            :checked="banner.thumbnail1"
+                            type="checkbox"
+                            v-model="banner.thumbnail1"
+                            id="checkbox-2"
+                          />
+                          <label
+                            class="form-check-label"
+                            style=""
+                            for="checkbox-2"
+                          >
+                            Banner danh mục 1</label
+                          >
+                        </div>
+                        <div
+                          class="form-check checkbox-style checkbox-success mb-20"
+                        >
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            :checked="banner.thumbnail2"
+                            v-model="banner.thumbnail2"
+                            value="true"
+                            id="checkbox-1"
+                          />
+                          <label
+                            class="form-check-label"
+                            style=""
+                            for="checkbox-1"
+                          >
+                            Banner danh mục 2</label
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="select-style-1">
+                      <label>Chọn loại banner</label>
+                      <div class="select-position">
+                        <select v-model="banner.type">
+                          <option value="null">Chọn</option>
+                          <option value="image">Ảnh</option>
+                          <option value="video">Video</option>
+                        </select>
+                        <span v-if="errors.type" class="error">{{
+                          errors.type[0]
+                        }}</span>
                       </div>
                     </div>
                     <h6 class="mb-25">Chọn ảnh mới</h6>
                     <div style="margin-bottom: 20px">
                       <loadfile></loadfile>
-                      <span v-if="errors.logo" class="error">{{
-                        errors.logo[0]
+                      <span v-if="errors.banner" class="error">{{
+                        errors.banner[0]
                       }}</span>
                     </div>
 
                     <div class="btn-zone">
+                      <button @click.prevent="$router.back()" class="button">
+                        Quay lại
+                      </button>
                       <button @click="changeInfor" class="button">
-                        Sửa chính sách
+                        Thêm banner
                       </button>
                     </div>
                     <!-- end input -->
@@ -113,21 +180,30 @@ export default {
   },
   data() {
     return {
-      policy: {},
+      banner: {
+        title: null,
+        description: null,
+        homeBanner: false,
+        thumbnail1: false,
+        thumbnail2: false,
+        banner: null,
+        type: null,
+      },
       errors: {},
       success: false,
       fail: false,
       newLogo: null,
+      type: null,
     };
   },
   methods: {
     changeInfor() {
       this.$isLoading(true);
       if (this.pictures[0]) {
-        this.policy.logo = this.pictures[0];
+        this.banner.banner = this.pictures[0];
       }
       baseRequest
-        .put("admin/policy/" + this.policy.id, this.policy)
+        .post("admin/banner/", this.banner)
         .then((response) => {
           if (response.data.success) {
             this.errors = {};
@@ -145,15 +221,6 @@ export default {
           this.$isLoading(false);
         });
     },
-    getSupplier() {
-      this.$isLoading(true);
-      baseRequest
-        .get("admin/policy/" + this.$route.params.id)
-        .then((response) => {
-          this.policy = response.data;
-          this.$isLoading(false);
-        });
-    },
   },
   watch: {
     success() {
@@ -165,7 +232,6 @@ export default {
   },
   mounted() {
     this.$isLoading(false);
-    this.getSupplier();
   },
   beforeRouteLeave() {
     this.$store.commit("setPictures", []);
@@ -207,6 +273,13 @@ select {
 }
 .sumPrice {
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.form-check-label {
+  line-height: 31px;
+}
+.position_box {
   display: flex;
   justify-content: space-between;
 }

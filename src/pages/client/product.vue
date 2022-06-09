@@ -8,9 +8,7 @@
         <div class="container">
           <router-link class="link" to="/">Trang chủ</router-link>
           <span class="seperate">/</span>
-          <router-link class="link" to="/">{{
-            product.supplier.name
-          }}</router-link>
+          <router-link class="link" to="/products">Sản phẩm</router-link>
           <span class="seperate">/</span>
           <span>{{ product.name }}</span>
         </div>
@@ -61,7 +59,7 @@
           </div>
         </div>
         <div class="right-content">
-          <h4>{{ product.supplier.name }}</h4>
+          <h4>{{ supplier.name }}</h4>
           <h3>{{ product.name }}</h3>
           <span class="gen" v-if="product.category">
             <i v-if="product.category.id == 1" class="fa-solid fa-venus"></i>
@@ -72,14 +70,15 @@
             ></i>
             {{ product.category.name }}
           </span>
-          <span class="price price-item line-through"
-                v-if="product.discount"
-                  >{{ (product.price * 100) / 100 }} VNĐ </span
-                >
-                <span style="color: red" class="price" v-if="product.discount"> -{{product.discount}} %</span>
-                <span class="price new-price"
-                  >{{ ((100 - product.discount) * product.price) / 100 }}VNĐ </span
-                >
+          <span class="price price-item line-through" v-if="product.discount"
+            >{{ (product.price * 100) / 100 }} VNĐ
+          </span>
+          <span style="color: red" class="price" v-if="product.discount">
+            -{{ product.discount }} %</span
+          >
+          <span class="price new-price"
+            >{{ ((100 - product.discount) * product.price) / 100 }}VNĐ
+          </span>
           <div class="quantity">
             <div class="quantity-box" v-if="product.quantity > 0">
               <input type="number" v-model="quantity" />
@@ -170,7 +169,15 @@
                   </li>
                   <li class="tab-item">
                     <span class="item-title">Giới tính:</span>
-                    <span v-if="product.category">{{ product.category.name }}</span>
+                    <span v-if="product.category">{{
+                      product.category.name
+                    }}</span>
+                  </li>
+                  <li class="tab-item">
+                    <span class="item-title">Nồng độ:</span>
+                    <span v-if="product.category">{{
+                      productDetail.concentration
+                    }}</span>
                   </li>
                   <li class="tab-item">
                     <span class="item-title">Độ tuổi:</span>
@@ -291,6 +298,7 @@ export default {
       relatedProducts: {},
       productDetail: null,
       tabActive: 1,
+      supplier: {},
       image1: true,
       quantity: 1,
       saveIncense: [
@@ -320,17 +328,22 @@ export default {
       return this.quantity--;
     },
     getProduct() {
+      this.$isLoading(true);
       baseRequest.get("product/" + this.$route.params.id).then((response) => {
         this.product = response.data.product;
+        this.supplier =
+          response.data.product.supplier != null
+            ? response.data.product.supplier
+            : {};
         this.relatedProducts = response.data.relatedProducts;
         this.productDetail = this.product.product_detail;
-        this.$isLoading(false);
+      }).finally(() =>{
+        setTimeout(() => this.$isLoading(false), 1000);
       });
     },
   },
   watch: {
     $route() {
-      this.$isLoading(true);
       this.getProduct();
     },
     quantity() {
@@ -340,10 +353,6 @@ export default {
     },
   },
   mounted() {
-    this.$isLoading(true);
-    // this.getProduct();
-  },
-  beforeMount() {
     this.getProduct();
   },
 };

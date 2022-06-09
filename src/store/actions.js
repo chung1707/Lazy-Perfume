@@ -88,24 +88,26 @@ export default {
       })
   },
   // import 
-  addItemToBill(context, item){
-    context.commit('addItemToBill',item);
-    context.commit('setPictures',[]);
+  addItemToBill(context, item) {
+    context.commit('addItemToBill', item);
+    context.commit('setPictures', []);
   },
-  removeItemInBill(context, item){
-      context.commit('removeItemInBill',item);
+  removeItemInBill(context, item) {
+    context.commit('removeItemInBill', item);
   },
-  importBill(context,items_import){
-      let items = items_import[0];
-      let bill = items_import;
-      items.forEach(item => item.supplier_id = items_import[1]);
-      baseRequest.post('admin/import',{'items': items, 'bill': bill}).then((response) =>{
-          if(response.data.status == 201){
-              context.commit('setItemsInBill',[]);
-          }
-          else{
-            return;
-          }
-      });
+  importBill(context, items_import) {
+    let items = items_import[0];
+    let bill = items_import;
+    items.forEach(item => item.supplier_id = items_import[1]);
+    baseRequest.post('admin/import', {
+      'items': items,
+      'bill': bill
+    }).then((response) => {
+      if (response.data.status == 201) {
+        context.commit('setItemsInBill', []);
+      } else {
+        return;
+      }
+    });
   },
 }

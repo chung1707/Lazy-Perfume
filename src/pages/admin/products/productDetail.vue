@@ -59,7 +59,7 @@
               </div>
             </div>
             <div class="right-content">
-              <h4>{{ product.supplier.name }}</h4>
+              <h4>{{ supplier.name }}</h4>
               <h3>{{ product.name }}</h3>
               <span class="gen" v-if="product.category">
                 <i
@@ -162,7 +162,15 @@
                       </li>
                       <li class="tab-item">
                         <span class="item-title">Giới tính:</span>
-                        <span v-if="product.category">{{ product.category.name }}</span>
+                        <span v-if="product.category">{{
+                          product.category.name
+                        }}</span>
+                      </li>
+                      <li class="tab-item">
+                        <span class="item-title">Nồng độ:</span>
+                        <span v-if="product.category">{{
+                          productDetail.concentration
+                        }}</span>
                       </li>
                       <li class="tab-item">
                         <span class="item-title">Độ tuổi:</span>
@@ -314,6 +322,7 @@ export default {
       image1: true,
       success: false,
       fail: false,
+      supplier: {},
       saveIncense: [
         { id: 1, saving: [3, 4, 5, 1, 2] },
         { id: 2, saving: [6, 7] },
@@ -349,6 +358,10 @@ export default {
         .get("admin/product/" + this.$route.params.id)
         .then((response) => {
           this.product = response.data;
+          this.supplier =
+            response.data.product.supplier != null
+              ? response.data.product.supplier
+              : {};
           this.quantity = response.data.quantity;
           this.productDetail = response.data.product_detail;
           this.$isLoading(false);

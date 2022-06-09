@@ -4,34 +4,31 @@
       <div class="why-lp">
         <h3 class="title-section">Tại sao chọn Lazy Perfume</h3>
         <div class="reasons">
-          <div class="reason">
-            <img
-              src="../../assets/images/icons/grommet-icons_shield-security.svg"
-              alt=""
-            />
-            <h5 class="reason-title">Sản phẩm chính hãng</h5>
-            <p class="reason-description">
-              Sản phẩm nước hoa được mua trực tiếp tại store ở Pháp, cam kết
-              chính hãng. Đổi trả trong vòng 7 ngày từ khi nhận được hàng.
-            </p>
-          </div>
-          <div class="reason">
-            <img src="../../assets/images/icons/free-ship.svg" alt="" />
-            <h5 class="reason-title">Chính sách vận chuyển</h5>
-            <p class="reason-description">
-              Lazy Perfume áp dụng freeship cho tất cả các khách hàng trên toàn quốc.
-              chúng tôi chưa áp dụng hình thức giao hàng quốc tế tại thời điểm
-              này
-            </p>
-          </div>
-          <div class="reason">
-            <img src="../../assets/images/icons/gift.svg" alt="" />
-            <h5 class="reason-title">Thành viên thân thiết</h5>
-            <p class="reason-description">
-              thành viên vàng sẽ được giảm 5% / đơn hàng. với thành viên bạc
-              khách được giảm 3% / đơn hàng.
-            </p>
-          </div>
+          <swiper
+            class="swiper"
+            ref="swiper"
+            :spaceBetween="50"
+                        :autoplay="autoplay"
+x          >
+            <!-- :allowTouchMove="false" -->
+
+            <swiper-slide
+              class="why_slide"
+              v-for="policy in policies"
+              :key="policy"
+            >
+              <div class="reason">
+                <img
+                  :src="imgUrl + policy.logo"
+                  alt=""
+                />
+                <h5 class="reason-title">{{policy.title}}</h5>
+                <p class="reason-description">
+                  {{policy.content}}
+                </p>
+              </div>
+            </swiper-slide>
+          </swiper>
         </div>
       </div>
     </div>
@@ -39,7 +36,50 @@
 </template>
 
 <script>
-export default {};
+import { Swiper, SwiperSlide } from "swiper/vue";
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+SwiperCore.use([Navigation, Pagination, Scrollbar, A11y]);
+import "swiper/swiper-bundle.min.css";
+import baseRequest from "../../base/baseRequest"
+import { mapGetters } from "vuex";
+export default {
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+    computed: {
+    ...mapGetters(["imgUrl"]),
+  },
+  data() {
+    return {
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      policies: [],
+    };
+  },
+  methods: {
+    getPolices(){
+      baseRequest.get('polices').then(response => {
+        this.policies = response.data.policies;
+      })
+    }
+  },
+  mounted() {
+    this.getPolices();
+  }
+};
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+// .slide-product-card-item {
+//   max-width: 30%;
+// }
+// .why_slide{
+//   width: 30% !important; 
+// }
+// .swiper-container {
+//   max-width: 1200px !important;
+// }
+</style>

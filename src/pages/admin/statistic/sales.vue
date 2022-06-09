@@ -62,7 +62,7 @@
                 <h6 class="mb-10">Tổng phí nhập hàng</h6>
                 <h3 class="text-bold mb-10">{{ importFee }} VNĐ</h3>
                 <p class="text-sm text-danger">
-                  <router-link to="/admin/products" class="text-gray"
+                  <router-link to="/admin/importHistory" class="text-gray"
                     >Xem chi tiết</router-link
                   >
                 </p>

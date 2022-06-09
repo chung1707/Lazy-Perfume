@@ -673,8 +673,10 @@ export default {
       }
       let product_import = [this.itemsInBill, this.supplier_id, this.sumPrice];
       this.importBill(product_import);
-      this.$isLoading(false);
-      this.success = true;
+      setTimeout(() => {
+        this.success = true;
+        this.$isLoading(false);
+      }, 1000);
       this.importForm = false;
       this.notSupplierId = false;
     },

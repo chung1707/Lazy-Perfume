@@ -85,7 +85,7 @@
                         </p>
                       </td>
                             <td class="min-width">
-                        <p>
+                        <p v-if="bill.supplier">
                           <span >{{ bill.supplier.name }}</span>
                         </p>
                       </td>

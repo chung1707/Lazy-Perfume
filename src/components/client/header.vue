@@ -13,18 +13,20 @@
               >
             </li>
             <li>
-              <router-link to="/products" class="hover-border-bottom"
+              <router-link 
+                    :to="{ name: 'Products', params: { reload:Math.random() } }"
+              class="hover-border-bottom"
                 >SẢN PHẨM</router-link
               >
             </li>
-            <li>
+            <!-- <li>
               <router-link class="hover-border-bottom" to="/products"
                 >THƯƠNG HIỆU</router-link
               >
-            </li>
+            </li> -->
             <li>
               <router-link class="hover-border-bottom" to="/blog"
-                >BLOG</router-link
+                >BLOG - TIN TỨC</router-link
               >
             </li>
           </ul>
