@@ -13,6 +13,13 @@
             >{{ category.name }}</a
           >
         </p>
+        <router-link
+          to="/blog/addPost"
+          v-if="authenticated"
+          class="button"
+          style="background-color: black"
+          >Thêm bài viết</router-link
+        >
       </div>
     </section>
 
@@ -42,8 +49,10 @@
                   style="padding: 10px 0px; display: block; color: grey"
                   ><p>{{ post.title }}</p>
                 </router-link>
-                <p class="card-text" v-html=" post.content.substring(0, 100) + '....'">
-                </p>
+                <p
+                  class="card-text"
+                  v-html="post.content.substring(0, 100) + '....'"
+                ></p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
                     <router-link
@@ -116,7 +125,7 @@ import baseRequest from "../../base/baseRequest";
 
 export default {
   computed: {
-    ...mapGetters(["imgUrl"]),
+    ...mapGetters(["imgUrl", "authenticated"]),
   },
   data() {
     return {

@@ -273,7 +273,7 @@
             </li>
           </ul>
         </li>
-           <li class="nav-item">
+        <li class="nav-item" v-if="$store.getters.isAdmin">
           <router-link to="/admin/banner">
             <span class="icon">
               <i class="fas fa-store"></i>

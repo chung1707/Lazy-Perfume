@@ -93,7 +93,15 @@ const routes = [
       layout: 'client'
     },
   },
-
+  {
+    path: '/blog/addPost',
+    name: 'ClientAddPost',
+    component: () => import( /* webpackChunkName:"clientAddPost"*/ '../pages/client/addPost.vue'),
+    meta: {
+      layout: 'client'
+    },
+    beforeEnter: [guards.requireAuth]
+  },
   //admin layouts
   {
     path: '/admin/dashbroad',
