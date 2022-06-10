@@ -90,6 +90,7 @@ export default {
     register(){
       this.$isLoading(true);
         this.$store.dispatch('register', this.user).then(() => {
+          this.$store.dispatch("getCart");
           this.$router.push({name: 'Account'});
           this.errors = {};
         })

@@ -73,7 +73,15 @@
                 ></i>
                 {{ product.category.name }}
               </span>
-              <span class="price">{{ product.price }} VND</span>
+               <span class="price price-item line-through" v-if="product.discount"
+            >{{ (product.price * 100) / 100 }} VNĐ
+          </span>
+          <span style="color: red" class="price" v-if="product.discount">
+            -{{ product.discount }} %</span
+          >
+          <span class="price new-price"
+            >{{ ((100 - product.discount) * product.price) / 100 }}VNĐ
+          </span>
               <div class="quantity">
                 <div class="quantity-box">
                   <input type="number" v-model="quantity" />
@@ -178,17 +186,6 @@
                       </li>
                       <li class="tab-item">
                         <span class="item-title"> Độ lưu mùi:</span>
-                        <!-- <div class="saving">
-                          <div
-                            v-for="it in saveIncense"
-                            :key="it"
-                            :class="{
-                              bg_blue: productDetail.saveIncense == it.saving,
-                            }"
-                          >
-                            <span class="number">{{ it.saving }}</span>
-                          </div>
-                        </div> -->
                         <div class="saving">
                           <div
                             v-for="it in saveIncense"
@@ -359,8 +356,8 @@ export default {
         .then((response) => {
           this.product = response.data;
           this.supplier =
-            response.data.product.supplier != null
-              ? response.data.product.supplier
+            response.data.supplier != null
+              ? response.data.supplier
               : {};
           this.quantity = response.data.quantity;
           this.productDetail = response.data.product_detail;

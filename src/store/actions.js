@@ -20,9 +20,11 @@ export default {
   },
   login(context, user) {
     return baseRequest.post("login", user).then((response) => {
-      window.localStorage.setItem('token', response.data.token);
-      context.commit('setAuthUser', response.data.user);
-      context.commit('setRoleId', response.data.user.role_id);
+      if(!user.blocked){
+        window.localStorage.setItem('token', response.data.token);
+        context.commit('setAuthUser', response.data.user);
+        context.commit('setRoleId', response.data.user.role_id);
+      }
     })
   },
   register(context, user) {
